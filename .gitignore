@@ -1,0 +1,8 @@
+# Ignore Visual studio configuration directory
+.vs/
+
+# Ignore output binaries and intermediates directory
+_out/
+
+# Ignore Visual studio user file
+*.user
