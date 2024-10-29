@@ -1,0 +1,5 @@
+TARGET_SOURCES(
+  ${SANDBOX}
+  PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/Sandbox.cpp
+)
