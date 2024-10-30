@@ -8,14 +8,14 @@ namespace Angel3D
 	{
 		class ANGEL3D_API Application
 		{
-		public:
-			Application();
-			~Application();
-			void Run();
-		};
+			public:
+				Application();
+				~Application();
+				void Run();
+			};
 
-		// To be defined in the CLIENT
-		Application* CreateApplication();
+			// To be defined in the CLIENT
+			Application* CreateApplication();
 	}
 }
 

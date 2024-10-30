@@ -2,16 +2,16 @@
 
 class Sandbox : public Angel3D::Core::Application
 {
-public:
-	Sandbox()
-	{
+	public:
+		Sandbox()
+		{
 
-	}
+		}
 
-	~Sandbox()
-	{
+		~Sandbox()
+		{
 
-	}
+		}
 };
 
 Angel3D::Core::Application* Angel3D::Core::CreateApplication()

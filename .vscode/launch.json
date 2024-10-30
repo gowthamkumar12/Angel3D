@@ -1,0 +1,15 @@
+{
+  "configurations": [
+    {
+      "name": "Sandbox",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/_out/bin/Debug-Windows-x86_64/Sandbox/Sandbox.exe",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "console": "externalTerminal"
+    }
+  ]
+}
