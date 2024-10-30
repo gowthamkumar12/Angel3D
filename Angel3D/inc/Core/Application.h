@@ -18,4 +18,3 @@ namespace Angel3D
 			Application* CreateApplication();
 	}
 }
-

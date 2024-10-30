@@ -9,3 +9,5 @@
 #else
 	#error Angel3D only supports Windows!
 #endif // ANGEL_PLATFORM_WINDOWS
+
+#define BIT(x) (1 << x)

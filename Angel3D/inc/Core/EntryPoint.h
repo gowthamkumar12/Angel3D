@@ -7,9 +7,6 @@
 	{
 		Angel3D::Core::Log::Init();
 
-		ANGEL3D_CORE_ERROR("Hello");
-		ANGEL3D_WARN("Hello");
-
 		auto app = Angel3D::Core::CreateApplication();
 		app->Run();
 		delete app;

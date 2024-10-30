@@ -1,2 +1,5 @@
 # Ignore output folder
 _out/
+
+# Ignore un-nessesary files from .vscode
+.vscode/settings.json

@@ -1,0 +1,15 @@
+{
+  "configurations": [
+    {
+      "name": "Win32",
+      "defines": [
+        "ANGEL3D_PLATFORM_WINDOWS",
+        "ANGEL3D_BUILD_DLL"
+      ],
+      "includePath": [
+        "${workspaceFolder}/Angel3D/Core/Log.h"
+      ],
+    }
+  ],
+  "version": 4
+}
