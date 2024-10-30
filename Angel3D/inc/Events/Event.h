@@ -2,8 +2,6 @@
 
 #include "Core/Core.h"
 
-#include <functional>
-
 namespace Angel3D
 {
   namespace Events

@@ -1,5 +1,5 @@
 # Required minimum CMake version
-CMAKE_MINIMUM_REQUIRED(VERSION 3.12)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.16)
 
 # Name of the project and the language supported
 PROJECT(Angel3D C CXX)

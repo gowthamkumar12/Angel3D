@@ -2,8 +2,6 @@
 
 #include "Events/Event.h"
 
-#include <sstream>
-
 namespace Angel3D
 {
   namespace Events
