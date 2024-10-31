@@ -1,15 +1,26 @@
 {
-  "configurations": [
-    {
-      "name": "Win32",
-      "defines": [
-        "ANGEL3D_PLATFORM_WINDOWS",
-        "ANGEL3D_BUILD_DLL"
-      ],
-      "includePath": [
-        "${workspaceFolder}/Angel3D/Core/Log.h"
-      ],
-    }
-  ],
-  "version": 4
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${vcpkgRoot}/x64-windows/include"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE",
+                "ANGEL3D_PLATFORM_WINDOWS",
+                "ANGEL3D_BUILD_DLL",
+                "ANGEL3D_ENABLE_ASSERTS"
+            ],
+            "windowsSdkVersion": "10.0.19041.0",
+            "compilerPath": "cl.exe",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "windows-msvc-x64",
+            "configurationProvider": "ms-vscode.cmake-tools"
+        }
+    ],
+    "version": 4
 }

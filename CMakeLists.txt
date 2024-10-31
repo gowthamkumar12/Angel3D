@@ -1,26 +1,28 @@
 # Required minimum CMake version
-CMAKE_MINIMUM_REQUIRED(VERSION 3.16)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.4...3.28 FATAL_ERROR)
 
 # Name of the project and the language supported
-PROJECT(Angel3D C CXX)
+PROJECT(Angel3D VERSION 1.0.0 LANGUAGES C CXX)
 
 # Set the C++ standard
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+SET(CMAKE_CXX_STANDARD 17)
+SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Specify the architecture
 SET(CMAKE_GENERATOR_PLATFORM x86_64)
 
+SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
+
 # Define build configurations
 SET(CMAKE_CONFIGURATION_TYPES "Debug;Release;Dist" CACHE STRING "Available build types" FORCE)
+
+# Set output directory
+SET(OUTPUT_DIR "$<CONFIG>-${CMAKE_SYSTEM_NAME}-${CMAKE_GENERATOR_PLATFORM}")
 
 # Set flags for each configuration
 SET(CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2")
 SET(CMAKE_CXX_FLAGS_DIST    "${CMAKE_CXX_FLAGS_RELEASE} -O3")
-
-# Set output directory
-set(OUTPUT_DIR "$<CONFIG>-${CMAKE_SYSTEM_NAME}-${CMAKE_GENERATOR_PLATFORM}")
 
 # Add the compiler definitions
 ADD_DEFINITIONS(-D_LIBCPP_ABI_NAMESPACE=__1)
@@ -28,9 +30,9 @@ ADD_DEFINITIONS(-D_LIBCPP_ABI_NAMESPACE=__1)
 # Set the required vendor package paths
 SET(SPDLOGDIR ${CMAKE_CURRENT_SOURCE_DIR}/Vendor/spdlog)
 
-# Specify the include directories
+# Specify the include directories for spdlog
 INCLUDE_DIRECTORIES(${SPDLOGDIR}/include)
 
-# Add the subdirectories here.
-ADD_SUBDIRECTORY(Sandbox)
+# Add the subdirectories
 ADD_SUBDIRECTORY(Angel3D)
+ADD_SUBDIRECTORY(Sandbox)

@@ -3,7 +3,7 @@ setlocal
 
 :: Default values
 set BUILD_DIR=_out
-set CONFIG=Debug
+set CONFIG=DEBUG
 set CLEAN_BUILD=0
 set INCREMENTAL_BUILD=0
 
@@ -12,9 +12,9 @@ set INCREMENTAL_BUILD=0
 if "%1"=="" goto done_parse
 if "%1"=="-mclean" set CLEAN_BUILD=1
 if "%1"=="-mbuild" set INCREMENTAL_BUILD=1
-if /I "%1"=="Debug" set CONFIG=Debug
-if /I "%1"=="Release" set CONFIG=Release
-if /I "%1"=="Dist" set CONFIG=Dist
+if /I "%1"=="DEBUG" set CONFIG=DEBUG
+if /I "%1"=="RELEASE" set CONFIG=RELEASE
+if /I "%1"=="DIST" set CONFIG=DIST
 shift
 goto parse_args
 
