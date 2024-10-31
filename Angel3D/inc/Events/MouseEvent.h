@@ -2,9 +2,9 @@
 
 #include "Events/Event.h"
 
-namespace Angel3d
+namespace Angel3D
 {
-  namespace Event
+  namespace Events
   {
     class ANGEL3D_API MouseMovedEvent : public Event
     {
@@ -62,7 +62,7 @@ namespace Angel3d
         inline int GetMouseButton() const { return m_Button; }
 
         EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
-      private:
+      protected:
         MouseButtonEvent(int f_button)
         : m_Button(f_button)
         {}

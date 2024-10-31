@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Core/Log.h"
+
 #ifdef ANGEL3D_PLATFORM_WINDOWS
 	extern Angel3D::Core::Application* Angel3D::Core::CreateApplication();
 

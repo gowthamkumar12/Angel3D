@@ -22,7 +22,7 @@ namespace Angel3D
     class ANGEL3D_API KeyPressedEvent : public KeyEvent
     {
       public:
-        KeyPressedEvent(int f_keyCode, int f_repeatCode)
+        KeyPressedEvent(int f_keyCode, int f_repeatCount)
         : KeyEvent(f_keyCode),
           m_RepeatCount(f_repeatCount)
         {}
@@ -52,7 +52,7 @@ namespace Angel3D
         {
           std::stringstream ss;
           ss << "KeyReleasedEvent " << m_KeyCode;
-          ss.str();
+          return ss.str();
         }
 
         EVENT_CLASS_TYPE(KeyReleased)

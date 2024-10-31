@@ -1,5 +1,7 @@
-#include "Core/Log.h"
+
 #include "spdlog/sinks/stdout_color_sinks.h"
+
+#include "Core/Log.h"
 
 namespace Angel3D
 {
