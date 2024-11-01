@@ -49,7 +49,6 @@ namespace Angel3D
 
         virtual ~Event() = default;
 
-      protected:
         bool m_Handled = false;
 
       private:

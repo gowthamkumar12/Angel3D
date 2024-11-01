@@ -18,21 +18,46 @@ namespace Angel3D
 		{
 		}
 
-		void Application::OnEvent(Angel3D::Events::Event& f_e)
-		{
-			Events::EventDispatcher dispatcher(f_e);
-			dispatcher.Dispatch<Events::WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
-
-			ANGEL3D_CORE_TRACE("{0}", f_e.ToString());
-		}
-
 		void Application::Run()
 		{
 			while (m_Running)
 			{
 				glClearColor(0, 1, 0, 1);
 				glClear(GL_COLOR_BUFFER_BIT);
+
+				for(Layer* layer : m_LayerStack)
+				{
+					layer->OnUpdate();
+				}
+
 				m_Window->OnUpdate();
+			}
+		}
+
+		void Application::PushLayer(Layer* f_layer)
+		{
+			m_LayerStack.PushLayer(f_layer);
+		}
+
+		void Application::PushOverlay(Layer* f_overlay)
+		{
+			m_LayerStack.PushOverlay(f_overlay);
+		}
+
+		void Application::OnEvent(Angel3D::Events::Event& f_e)
+		{
+			Events::EventDispatcher dispatcher(f_e);
+			dispatcher.Dispatch<Events::WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
+
+			ANGEL3D_CORE_TRACE("{0}", f_e.ToString());
+
+			for(auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
+			{
+				(*--it)->OnEvent(f_e);
+				if(f_e.m_Handled);
+				{
+					break;
+				}
 			}
 		}
 
