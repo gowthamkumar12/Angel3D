@@ -29,9 +29,8 @@ ADD_DEFINITIONS(-D_LIBCPP_ABI_NAMESPACE=__1)
 
 # Set the required vendor package paths
 SET(SPDLOGDIR ${CMAKE_CURRENT_SOURCE_DIR}/Vendor/spdlog)
-
-# Specify the include directories for spdlog
-INCLUDE_DIRECTORIES(${SPDLOGDIR}/include)
+SET(GLFW      ${CMAKE_CURRENT_SOURCE_DIR}/Vendor/GLFW)
+SET(GLAD      ${CMAKE_CURRENT_SOURCE_DIR}/Vendor/GLAD)
 
 # Add the subdirectories
 ADD_SUBDIRECTORY(Angel3D)

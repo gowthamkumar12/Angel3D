@@ -3,3 +3,6 @@ _out/
 
 # Ignore un-nessesary files from .vscode
 .vscode/settings.json
+
+# Ignore GLAD build folder
+Vendor/GLAD/build/

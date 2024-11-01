@@ -7,6 +7,8 @@
 
 #include "Core/Log.h"
 
+#include "glad/glad.h"
+
 Angel3D::Core::BaseWindow* Angel3D::Core::BaseWindow::Create(const Angel3D::Core::WindowProps& f_props)
 {
   return new Angel3D::Platform::Windows::Window(f_props);
@@ -54,6 +56,10 @@ namespace Angel3D
         m_window = glfwCreateWindow((int)m_data.m_Width, (int)m_data.m_Height,
                                     m_data.m_Title.c_str(), nullptr, nullptr);
         glfwMakeContextCurrent(m_window);
+
+        int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+        ANGEL3D_CORE_ASSERT(status, "Failed to initialize GLAD");
+
         glfwSetWindowUserPointer(m_window, &m_data);
         SetVSync(true);
 

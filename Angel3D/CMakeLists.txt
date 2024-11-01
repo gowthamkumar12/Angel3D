@@ -10,7 +10,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(GLFW_LIBRARY_TYPE "STATIC" CACHE STRING "Library type override for GLFW (SHARED, STATIC, OBJECT, or empty to follow BUILD_SHARED_LIBS)")
 
 # Add GLFW as a subdirectory
-ADD_SUBDIRECTORY(${CMAKE_SOURCE_DIR}/Vendor/GLFW ${CMAKE_SOURCE_DIR}/Vendor/GLFW/build)
+ADD_SUBDIRECTORY(${GLFW} ${GLFW}/build)
+ADD_SUBDIRECTORY(${GLAD} ${GLAD}/build)
 
 # Define output directories
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/_out/bin/${OUTPUT_DIR}/${ENGINE}")
@@ -32,7 +33,9 @@ TARGET_INCLUDE_DIRECTORIES(
   ${ENGINE}
   PUBLIC
     "${PROJECT_SOURCE_DIR}/inc"         # Local include directory
-    "${CMAKE_SOURCE_DIR}/Vendor/GLFW/include"
+    "${SPDLOGDIR}/include"
+    "${GLFW}/include"
+    "${GLAD}/include"
 )
 
 # Link GLFW and OpenGL as private dependencies
@@ -40,6 +43,7 @@ TARGET_LINK_LIBRARIES(
   ${ENGINE}
   PRIVATE
     glfw
+    GLAD
     opengl32.lib
 )
 
@@ -50,7 +54,7 @@ ENDIF()
 
 # Platform-specific definitions
 IF(WIN32)
-  TARGET_COMPILE_DEFINITIONS(${ENGINE} PRIVATE ANGEL3D_PLATFORM_WINDOWS ANGEL3D_BUILD_DLL ANGEL3D_ENABLE_ASSERTS)
+  TARGET_COMPILE_DEFINITIONS(${ENGINE} PRIVATE ANGEL3D_PLATFORM_WINDOWS ANGEL3D_BUILD_DLL ANGEL3D_ENABLE_ASSERTS GLFW_INCLUDE_NONE)
 ENDIF()
 
 # Configuration-specific definitions
