@@ -19,6 +19,8 @@ namespace Angel3D::Platform::Windows
       inline void SetEventCallback(const EventCallbackfn& f_callback) override { m_data.m_eventCallbackFn = f_callback; }
       void SetVSync(bool f_enabled) override;
       bool IsVSync() const override;
+      inline void* GetNativeWindow() const override { return m_window; }
+
     private:
       virtual void Init(const Angel3D::Core::WindowProps& f_props);
       virtual void Shutdown();

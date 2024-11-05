@@ -38,6 +38,8 @@ namespace Angel3D::Core
       virtual void SetVSync(bool f_enabled) = 0;
       virtual bool IsVSync() const = 0;
 
+      virtual void* GetNativeWindow() const = 0;
+
       static BaseWindow* Create(const WindowProps& f_props = WindowProps());
   };
 } // namespace Angel3D::Core

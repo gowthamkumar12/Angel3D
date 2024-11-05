@@ -35,6 +35,6 @@ namespace Angel3D::Core
 			static Application* m_ApplicationInstance;
 	};
 
-		// To be defined in the CLIENT
+	// To be defined in the CLIENT
 	Application* CreateApplication();
 }

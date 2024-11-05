@@ -1,6 +1,7 @@
 #include "Core/Application.h"
 #include "Core/Log.h"
 #include "Events/ApplicationEvent.h"
+#include "Platform/Windows/Input.h"
 #include "glad/glad.h"
 
 namespace Angel3D::Core
@@ -24,7 +25,7 @@ namespace Angel3D::Core
 	{
 		while (m_Running)
 		{
-			glClearColor(0, 1, 0, 1);
+			glClearColor(0, 0, 0, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			for(Layer* layer : m_LayerStack)
