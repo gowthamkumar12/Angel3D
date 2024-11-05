@@ -1,16 +1,13 @@
 #include "Core/Layer.h"
 
-namespace Angel3D
+namespace Angel3D::Core
 {
-  namespace Core
+  Layer::Layer(const std::string& name)
+  : m_Name(name)
   {
-    Layer::Layer(const std::string& name)
-    : m_Name(name)
-    {
-    }
+  }
 
-    Layer::~Layer()
-    {
-    }
-  } // namespace Core
+  Layer::~Layer()
+  {
+  }
 } // namespace Angel3D

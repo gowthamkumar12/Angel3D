@@ -1,44 +1,40 @@
 #pragma once
 
-#include "Core.h"
-#include "Platform/Windows/Window.h"
-
-#include "Events/ApplicationEvent.h"
+#include "Core/Core.h"
 #include "Core/LayerStack.h"
+#include "Platform/Windows/Window.h"
+#include "Events/ApplicationEvent.h"
 
-namespace Angel3D
+namespace Angel3D::Core
 {
-	namespace Core
+	class ANGEL3D_API Application
 	{
-		class ANGEL3D_API Application
-		{
-			public:
-				Application();
-				~Application();
+		public:
+			Application();
+			~Application();
 
-				void Run();
+			void Run();
 
-				void OnEvent(Angel3D::Events::Event& f_e);
+			void OnEvent(Angel3D::Events::Event& f_e);
 
-				void PushLayer(Layer* f_layer);
-				void PushOverlay(Layer* f_overlay);
+			void PushLayer(Layer* f_layer);
+			void PushOverlay(Layer* f_overlay);
 
-				inline static Application& Get() { return *m_ApplicationInstance; }
+			inline static Application& Get() { return *m_ApplicationInstance; }
 
-				inline Angel3D::Core::BaseWindow& GetWindow() { return *m_Window; }
+			inline Angel3D::Core::BaseWindow& GetWindow() { return *m_Window; }
 
-			private:
-			  bool OnWindowClose(Events::WindowCloseEvent& f_event);
+		private:
+			bool OnWindowClose(Events::WindowCloseEvent& f_event);
 
-				std::unique_ptr<Angel3D::Core::BaseWindow> m_Window;
-				bool m_Running = true;
+			std::unique_ptr<Angel3D::Core::BaseWindow> m_Window;
+			bool m_Running = true;
 
-				LayerStack m_LayerStack;
+			LayerStack m_LayerStack;
 
-				static Application* m_ApplicationInstance;
-			};
+			static Application* m_ApplicationInstance;
+	};
 
-			// To be defined in the CLIENT
-			Application* CreateApplication();
-	}
+		// To be defined in the CLIENT
+	Application* CreateApplication();
 }
