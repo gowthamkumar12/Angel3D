@@ -57,5 +57,22 @@ namespace Angel3D
 
         EVENT_CLASS_TYPE(KeyReleased)
     };
+
+    class ANGEL3D_API KeyTypedEvent : public KeyEvent
+    {
+      public:
+        KeyTypedEvent(int f_keyCode)
+        : KeyEvent(f_keyCode)
+        {}
+
+        std::string ToString() const override
+        {
+          std::stringstream ss;
+          ss << "KeyTypedEvent: " << m_KeyCode ;
+          return ss.str();
+        }
+
+        EVENT_CLASS_TYPE(KeyTyped)
+    };
   } // Events
 } // Angel3d

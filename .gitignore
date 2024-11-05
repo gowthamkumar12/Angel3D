@@ -6,3 +6,6 @@ _out/
 
 # Ignore GLAD build folder
 Vendor/GLAD/build/
+
+# Ignore Imgui generated files
+imgui_log.txt

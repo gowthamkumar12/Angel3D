@@ -110,6 +110,13 @@ namespace Angel3D
           }
         });
 
+        glfwSetCharCallback(m_window, [](GLFWwindow* window, unsigned int codepoint)
+        {
+          WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+          Events::KeyTypedEvent event(codepoint);
+          data.m_eventCallbackFn(event);
+        });
+
         glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int mods)
         {
           WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
