@@ -10,8 +10,14 @@ namespace Angel3D
 	namespace Core
 	{
 		#define BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
+
+		Application* Application::m_ApplicationInstance = nullptr;
+
 		Application::Application()
 		{
+			ANGEL3D_CORE_ASSERT(!m_ApplicationInstance, "Core application already exists.");
+			m_ApplicationInstance = this;
+
 			m_Window = std::unique_ptr<Angel3D::Core::BaseWindow>(Angel3D::Core::BaseWindow::Create());
 			m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 		}
@@ -39,11 +45,13 @@ namespace Angel3D
 		void Application::PushLayer(Layer* f_layer)
 		{
 			m_LayerStack.PushLayer(f_layer);
+			f_layer->OnAttach();
 		}
 
 		void Application::PushOverlay(Layer* f_overlay)
 		{
 			m_LayerStack.PushOverlay(f_overlay);
+			f_overlay->OnAttach();
 		}
 
 		void Application::OnEvent(Angel3D::Events::Event& f_e)

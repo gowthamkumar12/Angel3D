@@ -24,6 +24,7 @@ class Sandbox : public Angel3D::Core::Application
 		Sandbox()
 		{
 			PushLayer(new ExampleLayer());
+			PushOverlay(new Angel3D::ImGuiImpl::ImGuiLayer());
 		}
 
 		~Sandbox()

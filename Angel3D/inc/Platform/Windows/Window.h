@@ -9,7 +9,7 @@ namespace Angel3D
   {
     namespace Windows
     {
-      class Window : public Angel3D::Core::BaseWindow
+      class ANGEL3D_API Window : public Angel3D::Core::BaseWindow
       {
         public:
           Window(const Angel3D::Core::WindowProps& f_props);

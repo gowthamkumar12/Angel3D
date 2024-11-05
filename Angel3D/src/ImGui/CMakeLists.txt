@@ -1,0 +1,5 @@
+TARGET_SOURCES(
+  ${ENGINE}
+  PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/ImGuiLayer.cpp
+)

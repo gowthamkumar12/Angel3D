@@ -23,6 +23,10 @@ namespace Angel3D
 				void PushLayer(Layer* f_layer);
 				void PushOverlay(Layer* f_overlay);
 
+				inline static Application& Get() { return *m_ApplicationInstance; }
+
+				inline Angel3D::Core::BaseWindow& GetWindow() { return *m_Window; }
+
 			private:
 			  bool OnWindowClose(Events::WindowCloseEvent& f_event);
 
@@ -30,6 +34,8 @@ namespace Angel3D
 				bool m_Running = true;
 
 				LayerStack m_LayerStack;
+
+				static Application* m_ApplicationInstance;
 			};
 
 			// To be defined in the CLIENT

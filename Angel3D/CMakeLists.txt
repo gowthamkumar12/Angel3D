@@ -12,6 +12,7 @@ set(GLFW_LIBRARY_TYPE "STATIC" CACHE STRING "Library type override for GLFW (SHA
 # Add GLFW as a subdirectory
 ADD_SUBDIRECTORY(${GLFW} ${GLFW}/build)
 ADD_SUBDIRECTORY(${GLAD} ${GLAD}/build)
+ADD_SUBDIRECTORY(${IMGUI} ${IMGUI}/build)
 
 # Define output directories
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/_out/bin/${OUTPUT_DIR}/${ENGINE}")
@@ -36,6 +37,7 @@ TARGET_INCLUDE_DIRECTORIES(
     "${SPDLOGDIR}/include"
     "${GLFW}/include"
     "${GLAD}/include"
+    "${IMGUI}"
 )
 
 # Link GLFW and OpenGL as private dependencies
@@ -44,6 +46,7 @@ TARGET_LINK_LIBRARIES(
   PRIVATE
     glfw
     GLAD
+    ImGui
     opengl32.lib
 )
 
