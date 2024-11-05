@@ -2,6 +2,7 @@
 #include "imgui.h"
 #include "Platform/OpenGL/ImGuiOpenGLRenderer.h"
 #include "Core/Application.h"
+#include "Core/KeyCodes.h"
 
 // TEMPORARY
 #include "GLFW/glfw3.h"
@@ -30,27 +31,27 @@ namespace Angel3D::ImGuiImpl
     io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
     // TEMPORARY: should eventually use our key codes
-    io.KeyMap[ImGuiKey_Tab] = GLFW_KEY_TAB;
-    io.KeyMap[ImGuiKey_LeftArrow] = GLFW_KEY_LEFT;
-    io.KeyMap[ImGuiKey_RightArrow] = GLFW_KEY_RIGHT;
-    io.KeyMap[ImGuiKey_UpArrow] = GLFW_KEY_UP;
-    io.KeyMap[ImGuiKey_DownArrow] = GLFW_KEY_DOWN;
-    io.KeyMap[ImGuiKey_PageUp] = GLFW_KEY_PAGE_UP;
-    io.KeyMap[ImGuiKey_PageDown] = GLFW_KEY_PAGE_DOWN;
-    io.KeyMap[ImGuiKey_Home] = GLFW_KEY_HOME;
-    io.KeyMap[ImGuiKey_End] = GLFW_KEY_END;
-    io.KeyMap[ImGuiKey_Insert] = GLFW_KEY_INSERT;
-    io.KeyMap[ImGuiKey_Delete] = GLFW_KEY_DELETE;
-    io.KeyMap[ImGuiKey_Backspace] = GLFW_KEY_BACKSPACE;
-    io.KeyMap[ImGuiKey_Space] = GLFW_KEY_SPACE;
-    io.KeyMap[ImGuiKey_Enter] = GLFW_KEY_ENTER;
-    io.KeyMap[ImGuiKey_Escape] = GLFW_KEY_ESCAPE;
-    io.KeyMap[ImGuiKey_A] = GLFW_KEY_A;
-    io.KeyMap[ImGuiKey_C] = GLFW_KEY_C;
-    io.KeyMap[ImGuiKey_V] = GLFW_KEY_V;
-    io.KeyMap[ImGuiKey_X] = GLFW_KEY_X;
-    io.KeyMap[ImGuiKey_Y] = GLFW_KEY_Y;
-    io.KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
+    io.KeyMap[ImGuiKey_Tab]        = ANGEL3D_KEY_TAB;
+    io.KeyMap[ImGuiKey_LeftArrow]  = ANGEL3D_KEY_LEFT;
+    io.KeyMap[ImGuiKey_RightArrow] = ANGEL3D_KEY_RIGHT;
+    io.KeyMap[ImGuiKey_UpArrow]    = ANGEL3D_KEY_UP;
+    io.KeyMap[ImGuiKey_DownArrow]  = ANGEL3D_KEY_DOWN;
+    io.KeyMap[ImGuiKey_PageUp]     = ANGEL3D_KEY_PAGE_UP;
+    io.KeyMap[ImGuiKey_PageDown]   = ANGEL3D_KEY_PAGE_DOWN;
+    io.KeyMap[ImGuiKey_Home]       = ANGEL3D_KEY_HOME;
+    io.KeyMap[ImGuiKey_End]        = ANGEL3D_KEY_END;
+    io.KeyMap[ImGuiKey_Insert]     = ANGEL3D_KEY_INSERT;
+    io.KeyMap[ImGuiKey_Delete]     = ANGEL3D_KEY_DELETE;
+    io.KeyMap[ImGuiKey_Backspace]  = ANGEL3D_KEY_BACKSPACE;
+    io.KeyMap[ImGuiKey_Space]      = ANGEL3D_KEY_SPACE;
+    io.KeyMap[ImGuiKey_Enter]      = ANGEL3D_KEY_ENTER;
+    io.KeyMap[ImGuiKey_Escape]     = ANGEL3D_KEY_ESCAPE;
+    io.KeyMap[ImGuiKey_A]          = ANGEL3D_KEY_A;
+    io.KeyMap[ImGuiKey_C]          = ANGEL3D_KEY_C;
+    io.KeyMap[ImGuiKey_V]          = ANGEL3D_KEY_V;
+    io.KeyMap[ImGuiKey_X]          = ANGEL3D_KEY_X;
+    io.KeyMap[ImGuiKey_Y]          = ANGEL3D_KEY_Y;
+    io.KeyMap[ImGuiKey_Z]          = ANGEL3D_KEY_Z;
 
     ImGui_ImplOpenGL3_Init("#version 410");
   }
@@ -137,10 +138,10 @@ namespace Angel3D::ImGuiImpl
     ImGuiIO& io = ImGui::GetIO();
     io.KeysDown[f_e.GetKeyCode()] = true;
 
-    io.KeyCtrl  = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
-    io.KeyShift = io.KeysDown[GLFW_KEY_LEFT_SHIFT] || io.KeysDown[GLFW_KEY_RIGHT_SHIFT];
-    io.KeyAlt   = io.KeysDown[GLFW_KEY_LEFT_ALT] || io.KeysDown[GLFW_KEY_RIGHT_ALT];
-    io.KeySuper = io.KeysDown[GLFW_KEY_LEFT_SUPER] || io.KeysDown[GLFW_KEY_RIGHT_SUPER];
+    io.KeyCtrl  = io.KeysDown[ANGEL3D_KEY_LEFT_CONTROL] || io.KeysDown[ANGEL3D_KEY_RIGHT_CONTROL];
+    io.KeyShift = io.KeysDown[ANGEL3D_KEY_LEFT_SHIFT]   || io.KeysDown[ANGEL3D_KEY_RIGHT_SHIFT];
+    io.KeyAlt   = io.KeysDown[ANGEL3D_KEY_LEFT_ALT]     || io.KeysDown[ANGEL3D_KEY_RIGHT_ALT];
+    io.KeySuper = io.KeysDown[ANGEL3D_KEY_LEFT_SUPER]   || io.KeysDown[ANGEL3D_KEY_RIGHT_SUPER];
 
     return false;
   }
