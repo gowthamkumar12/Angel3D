@@ -28,6 +28,7 @@ TARGET_INCLUDE_DIRECTORIES(
   PUBLIC
     "${PROJECT_SOURCE_DIR}/inc"                   # Local include directory
     "${CMAKE_CURRENT_SOURCE_DIR}/../Angel3D/inc"  # Angel3D headers
+    "${GLM}"
 )
 
 # Link dependencies

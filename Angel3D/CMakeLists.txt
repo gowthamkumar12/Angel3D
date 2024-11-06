@@ -10,8 +10,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(GLFW_LIBRARY_TYPE "STATIC" CACHE STRING "Library type override for GLFW (SHARED, STATIC, OBJECT, or empty to follow BUILD_SHARED_LIBS)")
 
 # Add GLFW as a subdirectory
-ADD_SUBDIRECTORY(${GLFW} ${GLFW}/build)
-ADD_SUBDIRECTORY(${GLAD} ${GLAD}/build)
+ADD_SUBDIRECTORY(${GLFW}  ${GLFW}/build)
+ADD_SUBDIRECTORY(${GLAD}  ${GLAD}/build)
 ADD_SUBDIRECTORY(${IMGUI} ${IMGUI}/build)
 
 # Define output directories
@@ -38,6 +38,7 @@ TARGET_INCLUDE_DIRECTORIES(
     "${GLFW}/include"
     "${GLAD}/include"
     "${IMGUI}"
+    "${GLM}"
 )
 
 # Link GLFW and OpenGL as private dependencies

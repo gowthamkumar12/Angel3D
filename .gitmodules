@@ -7,3 +7,6 @@
 [submodule "Vendor/ImGui"]
 	path = Vendor/ImGui
 	url = https://github.com/gowthamkumar12/imgui.git
+[submodule "Vendor/glm"]
+	path = Vendor/glm
+	url = https://github.com/g-truc/glm.git
