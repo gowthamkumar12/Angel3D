@@ -30,29 +30,6 @@ namespace Angel3D::ImGuiImpl
     io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
     io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
-    // TEMPORARY: should eventually use our key codes
-    io.KeyMap[ImGuiKey_Tab]        = ANGEL3D_KEY_TAB;
-    io.KeyMap[ImGuiKey_LeftArrow]  = ANGEL3D_KEY_LEFT;
-    io.KeyMap[ImGuiKey_RightArrow] = ANGEL3D_KEY_RIGHT;
-    io.KeyMap[ImGuiKey_UpArrow]    = ANGEL3D_KEY_UP;
-    io.KeyMap[ImGuiKey_DownArrow]  = ANGEL3D_KEY_DOWN;
-    io.KeyMap[ImGuiKey_PageUp]     = ANGEL3D_KEY_PAGE_UP;
-    io.KeyMap[ImGuiKey_PageDown]   = ANGEL3D_KEY_PAGE_DOWN;
-    io.KeyMap[ImGuiKey_Home]       = ANGEL3D_KEY_HOME;
-    io.KeyMap[ImGuiKey_End]        = ANGEL3D_KEY_END;
-    io.KeyMap[ImGuiKey_Insert]     = ANGEL3D_KEY_INSERT;
-    io.KeyMap[ImGuiKey_Delete]     = ANGEL3D_KEY_DELETE;
-    io.KeyMap[ImGuiKey_Backspace]  = ANGEL3D_KEY_BACKSPACE;
-    io.KeyMap[ImGuiKey_Space]      = ANGEL3D_KEY_SPACE;
-    io.KeyMap[ImGuiKey_Enter]      = ANGEL3D_KEY_ENTER;
-    io.KeyMap[ImGuiKey_Escape]     = ANGEL3D_KEY_ESCAPE;
-    io.KeyMap[ImGuiKey_A]          = ANGEL3D_KEY_A;
-    io.KeyMap[ImGuiKey_C]          = ANGEL3D_KEY_C;
-    io.KeyMap[ImGuiKey_V]          = ANGEL3D_KEY_V;
-    io.KeyMap[ImGuiKey_X]          = ANGEL3D_KEY_X;
-    io.KeyMap[ImGuiKey_Y]          = ANGEL3D_KEY_Y;
-    io.KeyMap[ImGuiKey_Z]          = ANGEL3D_KEY_Z;
-
     ImGui_ImplOpenGL3_Init("#version 410");
   }
 
@@ -136,12 +113,14 @@ namespace Angel3D::ImGuiImpl
   bool ImGuiLayer::OnKeyPressedEvent(Angel3D::Events::KeyPressedEvent &f_e)
   {
     ImGuiIO& io = ImGui::GetIO();
-    io.KeysDown[f_e.GetKeyCode()] = true;
+    int keyCode = f_e.GetKeyCode();
 
-    io.KeyCtrl  = io.KeysDown[ANGEL3D_KEY_LEFT_CONTROL] || io.KeysDown[ANGEL3D_KEY_RIGHT_CONTROL];
-    io.KeyShift = io.KeysDown[ANGEL3D_KEY_LEFT_SHIFT]   || io.KeysDown[ANGEL3D_KEY_RIGHT_SHIFT];
-    io.KeyAlt   = io.KeysDown[ANGEL3D_KEY_LEFT_ALT]     || io.KeysDown[ANGEL3D_KEY_RIGHT_ALT];
-    io.KeySuper = io.KeysDown[ANGEL3D_KEY_LEFT_SUPER]   || io.KeysDown[ANGEL3D_KEY_RIGHT_SUPER];
+    io.AddKeyEvent(static_cast<ImGuiKey>(keyCode), true);
+
+    io.AddKeyEvent(ImGuiKey_ModCtrl,  keyCode == ANGEL3D_KEY_LEFT_CONTROL || keyCode == ANGEL3D_KEY_RIGHT_CONTROL);
+    io.AddKeyEvent(ImGuiKey_ModShift, keyCode == ANGEL3D_KEY_LEFT_SHIFT   || keyCode == ANGEL3D_KEY_RIGHT_SHIFT);
+    io.AddKeyEvent(ImGuiKey_ModAlt,   keyCode == ANGEL3D_KEY_LEFT_ALT     || keyCode == ANGEL3D_KEY_RIGHT_ALT);
+    io.AddKeyEvent(ImGuiKey_ModSuper, keyCode == ANGEL3D_KEY_LEFT_SUPER   || keyCode == ANGEL3D_KEY_RIGHT_SUPER);
 
     return false;
   }
@@ -149,7 +128,9 @@ namespace Angel3D::ImGuiImpl
   bool ImGuiLayer::OnKeyReleasedEvent(Angel3D::Events::KeyReleasedEvent &f_e)
   {
     ImGuiIO& io = ImGui::GetIO();
-    io.KeysDown[f_e.GetKeyCode()] = false;
+    int keyCode = f_e.GetKeyCode();
+
+    io.AddKeyEvent(static_cast<ImGuiKey>(keyCode), false);
 
     return false;
   }
