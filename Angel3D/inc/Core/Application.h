@@ -4,6 +4,7 @@
 #include "Core/LayerStack.h"
 #include "Platform/Windows/Window.h"
 #include "Events/ApplicationEvent.h"
+#include "ImGui/ImGuiLayer.h"
 
 namespace Angel3D::Core
 {
@@ -28,6 +29,7 @@ namespace Angel3D::Core
 			bool OnWindowClose(Events::WindowCloseEvent& f_event);
 
 			std::unique_ptr<Angel3D::Core::BaseWindow> m_Window;
+			Angel3D::ImGuiImpl::ImGuiLayer* m_ImGuiLayer;
 			bool m_Running = true;
 
 			LayerStack m_LayerStack;

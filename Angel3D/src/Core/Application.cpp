@@ -15,6 +15,10 @@ namespace Angel3D::Core
 
 		m_Window = std::unique_ptr<Angel3D::Core::BaseWindow>(Angel3D::Core::BaseWindow::Create());
 		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
+
+		// Creating a new ImGui Layer and pushing it to the layer stack as a overlay.
+		m_ImGuiLayer = new Angel3D::ImGuiImpl::ImGuiLayer();
+		PushOverlay(m_ImGuiLayer);
 	}
 
 	Application::~Application()
@@ -32,6 +36,13 @@ namespace Angel3D::Core
 			{
 				layer->OnUpdate();
 			}
+
+			m_ImGuiLayer->Begin();
+			for(Layer* layer : m_LayerStack)
+			{
+				layer->OnImGuiRender();
+			}
+			m_ImGuiLayer->End();
 
 			m_Window->OnUpdate();
 		}

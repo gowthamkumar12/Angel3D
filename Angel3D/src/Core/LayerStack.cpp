@@ -4,7 +4,6 @@ namespace Angel3D::Core
 {
   LayerStack::LayerStack()
   {
-    m_LayerInsert = m_Layers.begin();
   }
 
   LayerStack::~LayerStack()
@@ -17,7 +16,8 @@ namespace Angel3D::Core
 
   void LayerStack::PushLayer(Layer* f_layer)
   {
-    m_LayerInsert = m_Layers.emplace(m_LayerInsert, f_layer);
+    m_Layers.emplace(m_Layers.begin() + m_LayerInsertIndex, f_layer);
+    m_LayerInsertIndex++;
   }
 
   void LayerStack::PushOverlay(Layer* f_overlay)
@@ -31,7 +31,7 @@ namespace Angel3D::Core
     if(it != m_Layers.end())
     {
       m_Layers.erase(it);
-      m_LayerInsert--;
+      m_LayerInsertIndex--;
     }
   }
 

@@ -11,7 +11,7 @@ class ExampleLayer : public Angel3D::Core::Layer
 		{
 			if(Angel3D::Core::Input::IsKeyPressed(ANGEL3D_KEY_TAB))
 			{
-				ANGEL3D_TRACE("Tab keu is pressed");
+				ANGEL3D_TRACE("Tab key is pressed");
 			}
 		}
 
@@ -30,7 +30,6 @@ class Sandbox : public Angel3D::Core::Application
 	public:
 		Sandbox()
 		{
-			PushOverlay(new Angel3D::ImGuiImpl::ImGuiLayer());
 		}
 
 		~Sandbox()
