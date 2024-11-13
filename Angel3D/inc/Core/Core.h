@@ -1,10 +1,14 @@
 #pragma once
 
 #ifdef ANGEL3D_PLATFORM_WINDOWS
-	#ifdef ANGEL3D_BUILD_DLL
-		#define ANGEL3D_API __declspec(dllexport)
+	#ifdef ANGEL3D_DYNAMIC_LINK
+		#ifdef ANGEL3D_BUILD_DLL
+			#define ANGEL3D_API __declspec(dllexport)
+		#else
+			#define ANGEL3D_API __declspec(dllimport)
+		#endif
 	#else
-		#define ANGEL3D_API __declspec(dllimport)
+		#define ANGEL3D_API
 	#endif
 #else
 	#error Angel3D only supports Windows!

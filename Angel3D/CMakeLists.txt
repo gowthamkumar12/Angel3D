@@ -24,7 +24,7 @@ SET(PCH_HEADER "inc/pch.h")
 SET(PCH_SOURCE "src/pch.cpp")
 
 # Creating this Angel3D library as a shared library (DLL)
-ADD_LIBRARY(${ENGINE} SHARED)
+ADD_LIBRARY(${ENGINE} STATIC)
 
 # Add precompiled header
 TARGET_PRECOMPILE_HEADERS(${ENGINE} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/${PCH_HEADER}")
@@ -62,23 +62,13 @@ IF(WIN32)
 ENDIF()
 
 # Configuration-specific definitions
-TARGET_COMPILE_DEFINITIONS(${ENGINE}
+TARGET_COMPILE_DEFINITIONS(
+  ${ENGINE}
   PRIVATE
-    $<$<CONFIG:Debug>:Angel3D_DEBUG>
-    $<$<CONFIG:Release>:Angel3D_RELEASE>
-    $<$<CONFIG:Dist>:Angel3D_DIST>
+    $<$<CONFIG:Debug>:DEBUG>
+    $<$<CONFIG:Release>:RELEASE>
+    $<$<CONFIG:Dist>:DIST>
 )
 
 # Add source directory
 ADD_SUBDIRECTORY(src)
-
-# Copy the required DLL after build
-ADD_CUSTOM_COMMAND(TARGET ${ENGINE}
-    POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E remove -f "${CMAKE_SOURCE_DIR}/_out/bin/${OUTPUT_DIR}/Sandbox"
-    COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_SOURCE_DIR}/_out/bin/${OUTPUT_DIR}/Sandbox"
-    COMMAND ${CMAKE_COMMAND} -E copy
-      ${CMAKE_SOURCE_DIR}/_out/bin/${OUTPUT_DIR}/${ENGINE}/${ENGINE}.dll
-      ${CMAKE_SOURCE_DIR}/_out/bin/${OUTPUT_DIR}/Sandbox
-    COMMENT "Copying Angel3D.dll to Sandbox directory..."
-)

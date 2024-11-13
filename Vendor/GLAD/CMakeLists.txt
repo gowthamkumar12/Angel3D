@@ -9,3 +9,11 @@ TARGET_INCLUDE_DIRECTORIES(
   PUBLIC
   "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
+
+# Configuration-specific definitions
+TARGET_COMPILE_DEFINITIONS(
+  GLAD
+  PRIVATE
+    $<$<CONFIG:Debug>:DEBUG>
+    $<$<CONFIG:Release>:RELEASE>
+)

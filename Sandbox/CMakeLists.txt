@@ -44,9 +44,10 @@ IF(WIN32)
 endif()
 
 # Configuration-specific definitions
-TARGET_COMPILE_DEFINITIONS(${SANDBOX}
+TARGET_COMPILE_DEFINITIONS(
+  ${SANDBOX}
   PRIVATE
-    $<$<CONFIG:Debug>:Angel3D_DEBUG>
-    $<$<CONFIG:Release>:Angel3D_RELEASE>
-    $<$<CONFIG:Dist>:Angel3D_DIST>
+    $<$<CONFIG:Debug>:DEBUG>
+    $<$<CONFIG:Release>:RELEASE>
+    $<$<CONFIG:Dist>:DIST>
 )
