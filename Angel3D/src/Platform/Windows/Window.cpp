@@ -1,10 +1,10 @@
 #include "Core/BaseWindow.h"
 #include "Core/Log.h"
 #include "Platform/Windows/Window.h"
+#include "Platform/OpenGL/OpenGLContext.h"
 #include "Events/ApplicationEvent.h"
 #include "Events/KeyEvent.h"
 #include "Events/MouseEvent.h"
-#include "glad/glad.h"
 
 Angel3D::Core::BaseWindow* Angel3D::Core::BaseWindow::Create(const Angel3D::Core::WindowProps& f_props)
 {
@@ -48,10 +48,8 @@ namespace Angel3D::Platform::Windows
 
     m_window = glfwCreateWindow((int)m_data.m_Width, (int)m_data.m_Height,
                                 m_data.m_Title.c_str(), nullptr, nullptr);
-    glfwMakeContextCurrent(m_window);
-
-    int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-    ANGEL3D_CORE_ASSERT(status, "Failed to initialize GLAD");
+    m_Context = new Angel3D::Platform::OpenGL::OpenGLContext(m_window);
+    m_Context->Init();
 
     glfwSetWindowUserPointer(m_window, &m_data);
     SetVSync(true);
@@ -158,7 +156,7 @@ namespace Angel3D::Platform::Windows
   void Window::OnUpdate()
   {
     glfwPollEvents();
-    glfwSwapBuffers(m_window);
+    m_Context->SwapBuffers();
   }
 
   void Window::SetVSync(bool f_enabled)

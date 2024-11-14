@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Core/BaseWindow.h"
+#include "Renderer/GraphicsContext.h"
+
 #include <GLFW/glfw3.h>
 
 namespace Angel3D::Platform::Windows
@@ -26,6 +28,8 @@ namespace Angel3D::Platform::Windows
       virtual void Shutdown();
 
       GLFWwindow* m_window;
+
+      Angel3D::Renderer::GraphicsContext* m_Context;
 
       struct WindowData
       {
