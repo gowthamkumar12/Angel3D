@@ -29,7 +29,7 @@ namespace Angel3D::Core
 	{
 		while (m_Running)
 		{
-			glClearColor(0, 0, 0, 1);
+			glClearColor(0.1, 0.1, 0.1, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			for(Layer* layer : m_LayerStack)
