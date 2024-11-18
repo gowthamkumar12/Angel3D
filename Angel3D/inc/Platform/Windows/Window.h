@@ -1,5 +1,6 @@
 #pragma once
 
+#include "pch.h"
 #include "Core/BaseWindow.h"
 #include "Renderer/GraphicsContext.h"
 
@@ -13,15 +14,15 @@ namespace Angel3D::Platform::Windows
       Window(const Angel3D::Core::WindowProps& f_props);
       virtual ~Window();
 
-      void OnUpdate() override;
+      virtual void OnUpdate() override;
 
-      inline unsigned int GetWidth() const override { return m_data.m_Width; }
-      inline unsigned int GetHeight() const override { return m_data.m_Height; }
+      virtual inline unsigned int GetWidth() const override { return m_data.m_Width; }
+      virtual inline unsigned int GetHeight() const override { return m_data.m_Height; }
 
-      inline void SetEventCallback(const EventCallbackfn& f_callback) override { m_data.m_eventCallbackFn = f_callback; }
-      void SetVSync(bool f_enabled) override;
-      bool IsVSync() const override;
-      inline void* GetNativeWindow() const override { return m_window; }
+      virtual inline void SetEventCallback(const EventCallbackfn& f_callback) override { m_data.m_eventCallbackFn = f_callback; }
+      virtual void SetVSync(bool f_enabled) override;
+      virtual bool IsVSync() const override;
+      virtual inline void* GetNativeWindow() const override { return m_window; }
 
     private:
       virtual void Init(const Angel3D::Core::WindowProps& f_props);

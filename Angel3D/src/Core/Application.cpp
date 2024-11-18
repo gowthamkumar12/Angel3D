@@ -19,6 +19,54 @@ namespace Angel3D::Core
 		// Creating a new ImGui Layer and pushing it to the layer stack as a overlay.
 		m_ImGuiLayer = new Angel3D::ImGuiImpl::ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
+
+		// Vertex array
+		glGenVertexArrays(1, &m_vertexArray);
+		glBindVertexArray(m_vertexArray);
+
+		// Vertex buffer
+		float vertices[3 * 3] = {  0.0f,  0.5f, 0.0f,
+		                          -0.5f, -0.5f, 0.0f,
+															 0.5f,  -0.5f, 0.0f};
+
+		m_vertexBuffer.reset(Angel3D::Renderer::VertexBuffer::Create(vertices, sizeof(vertices)));
+
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+
+		// Index buffer
+		unsigned int indices[3] = {0, 1, 2};
+
+		m_indexBuffer.reset(Angel3D::Renderer::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+
+		std::string vertexShader = R"(
+				#version 330 core
+
+				layout(location = 0) in vec3 a_Position;
+
+				out vec3 v_Position;
+
+				void main()
+				{
+				  v_Position = a_Position;
+					gl_Position = vec4(a_Position, 1.0);
+				}
+			)";
+
+			std::string fragmentShader = R"(
+				#version 330 core
+
+				layout(location = 0) out vec4 color;
+
+				in vec3 v_Position;
+
+				void main()
+				{
+					color = vec4(v_Position * 0.5 + 0.5, 1.0);
+				}
+			)";
+
+		m_Shader.reset(new Angel3D::Renderer::Shader(vertexShader, fragmentShader));
 	}
 
 	Application::~Application()
@@ -31,6 +79,9 @@ namespace Angel3D::Core
 		{
 			glClearColor(0.1, 0.1, 0.1, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
+
+			m_Shader->Bind();
+			glDrawElements(GL_TRIANGLES, m_indexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 			for(Layer* layer : m_LayerStack)
 			{
@@ -64,8 +115,6 @@ namespace Angel3D::Core
 	{
 		Events::EventDispatcher dispatcher(f_e);
 		dispatcher.Dispatch<Events::WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
-
-		ANGEL3D_CORE_TRACE("{0}", f_e.ToString());
 
 		for(auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{

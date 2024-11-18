@@ -12,6 +12,10 @@
 
 #include "ImGui/ImGuiLayer.h"
 
+// ------- Precompiled Header ----------
+#include "pch.h"
+// -------------------------------------
+
 // -------- Entry Point --------
 #include "Core/EntryPoint.h"
 // -----------------------------

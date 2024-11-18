@@ -41,7 +41,7 @@ pushd %BUILD_DIR%
 :: Run CMake configuration if necessary
 if not exist CMakeCache.txt (
     echo Configuring project with CMake for %CONFIG%...
-    cmake -DCMAKE_BUILD_TYPE=%CONFIG% ..
+    cmake -G "Visual Studio 16 2019" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=%CONFIG% ..
 ) else (
     echo CMake configuration already exists, skipping configuration step.
 )

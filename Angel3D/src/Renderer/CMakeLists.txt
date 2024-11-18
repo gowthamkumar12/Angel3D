@@ -1,0 +1,7 @@
+TARGET_SOURCES(
+  ${ENGINE}
+  PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/Shader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Buffer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Renderer.cpp
+)

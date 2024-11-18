@@ -5,6 +5,8 @@
 #include "Platform/Windows/Window.h"
 #include "Events/ApplicationEvent.h"
 #include "ImGui/ImGuiLayer.h"
+#include "Renderer/Shader.h"
+#include "Renderer/Buffer.h"
 
 namespace Angel3D::Core
 {
@@ -31,8 +33,12 @@ namespace Angel3D::Core
 			std::unique_ptr<Angel3D::Core::BaseWindow> m_Window;
 			Angel3D::ImGuiImpl::ImGuiLayer* m_ImGuiLayer;
 			bool m_Running = true;
-
 			LayerStack m_LayerStack;
+
+			unsigned int                                     m_vertexArray;
+			std::unique_ptr<Angel3D::Renderer::Shader>       m_Shader;
+			std::unique_ptr<Angel3D::Renderer::VertexBuffer> m_vertexBuffer;
+			std::unique_ptr<Angel3D::Renderer::IndexBuffer>  m_indexBuffer;
 
 			static Application* m_ApplicationInstance;
 	};

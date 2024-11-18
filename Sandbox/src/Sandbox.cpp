@@ -34,7 +34,6 @@ class Sandbox : public Angel3D::Core::Application
 
 		~Sandbox()
 		{
-
 		}
 };
 
