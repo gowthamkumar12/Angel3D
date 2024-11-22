@@ -33,7 +33,7 @@ namespace Angel3D::Platform::OpenGL
    * OpenGLIndexBuffer Class
    */
   OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t *f_Indices, uint32_t f_count)
-  : m_Count{f_count}
+  : m_Count(f_count)
   {
     glCreateBuffers(1, &m_RendererID);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);

@@ -4,4 +4,5 @@ TARGET_SOURCES(
     ${CMAKE_CURRENT_SOURCE_DIR}/Shader.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Buffer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Renderer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/VertexArray.cpp
 )
