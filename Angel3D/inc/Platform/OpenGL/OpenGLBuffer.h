@@ -16,8 +16,11 @@ namespace Angel3D::Platform::OpenGL
       virtual void Bind() const override;
       virtual void Unbind() const override;
 
+      virtual const Angel3D::Renderer::BufferLayout& GetLayout() const override { return m_Layout; }
+      virtual void SetLayout(const Angel3D::Renderer::BufferLayout& f_layout) override { m_Layout = f_layout; }
     private:
       uint32_t m_RendererID;
+      Angel3D::Renderer::BufferLayout m_Layout;
   };
 
   /**

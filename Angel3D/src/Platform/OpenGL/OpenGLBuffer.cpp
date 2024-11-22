@@ -7,7 +7,7 @@ namespace Angel3D::Platform::OpenGL
   /**
    * OpenGLVertexBuffer Class
    */
-  OpenGLVertexBuffer::OpenGLVertexBuffer(float *f_Vertices, uint32_t f_size)
+  OpenGLVertexBuffer::OpenGLVertexBuffer(float* f_Vertices, uint32_t f_size)
   {
     glCreateBuffers(1, &m_RendererID);
     glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
