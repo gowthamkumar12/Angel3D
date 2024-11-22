@@ -14,11 +14,11 @@ namespace Angel3D::Renderer
   {
     switch (Renderer::GetAPI())
     {
-      case RendererAPI::NONE:
+      case RendererAPI::API::NONE:
         ANGEL3D_CORE_ASSERT(false, "RenderAPI::None is currently not supported!");
         return nullptr;
 
-      case RendererAPI::OPENGL:
+      case RendererAPI::API::OPENGL:
         return new Angel3D::Platform::OpenGL::OpenGLVertexBuffer(f_Vertices, f_size);
 
       default:
@@ -36,11 +36,11 @@ namespace Angel3D::Renderer
   {
     switch (Renderer::GetAPI())
     {
-      case RendererAPI::NONE:
+      case RendererAPI::API::NONE:
         ANGEL3D_CORE_ASSERT(false, "RenderAPI::None is currently not supported!");
         return nullptr;
 
-      case RendererAPI::OPENGL:
+      case RendererAPI::API::OPENGL:
         return new Angel3D::Platform::OpenGL::OpenGLIndexBuffer(f_Indices, f_size);
 
       default:

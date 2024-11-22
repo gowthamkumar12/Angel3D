@@ -2,7 +2,7 @@
 #include "Core/Log.h"
 #include "Events/ApplicationEvent.h"
 #include "Platform/Windows/Input.h"
-#include "glad/glad.h"
+#include "Renderer/Renderer.h"
 
 namespace Angel3D::Core
 {
@@ -114,16 +114,18 @@ namespace Angel3D::Core
 	{
 		while (m_Running)
 		{
-			glClearColor(0.1, 0.1, 0.1, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
+			Angel3D::Renderer::RenderCommand::SetClearColor({0.1, 0.1, 0.1, 1});
+			Angel3D::Renderer::RenderCommand::Clear();
 
-			m_Shader->Bind();
+			Angel3D::Renderer::Renderer::BeginScene();
 
-			m_squareVertexArray->Bind();
-			glDrawElements(GL_TRIANGLES, m_squareVertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			{
+				m_Shader->Bind();
+				Angel3D::Renderer::Renderer::Submit(m_squareVertexArray);
+				Angel3D::Renderer::Renderer::Submit(m_vertexArray);
+			}
 
-			m_vertexArray->Bind();
-			glDrawElements(GL_TRIANGLES, m_vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			Angel3D::Renderer::Renderer::EndScene();
 
 			for(Layer* layer : m_LayerStack)
 			{

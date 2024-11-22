@@ -1,20 +1,17 @@
 #pragma once
 
+#include "Renderer/RenderCommand.h"
+
 namespace Angel3D::Renderer
 {
-  enum class RendererAPI
-  {
-    NONE = 0,
-    OPENGL = 1,
-    VULKAN = 2,
-    DIRECT3D = 3,
-  };
-
   class Renderer
   {
     public:
-      inline static RendererAPI GetAPI() { return s_RendererAPI; }
-    private:
-      static RendererAPI s_RendererAPI;
+      static void BeginScene();
+      static void EndScene();
+
+      static void Submit(const std::shared_ptr<VertexArray>& f_vertexArray);
+
+      inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
   };
 } // namespace Angel3D::Renderer
