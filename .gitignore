@@ -9,3 +9,6 @@ Vendor/GLAD/build/
 
 # Ignore Imgui generated files
 imgui_log.txt
+
+# Ignore __pycache__ folders
+__pycache__/
