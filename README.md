@@ -36,6 +36,7 @@ This project is a stepping stone for mastering the intricate details of engine d
 1. CMake
 2. Python
 3. Git
+4. Doxygen
 
 ### Clone the repo:
 1. Create a new workspace folder in your local machine
