@@ -7,4 +7,5 @@ TARGET_SOURCES(
     ${CMAKE_CURRENT_SOURCE_DIR}/VertexArray.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/RendererAPI.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/RenderCommand.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Camera.cpp
 )

@@ -4,6 +4,8 @@
 #include "Renderer/Shader.h"
 #include "glad/glad.h"
 
+#include <glm/gtc/type_ptr.hpp>
+
 namespace Angel3D::Renderer
 {
   Shader::Shader(const std::string &vertexSrc, const std::string &fragSrc)
@@ -124,4 +126,11 @@ namespace Angel3D::Renderer
   {
     glUseProgram(0);
   }
+
+  void Shader::UploadUniformMat4(const std::string& f_name, const glm::mat4 &f_matrix)
+  {
+    GLint location = glGetUniformLocation(m_RendererId, f_name.c_str());
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(f_matrix));
+  }
+
 } // namespace Angel3D::Renderer

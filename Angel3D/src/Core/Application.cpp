@@ -9,6 +9,7 @@ namespace Angel3D::Core
 	Application* Application::m_ApplicationInstance = nullptr;
 
 	Application::Application()
+	: m_Camera(-1.0f, 1.0f, -1.0f, 1.0f)
 	{
 		ANGEL3D_CORE_ASSERT(!m_ApplicationInstance, "Core application already exists.");
 		m_ApplicationInstance = this;
@@ -77,6 +78,8 @@ namespace Angel3D::Core
 				layout(location = 0) in vec3 a_Position;
 				layout(location = 1) in vec4 a_Color;
 
+				uniform mat4 u_ViewProjectionMatrix;
+
 				out vec3 v_Position;
 				out vec4 v_Color;
 
@@ -84,7 +87,7 @@ namespace Angel3D::Core
 				{
 				  v_Position = a_Position;
 					v_Color    = a_Color;
-					gl_Position = vec4(a_Position, 1.0);
+					gl_Position = u_ViewProjectionMatrix * vec4(a_Position, 1.0);
 				}
 			)";
 
@@ -117,12 +120,13 @@ namespace Angel3D::Core
 			Angel3D::Renderer::RenderCommand::SetClearColor({0.1, 0.1, 0.1, 1});
 			Angel3D::Renderer::RenderCommand::Clear();
 
-			Angel3D::Renderer::Renderer::BeginScene();
+			m_Camera.SetRotation(45.0f);
+
+			Angel3D::Renderer::Renderer::BeginScene(m_Camera);
 
 			{
-				m_Shader->Bind();
-				Angel3D::Renderer::Renderer::Submit(m_squareVertexArray);
-				Angel3D::Renderer::Renderer::Submit(m_vertexArray);
+				Angel3D::Renderer::Renderer::Submit(m_Shader, m_squareVertexArray);
+				Angel3D::Renderer::Renderer::Submit(m_Shader, m_vertexArray);
 			}
 
 			Angel3D::Renderer::Renderer::EndScene();
@@ -132,12 +136,12 @@ namespace Angel3D::Core
 				layer->OnUpdate();
 			}
 
-			m_ImGuiLayer->Begin();
-			for(Layer* layer : m_LayerStack)
-			{
-				layer->OnImGuiRender();
-			}
-			m_ImGuiLayer->End();
+			// m_ImGuiLayer->Begin();
+			// for(Layer* layer : m_LayerStack)
+			// {
+			// 	layer->OnImGuiRender();
+			// }
+			// m_ImGuiLayer->End();
 
 			m_Window->OnUpdate();
 		}
