@@ -4,13 +4,26 @@
 
 #include "Core/Application.h"
 #include "Core/Layer.h"
+#include "Core/Log.h"
+
+#include "Core/Input.h"
 #include "Core/KeyCodes.h"
 #include "Core/MouseButtonCodes.h"
-#include "Core/Input.h"
 
 #include "Events/Event.h"
 
 #include "ImGui/ImGuiLayer.h"
+
+// ----------- Renderer ------------
+#include "Renderer/Renderer.h"
+#include "Renderer/RenderCommand.h"
+
+#include "Renderer/Buffer.h"
+#include "Renderer/Shader.h"
+#include "Renderer/VertexArray.h"
+
+#include "Renderer/Camera.h"
+// ---------------------------------
 
 // ------- Precompiled Header ----------
 #include "pch.h"

@@ -11,7 +11,7 @@ namespace Angel3D::ImGuiImpl
   {
     public:
       ImGuiLayer();
-      ~ImGuiLayer();
+      virtual ~ImGuiLayer() = default;
 
       virtual void OnAttach() override;
       virtual void OnDetach() override;

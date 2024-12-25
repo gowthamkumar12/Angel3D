@@ -5,10 +5,6 @@
 #include "Platform/Windows/Window.h"
 #include "Events/ApplicationEvent.h"
 #include "ImGui/ImGuiLayer.h"
-#include "Renderer/Shader.h"
-#include "Renderer/Buffer.h"
-#include "Renderer/VertexArray.h"
-#include "Renderer/Camera.h"
 
 namespace Angel3D::Core
 {
@@ -16,7 +12,7 @@ namespace Angel3D::Core
 	{
 		public:
 			Application();
-			~Application();
+			virtual ~Application() = default;
 
 			void Run();
 
@@ -36,12 +32,6 @@ namespace Angel3D::Core
 			Angel3D::ImGuiImpl::ImGuiLayer* m_ImGuiLayer;
 			bool m_Running = true;
 			LayerStack m_LayerStack;
-
-			std::shared_ptr<Angel3D::Renderer::VertexArray>  m_vertexArray;
-			std::shared_ptr<Angel3D::Renderer::VertexArray>  m_squareVertexArray;
-			std::shared_ptr<Angel3D::Renderer::Shader>       m_Shader;
-
-			Angel3D::Renderer::OrthographicCamera m_Camera;
 
 			static Application* m_ApplicationInstance;
 	};

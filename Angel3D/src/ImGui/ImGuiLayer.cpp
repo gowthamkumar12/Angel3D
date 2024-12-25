@@ -15,12 +15,6 @@ namespace Angel3D::ImGuiImpl
   ImGuiLayer::ImGuiLayer()
   : Angel3D::Core::Layer("ImGuiLayer")
   {
-
-  }
-
-  ImGuiLayer::~ImGuiLayer()
-  {
-
   }
 
   void ImGuiLayer::OnAttach()
@@ -88,9 +82,9 @@ namespace Angel3D::ImGuiImpl
     }
   }
 
-    void ImGuiLayer::OnImGuiRender()
-    {
-      static bool show = true;
-      ImGui::ShowDemoWindow(&show);
-    }
+  void ImGuiLayer::OnImGuiRender()
+  {
+    static bool show = true;
+    ImGui::ShowDemoWindow(&show);
+  }
 } // namespace Angel3D

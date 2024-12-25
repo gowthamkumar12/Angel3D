@@ -6,8 +6,4 @@ namespace Angel3D::Core
   : m_Name(name)
   {
   }
-
-  Layer::~Layer()
-  {
-  }
 } // namespace Angel3D

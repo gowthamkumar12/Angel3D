@@ -26,7 +26,7 @@ namespace Angel3D::Core
     public:
       using EventCallbackfn = std::function<void(Angel3D::Events::Event&)>;
 
-      virtual ~BaseWindow() {}
+      virtual ~BaseWindow() = default;
 
       virtual void OnUpdate() = 0;
 
