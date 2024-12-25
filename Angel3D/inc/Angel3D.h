@@ -5,6 +5,7 @@
 #include "Core/Application.h"
 #include "Core/Layer.h"
 #include "Core/Log.h"
+#include "core/Timestep.h"
 
 #include "Core/Input.h"
 #include "Core/KeyCodes.h"

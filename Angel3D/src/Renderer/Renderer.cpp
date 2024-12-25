@@ -14,10 +14,13 @@ namespace Angel3D::Renderer
   {
   }
 
-  void Renderer::Submit(const std::shared_ptr<Shader>& f_Shader, const std::shared_ptr<VertexArray> &f_vertexArray)
+  void Renderer::Submit(const std::shared_ptr<Shader>&      f_Shader,
+                        const std::shared_ptr<VertexArray>& f_vertexArray,
+                        const glm::mat4&                    f_transform)
   {
     f_Shader->Bind();
     f_Shader->UploadUniformMat4("u_ViewProjectionMatrix", m_SceneData->m_ViewProjectionMatrix);
+    f_Shader->UploadUniformMat4("u_Transform", f_transform);
 
     f_vertexArray->Bind();
     RenderCommand::DrawIndexed(f_vertexArray);

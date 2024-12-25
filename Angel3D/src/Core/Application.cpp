@@ -1,5 +1,6 @@
 #include "Core/Application.h"
 #include "Core/Log.h"
+#include "Core/Timestep.h"
 #include "Events/ApplicationEvent.h"
 #include "Platform/Windows/Input.h"
 #include "Renderer/Renderer.h"
@@ -50,9 +51,13 @@ namespace Angel3D::Core
 	{
 		while (m_Running)
 		{
+			float time = (float)glfwGetTime();
+			Timestep timestep = time - m_LastFrameTime;
+			m_LastFrameTime = time;
+
 			for(Layer* layer : m_LayerStack)
 			{
-				layer->OnUpdate();
+				layer->OnUpdate(timestep);
 			}
 
 			// m_ImGuiLayer->Begin();

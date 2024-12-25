@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/Core.h"
+#include "Core/Timestep.h"
 #include "Events/Event.h"
 
 namespace Angel3D::Core
@@ -13,7 +14,7 @@ namespace Angel3D::Core
 
       virtual void OnAttach() {}
       virtual void OnDetach() {}
-      virtual void OnUpdate() {}
+      virtual void OnUpdate(Timestep f_ts) {}
       virtual void OnImGuiRender() {}
       virtual void OnEvent(Angel3D::Events::Event& f_e) {}
 

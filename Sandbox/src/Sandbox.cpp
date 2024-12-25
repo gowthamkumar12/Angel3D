@@ -1,4 +1,5 @@
 #include "Angel3D.h"
+#include <glm/gtc/matrix_transform.hpp>
 
 class MainLayer : public Angel3D::Core::Layer
 {
@@ -12,9 +13,9 @@ class MainLayer : public Angel3D::Core::Layer
 			m_vertexArray.reset(Angel3D::Renderer::VertexArray::Create());
 
 			// Vertex buffer
-			float vertices[3 * 7] = {  0.0f,  0.5f, 0.0f, 0.8f, 0.2f, 0.2f, 1.0f,
-																-0.5f, -0.5f, 0.0f, 0.2f, 0.8f, 0.2f, 1.0f,
-																0.5f,  -0.5f, 0.0f, 0.2f, 0.2f, 0.8f, 1.0f };
+			float vertices[3 * 7] = { 0.0f,  0.5f, 0.0f, 0.8f, 0.2f, 0.2f, 1.0f,
+															 -0.5f, -0.5f, 0.0f, 0.2f, 0.8f, 0.2f, 1.0f,
+															  0.5f, -0.5f, 0.0f, 0.2f, 0.2f, 0.8f, 1.0f };
 
 			std::shared_ptr<Angel3D::Renderer::VertexBuffer> vertexBuffer;
 			vertexBuffer.reset(Angel3D::Renderer::VertexBuffer::Create(vertices, sizeof(vertices)));
@@ -37,10 +38,10 @@ class MainLayer : public Angel3D::Core::Layer
 			m_squareVertexArray.reset(Angel3D::Renderer::VertexArray::Create());
 
 			// Square Vertex buffer
-			float SquareVertices[4 * 7] = { -0.75f, -0.75f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-																			0.75f, -0.75f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-																			0.75f,  0.75f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-																			-0.75f,  0.75f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, };
+			float SquareVertices[4 * 7] = { -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+																			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+																			 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+																			-0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, };
 
 			std::shared_ptr<Angel3D::Renderer::VertexBuffer> squareVertexBuffer;
 			squareVertexBuffer.reset(Angel3D::Renderer::VertexBuffer::Create(SquareVertices, sizeof(SquareVertices)));
@@ -66,6 +67,7 @@ class MainLayer : public Angel3D::Core::Layer
 					layout(location = 1) in vec4 a_Color;
 
 					uniform mat4 u_ViewProjectionMatrix;
+					uniform mat4 u_Transform;
 
 					out vec3 v_Position;
 					out vec4 v_Color;
@@ -74,7 +76,7 @@ class MainLayer : public Angel3D::Core::Layer
 					{
 						v_Position = a_Position;
 						v_Color    = a_Color;
-						gl_Position = u_ViewProjectionMatrix * vec4(a_Position, 1.0);
+						gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Position, 1.0);
 					}
 				)";
 
@@ -96,35 +98,34 @@ class MainLayer : public Angel3D::Core::Layer
 			m_Shader.reset(new Angel3D::Renderer::Shader(vertexShader, fragmentShader));
 		}
 
-		virtual void OnUpdate() override
+		virtual void OnUpdate(Angel3D::Core::Timestep f_ts) override
 		{
 			if(Angel3D::Core::Input::IsKeyPressed(ANGEL3D_KEY_LEFT))
 			{
-				m_CameraPosition.x += m_CameraMoveSpeed;
+				m_CameraPosition.x += m_CameraMoveSpeed * f_ts;
 			}
 			else if(Angel3D::Core::Input::IsKeyPressed(ANGEL3D_KEY_RIGHT))
 			{
-				m_CameraPosition.x -= m_CameraMoveSpeed;
+				m_CameraPosition.x -= m_CameraMoveSpeed * f_ts;
 			}
 
 			if(Angel3D::Core::Input::IsKeyPressed(ANGEL3D_KEY_UP))
 			{
-				m_CameraPosition.y -= m_CameraMoveSpeed;
+				m_CameraPosition.y -= m_CameraMoveSpeed * f_ts;
 			}
 			else if(Angel3D::Core::Input::IsKeyPressed(ANGEL3D_KEY_DOWN))
 			{
-				m_CameraPosition.y += m_CameraMoveSpeed;
+				m_CameraPosition.y += m_CameraMoveSpeed * f_ts;
 			}
 
 			if(Angel3D::Core::Input::IsKeyPressed(ANGEL3D_KEY_A))
 			{
-				m_CameraRotation -= m_CameraRotationSpeed;
+				m_CameraRotation -= m_CameraRotationSpeed * f_ts;
 			}
 			else if(Angel3D::Core::Input::IsKeyPressed(ANGEL3D_KEY_D))
 			{
-				m_CameraRotation += m_CameraRotationSpeed;
+				m_CameraRotation += m_CameraRotationSpeed * f_ts;
 			}
-
 
 			Angel3D::Renderer::RenderCommand::SetClearColor({0.1, 0.1, 0.1, 1});
 			Angel3D::Renderer::RenderCommand::Clear();
@@ -135,7 +136,16 @@ class MainLayer : public Angel3D::Core::Layer
 			Angel3D::Renderer::Renderer::BeginScene(m_Camera);
 
 			{
-				Angel3D::Renderer::Renderer::Submit(m_Shader, m_squareVertexArray);
+				static glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+				for(int y = 0; y < 10; y++)
+				{
+					for(int x = 0; x < 10; x++)
+					{
+						glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
+						glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+						Angel3D::Renderer::Renderer::Submit(m_Shader, m_squareVertexArray, transform);
+					}
+				}
 				Angel3D::Renderer::Renderer::Submit(m_Shader, m_vertexArray);
 			}
 
@@ -157,9 +167,9 @@ class MainLayer : public Angel3D::Core::Layer
 
 		Angel3D::Renderer::OrthographicCamera m_Camera;
 		glm::vec3                             m_CameraPosition;
-		float                                 m_CameraMoveSpeed     = 0.1f;
+		float                                 m_CameraMoveSpeed     = 5.0f;
 		float                                 m_CameraRotation      = 0.0f;
-		float                                 m_CameraRotationSpeed = 2.0f;
+		float                                 m_CameraRotationSpeed = 90.0f;
 };
 
 class Sandbox : public Angel3D::Core::Application
