@@ -1,5 +1,10 @@
 #include "Angel3D.h"
+#include "Platform/OpenGL/OpenGLShader.h"
+
+#include "imgui.h"
+
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class MainLayer : public Angel3D::Core::Layer
 {
@@ -95,7 +100,45 @@ class MainLayer : public Angel3D::Core::Layer
 					}
 				)";
 
-			m_Shader.reset(new Angel3D::Renderer::Shader(vertexShader, fragmentShader));
+				std::string t_vertexShader = R"(
+					#version 330 core
+
+					layout(location = 0) in vec3 a_Position;
+					layout(location = 1) in vec4 a_Color;
+
+					uniform mat4 u_ViewProjectionMatrix;
+					uniform mat4 u_Transform;
+
+					out vec3 v_Position;
+					out vec4 v_Color;
+
+					void main()
+					{
+						v_Position = a_Position;
+						v_Color    = a_Color;
+						gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Position, 1.0);
+					}
+				)";
+
+				std::string t_fragmentShader = R"(
+					#version 330 core
+
+					layout(location = 0) out vec4 color;
+
+					uniform vec3 u_Color;
+
+					in vec3 v_Position;
+					in vec4 v_Color;
+
+					void main()
+					{
+						color = vec4(v_Position * 0.5 + 0.5, 1.0);
+						color = vec4(u_Color, 1.0f);
+					}
+				)";
+
+			m_Shader.reset(Angel3D::Renderer::Shader::Create(vertexShader, fragmentShader));
+			m_TileShader.reset(Angel3D::Renderer::Shader::Create(t_vertexShader, t_fragmentShader));
 		}
 
 		virtual void OnUpdate(Angel3D::Core::Timestep f_ts) override
@@ -143,7 +186,9 @@ class MainLayer : public Angel3D::Core::Layer
 					{
 						glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
 						glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
-						Angel3D::Renderer::Renderer::Submit(m_Shader, m_squareVertexArray, transform);
+						m_TileShader->Bind();
+						std::dynamic_pointer_cast<Angel3D::Platform::OpenGL::OpenGLShader>(m_TileShader)->UploadUniformFloat3("u_Color", m_tileSquareColor);
+						Angel3D::Renderer::Renderer::Submit(m_TileShader, m_squareVertexArray, transform);
 					}
 				}
 				Angel3D::Renderer::Renderer::Submit(m_Shader, m_vertexArray);
@@ -154,6 +199,9 @@ class MainLayer : public Angel3D::Core::Layer
 
 		virtual void OnImGuiRender() override
 		{
+			ImGui::Begin("Settings");
+			ImGui::ColorEdit3("Square Color", glm::value_ptr(m_tileSquareColor));
+			ImGui::End();
 		}
 
 		virtual void OnEvent(Angel3D::Events::Event& f_e) override
@@ -164,12 +212,15 @@ class MainLayer : public Angel3D::Core::Layer
 		std::shared_ptr<Angel3D::Renderer::VertexArray>  m_vertexArray;
 		std::shared_ptr<Angel3D::Renderer::VertexArray>  m_squareVertexArray;
 		std::shared_ptr<Angel3D::Renderer::Shader>       m_Shader;
+		std::shared_ptr<Angel3D::Renderer::Shader>       m_TileShader;
 
 		Angel3D::Renderer::OrthographicCamera m_Camera;
 		glm::vec3                             m_CameraPosition;
 		float                                 m_CameraMoveSpeed     = 5.0f;
 		float                                 m_CameraRotation      = 0.0f;
 		float                                 m_CameraRotationSpeed = 90.0f;
+
+		glm::vec3 m_tileSquareColor{1.0f, 1.0f, 1.0f};
 };
 
 class Sandbox : public Angel3D::Core::Application
