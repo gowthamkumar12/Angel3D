@@ -10,6 +10,6 @@ namespace Angel3D::Platform::OpenGL
       virtual void SetClearColor(const glm::vec4& f_color) override;
       virtual void Clear() override;
 
-      virtual void DrawIndexed(const std::shared_ptr<Angel3D::Renderer::VertexArray>& f_vertexArray) override;
+      virtual void DrawIndexed(const Angel3D::Core::Ref<Angel3D::Renderer::VertexArray>& f_vertexArray) override;
   };
 } // namespace Angel3D::Platform::OpenGL

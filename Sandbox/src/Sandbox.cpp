@@ -22,7 +22,7 @@ class MainLayer : public Angel3D::Core::Layer
 															 -0.5f, -0.5f, 0.0f, 0.2f, 0.8f, 0.2f, 1.0f,
 															  0.5f, -0.5f, 0.0f, 0.2f, 0.2f, 0.8f, 1.0f };
 
-			std::shared_ptr<Angel3D::Renderer::VertexBuffer> vertexBuffer;
+			Angel3D::Core::Ref<Angel3D::Renderer::VertexBuffer> vertexBuffer;
 			vertexBuffer.reset(Angel3D::Renderer::VertexBuffer::Create(vertices, sizeof(vertices)));
 			{
 				Angel3D::Renderer::BufferLayout layout = {{Angel3D::Renderer::ShaderDataType::Float3, "a_Position"},
@@ -35,7 +35,7 @@ class MainLayer : public Angel3D::Core::Layer
 			// Index buffer
 			unsigned int indices[3] = {0, 1, 2};
 
-			std::shared_ptr<Angel3D::Renderer::IndexBuffer> indexBuffer;
+			Angel3D::Core::Ref<Angel3D::Renderer::IndexBuffer> indexBuffer;
 			indexBuffer.reset(Angel3D::Renderer::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 			m_vertexArray->SetIndexBuffer(indexBuffer);
 
@@ -48,7 +48,7 @@ class MainLayer : public Angel3D::Core::Layer
 																			 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
 																			-0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, };
 
-			std::shared_ptr<Angel3D::Renderer::VertexBuffer> squareVertexBuffer;
+			Angel3D::Core::Ref<Angel3D::Renderer::VertexBuffer> squareVertexBuffer;
 			squareVertexBuffer.reset(Angel3D::Renderer::VertexBuffer::Create(SquareVertices, sizeof(SquareVertices)));
 			{
 				Angel3D::Renderer::BufferLayout SquareLayout = {{Angel3D::Renderer::ShaderDataType::Float3, "a_Position"},
@@ -60,7 +60,7 @@ class MainLayer : public Angel3D::Core::Layer
 			// Squared Index Buffer
 			unsigned int squaredIndices[6] = {0, 1, 2, 2, 3, 0};
 
-			std::shared_ptr<Angel3D::Renderer::IndexBuffer> squareIndexBuffer;
+			Angel3D::Core::Ref<Angel3D::Renderer::IndexBuffer> squareIndexBuffer;
 
 			squareIndexBuffer.reset(Angel3D::Renderer::IndexBuffer::Create(squaredIndices, sizeof(squaredIndices)  / sizeof(uint32_t)));
 			m_squareVertexArray->SetIndexBuffer(squareIndexBuffer);
@@ -209,10 +209,10 @@ class MainLayer : public Angel3D::Core::Layer
 		}
 
 	private:
-		std::shared_ptr<Angel3D::Renderer::VertexArray>  m_vertexArray;
-		std::shared_ptr<Angel3D::Renderer::VertexArray>  m_squareVertexArray;
-		std::shared_ptr<Angel3D::Renderer::Shader>       m_Shader;
-		std::shared_ptr<Angel3D::Renderer::Shader>       m_TileShader;
+		Angel3D::Core::Ref<Angel3D::Renderer::VertexArray>  m_vertexArray;
+		Angel3D::Core::Ref<Angel3D::Renderer::VertexArray>  m_squareVertexArray;
+		Angel3D::Core::Ref<Angel3D::Renderer::Shader>       m_Shader;
+		Angel3D::Core::Ref<Angel3D::Renderer::Shader>       m_TileShader;
 
 		Angel3D::Renderer::OrthographicCamera m_Camera;
 		glm::vec3                             m_CameraPosition;

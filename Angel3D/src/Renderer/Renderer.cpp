@@ -15,8 +15,8 @@ namespace Angel3D::Renderer
   {
   }
 
-  void Renderer::Submit(const std::shared_ptr<Shader>&      f_Shader,
-                        const std::shared_ptr<VertexArray>& f_vertexArray,
+  void Renderer::Submit(const Angel3D::Core::Ref<Shader>&      f_Shader,
+                        const Angel3D::Core::Ref<VertexArray>& f_vertexArray,
                         const glm::mat4&                    f_transform)
   {
     f_Shader->Bind();

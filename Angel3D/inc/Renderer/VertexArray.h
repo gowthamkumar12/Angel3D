@@ -12,11 +12,11 @@ namespace Angel3D::Renderer
       virtual void Bind() const = 0;
       virtual void Unbind() const = 0;
 
-      virtual void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& f_vertexBuffer) = 0;
-      virtual void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& f_indexBuffer) = 0;
+      virtual void AddVertexBuffer(const Angel3D::Core::Ref<VertexBuffer>& f_vertexBuffer) = 0;
+      virtual void SetIndexBuffer(const Angel3D::Core::Ref<IndexBuffer>& f_indexBuffer) = 0;
 
-      virtual const std::vector<std::shared_ptr<VertexBuffer>>& GetVertexBuffers() const = 0;
-      virtual const std::shared_ptr<IndexBuffer> GetIndexBuffer() const = 0;
+      virtual const std::vector<Angel3D::Core::Ref<VertexBuffer>>& GetVertexBuffers() const = 0;
+      virtual const Angel3D::Core::Ref<IndexBuffer> GetIndexBuffer() const = 0;
 
       static VertexArray* Create();
   };

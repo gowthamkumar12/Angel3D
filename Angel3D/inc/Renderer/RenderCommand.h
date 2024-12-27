@@ -17,7 +17,7 @@ namespace Angel3D::Renderer
         s_RendererAPI->Clear();
       };
 
-      inline static void DrawIndexed(const std::shared_ptr<VertexArray>& f_vertexArray)
+      inline static void DrawIndexed(const Angel3D::Core::Ref<VertexArray>& f_vertexArray)
       {
         s_RendererAPI->DrawIndexed(f_vertexArray);
       }

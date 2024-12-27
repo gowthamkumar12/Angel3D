@@ -14,7 +14,7 @@ namespace Angel3D::Core
 		ANGEL3D_CORE_ASSERT(!m_ApplicationInstance, "Core application already exists.");
 		m_ApplicationInstance = this;
 
-		m_Window = std::unique_ptr<Angel3D::Core::BaseWindow>(Angel3D::Core::BaseWindow::Create());
+		m_Window = Ref<Angel3D::Core::BaseWindow>(Angel3D::Core::BaseWindow::Create());
 		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 
 		// Creating a new ImGui Layer and pushing it to the layer stack as a overlay.

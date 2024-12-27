@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #ifdef ANGEL3D_PLATFORM_WINDOWS
 	#ifdef ANGEL3D_DYNAMIC_LINK
 		#ifdef ANGEL3D_BUILD_DLL
@@ -25,3 +27,12 @@
 #define BIT(x) (1 << x)
 
 #define BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+
+namespace Angel3D::Core
+{
+	template<typename T>
+	using Scope = std::unique_ptr<T>;
+
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+}

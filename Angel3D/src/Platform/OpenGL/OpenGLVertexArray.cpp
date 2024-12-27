@@ -46,7 +46,7 @@ namespace Angel3D::Platform::OpenGL
     glBindVertexArray(0);
   }
 
-  void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<Angel3D::Renderer::VertexBuffer> &f_vertexBuffer)
+  void OpenGLVertexArray::AddVertexBuffer(const Angel3D::Core::Ref<Angel3D::Renderer::VertexBuffer> &f_vertexBuffer)
   {
     glBindVertexArray(m_RendererID);
     f_vertexBuffer->Bind();
@@ -68,7 +68,7 @@ namespace Angel3D::Platform::OpenGL
     m_VertexBuffers.push_back(f_vertexBuffer);
   }
 
-  void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<Angel3D::Renderer::IndexBuffer> &f_indexBuffer)
+  void OpenGLVertexArray::SetIndexBuffer(const Angel3D::Core::Ref<Angel3D::Renderer::IndexBuffer> &f_indexBuffer)
   {
     glBindVertexArray(m_RendererID);
     f_indexBuffer->Bind();

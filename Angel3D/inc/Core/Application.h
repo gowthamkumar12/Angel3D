@@ -29,7 +29,7 @@ namespace Angel3D::Core
 			bool OnWindowClose(Events::WindowCloseEvent& f_event);
 
 		private:
-			std::unique_ptr<Angel3D::Core::BaseWindow> m_Window;
+			Ref<Angel3D::Core::BaseWindow> m_Window;
 			Angel3D::ImGuiImpl::ImGuiLayer*            m_ImGuiLayer;
 			bool                                       m_Running = true;
 			LayerStack                                 m_LayerStack;
