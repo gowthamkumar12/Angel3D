@@ -6,6 +6,11 @@ namespace Angel3D::Renderer
 {
   Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
 
+  void Renderer::Init()
+  {
+    RenderCommand::Init();
+  }
+
   void Renderer::BeginScene(Angel3D::Renderer::OrthographicCamera& f_camera)
   {
     m_SceneData->m_ViewProjectionMatrix = f_camera.GetViewProjectionMatrix();

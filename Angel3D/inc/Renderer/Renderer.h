@@ -9,6 +9,7 @@ namespace Angel3D::Renderer
   class Renderer
   {
     public:
+      static void Init();
       static void BeginScene(Angel3D::Renderer::OrthographicCamera& f_camera);
       static void EndScene();
 

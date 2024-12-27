@@ -7,6 +7,11 @@ namespace Angel3D::Renderer
   class RenderCommand
   {
     public:
+      inline static void Init()
+      {
+        s_RendererAPI->Init();
+      }
+
       inline static void SetClearColor(const glm::vec4& f_color)
       {
         s_RendererAPI->SetClearColor(f_color);

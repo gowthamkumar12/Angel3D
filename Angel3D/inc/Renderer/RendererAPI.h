@@ -16,6 +16,8 @@ namespace Angel3D::Renderer
         DIRECT3D = 3
       };
 
+      virtual void Init() = 0;
+
       virtual void SetClearColor(const glm::vec4& f_color) = 0;
       virtual void Clear() = 0;
 
