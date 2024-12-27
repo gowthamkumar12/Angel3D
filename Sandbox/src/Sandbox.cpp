@@ -94,7 +94,7 @@ namespace Sandbox
 			}
 		)";
 
-		m_Shader.reset(Angel3D::Renderer::Shader::Create(vertexShader, fragmentShader));
+		m_Shader = Angel3D::Renderer::Shader::Create(vertexShader, fragmentShader);
 
 		// Shaders for the Tiles
 		std::string tile_vertexShader = R"(
@@ -129,43 +129,9 @@ namespace Sandbox
 			}
 		)";
 
-		m_TileShader.reset(Angel3D::Renderer::Shader::Create(tile_vertexShader, tile_fragmentShader));
+		m_TileShader = Angel3D::Renderer::Shader::Create(tile_vertexShader, tile_fragmentShader);
 
-		// Shader for the Texture
-		std::string texture_vertexShader = R"(
-			#version 330 core
-
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec2 a_TexCoord;
-
-			uniform mat4 u_ViewProjectionMatrix;
-			uniform mat4 u_Transform;
-
-			out vec2 v_TexCoord;
-
-			void main()
-			{
-				v_TexCoord = a_TexCoord;
-				gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Position, 1.0);
-			}
-		)";
-
-		std::string texture_fragmentShader = R"(
-			#version 330 core
-
-			layout(location = 0) out vec4 color;
-
-			uniform sampler2D u_Texture;
-
-			in vec2 v_TexCoord;
-
-			void main()
-			{
-				color = texture(u_Texture, v_TexCoord);
-			}
-		)";
-
-		m_TextureShader.reset(Angel3D::Renderer::Shader::Create(texture_vertexShader, texture_fragmentShader));
+		m_TextureShader = Angel3D::Renderer::Shader::Create("Sandbox/assets/shaders/Texture.glsl");
 
 		m_TextureShader->Bind();
 		std::dynamic_pointer_cast<Angel3D::Platform::OpenGL::OpenGLShader>(m_TileShader)->UploadUniformInt("u_Texture", 0);

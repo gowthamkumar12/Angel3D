@@ -4,80 +4,137 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
+#include <fstream>
+
 namespace Angel3D::Platform::OpenGL
 {
-  OpenGLShader::OpenGLShader(const std::string &vertexSrc, const std::string &fragSrc)
+  static GLenum ShaderTypeFromString(const std::string& f_type)
   {
-    // Create an empty vertex shader handle
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
-    // Send the vertex shader source code to GL
-    // Note that std::string's .c_str is NULL character terminated.
-    const GLchar* source = vertexSrc.c_str();
-    glShaderSource(vertexShader, 1, &source, 0);
-
-    // Compile the vertex shader
-    glCompileShader(vertexShader);
-
-    GLint isCompiled = 0;
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &isCompiled);
-    if(isCompiled == GL_FALSE)
+    if(f_type == "vertex")
     {
-      GLint maxLength = 0;
-      glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &maxLength);
-
-      // The maxLength includes the NULL character
-      std::vector<GLchar> infoLog(maxLength);
-      glGetShaderInfoLog(vertexShader, maxLength, &maxLength, &infoLog[0]);
-
-      // We don't need the shader anymore.
-      glDeleteShader(vertexShader);
-
-      ANGEL3D_CORE_ERROR("{0}", infoLog.data());
-      ANGEL3D_CORE_ASSERT(false, "Vertex shader compilation failure!");
-      return;
+      return GL_VERTEX_SHADER;
+    }
+    if(f_type == "fragment" || f_type == "pixel")
+    {
+      return GL_FRAGMENT_SHADER;
     }
 
-    // Create an empty fragment shader handle
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    ANGEL3D_CORE_ASSERT(false, "Invalid shader type!");
+    return 0;
+  }
 
-    // Send the fragment shader source code to GL
-    // Note that std::string's .c_str is NULL character terminated.
-    source = fragSrc.c_str();
-    glShaderSource(fragmentShader, 1, &source, 0);
+  OpenGLShader::OpenGLShader(const std::string& f_filePath)
+  {
+    std::string source = ReadFromFile(f_filePath);
+    auto shaderSources = PreProcessing(source);
+    Compile(shaderSources);
+  }
 
-    // Compile the fragment shader
-    glCompileShader(fragmentShader);
+  OpenGLShader::OpenGLShader(const std::string &vertexSrc, const std::string &fragSrc)
+  {
+    std::unordered_map<GLenum, std::string> shaderSource;
+    shaderSource[GL_VERTEX_SHADER] = vertexSrc;
+    shaderSource[GL_FRAGMENT_SHADER] = fragSrc;
+    Compile(shaderSource);
+  }
 
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &isCompiled);
-    if (isCompiled == GL_FALSE)
+  OpenGLShader::~OpenGLShader()
+  {
+    glDeleteProgram(m_RendererId);
+  }
+
+  std::string OpenGLShader::ReadFromFile(const std::string& f_filePath)
+  {
+    std::string result;
+    std::ifstream in(f_filePath, std::ios::in, std::ios::binary);
+    if(in)
     {
-      GLint maxLength = 0;
-      glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &maxLength);
+      in.seekg(0, std::ios::end);
+      result.resize(in.tellg());
+      in.seekg(0, std::ios::beg);
+      in.read(&result[0], result.size());
+      in.close();
+    }
+    else
+    {
+      ANGEL3D_CORE_ERROR("Could not load the shader file '{0}'", f_filePath);
+    }
 
-      // The maxLength includes the NULL character
-      std::vector<GLchar> infoLog(maxLength);
-      glGetShaderInfoLog(fragmentShader, maxLength, &maxLength, &infoLog[0]);
+    return result;
+  }
 
-      // We don't need the shader anymore.
-      glDeleteShader(fragmentShader);
-      // Either of them. Don't leak shaders.
-      glDeleteShader(vertexShader);
+  std::unordered_map<GLenum, std::string> OpenGLShader::PreProcessing(const std::string& f_shaderSource)
+  {
+    std::unordered_map<GLenum, std::string> shaderSources;
 
-      ANGEL3D_CORE_ERROR("{0}", infoLog.data());
-      ANGEL3D_CORE_ASSERT(false, "Fragment shader compilation failure!");
-      return;
+    const char* typeToken  = "#type";
+    size_t typeTokenLength = strlen(typeToken);
+    size_t pos             = f_shaderSource.find(typeToken, 0);
+    while (pos != std::string::npos)
+    {
+      size_t eol = f_shaderSource.find_first_of("\r\n", pos);
+      ANGEL3D_CORE_ASSERT(eol != std::string::npos, "Syntax error!");
+
+      size_t begin = pos + typeTokenLength + 1;
+      std::string type = f_shaderSource.substr(begin, eol - begin);
+      ANGEL3D_CORE_ASSERT(ShaderTypeFromString(type), "Invalid shader type specification");
+
+      size_t nextLinePos = f_shaderSource.find_first_not_of("\r\n", eol);
+      pos = f_shaderSource.find(typeToken, nextLinePos);
+      shaderSources[ShaderTypeFromString(type)] = f_shaderSource.substr(nextLinePos,
+                                                                        pos - (nextLinePos == std::string::npos ? f_shaderSource.size() - 1 : nextLinePos));
+    }
+
+    return shaderSources;
+  }
+
+  void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& f_shaderSources)
+  {
+    GLuint program = glCreateProgram();
+    std::vector<GLenum> glShaderIDs(f_shaderSources.size());
+
+    for (auto& ele : f_shaderSources)
+    {
+      GLenum type = ele.first;
+      const std::string source = ele.second;
+
+      // Create an empty shader handle
+      GLuint shader = glCreateShader(type);
+
+      // Send the vertex shader source code to GL
+      // Note that std::string's .c_str is NULL character terminated.
+      const GLchar* sourceCSTR = source.c_str();
+      glShaderSource(shader, 1, &sourceCSTR, 0);
+
+      // Compile the vertex shader
+      glCompileShader(shader);
+
+      GLint isCompiled = 0;
+      glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
+      if(isCompiled == GL_FALSE)
+      {
+        GLint maxLength = 0;
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+
+        // The maxLength includes the NULL character
+        std::vector<GLchar> infoLog(maxLength);
+        glGetShaderInfoLog(shader, maxLength, &maxLength, &infoLog[0]);
+
+        // We don't need the shader anymore.
+        glDeleteShader(shader);
+
+        ANGEL3D_CORE_ERROR("{0}", infoLog.data());
+        ANGEL3D_CORE_ASSERT(false, "Shader compilation failure!");
+        break;
+      }
+
+      glAttachShader(program, shader);
     }
 
     // Vertex and fragment shaders are successfully compiled.
     // Now time to link them together into a program.
     // Get a program object.
-    m_RendererId = glCreateProgram();
-    GLuint program = m_RendererId;
-
-    // Attach our shaders to our program
-    glAttachShader(program, vertexShader);
-    glAttachShader(program, fragmentShader);
+    m_RendererId = program;
 
     // Link our program
     glLinkProgram(program);
@@ -96,9 +153,12 @@ namespace Angel3D::Platform::OpenGL
 
       // We don't need the program anymore.
       glDeleteProgram(program);
+
       // Don't leak shaders either.
-      glDeleteShader(vertexShader);
-      glDeleteShader(fragmentShader);
+      for(auto id : glShaderIDs)
+      {
+        glDeleteShader(id);
+      }
 
       ANGEL3D_CORE_ERROR("{0}", infoLog.data());
       ANGEL3D_CORE_ASSERT(false, "Shader linking failure!");
@@ -106,13 +166,10 @@ namespace Angel3D::Platform::OpenGL
     }
 
     // Always detach shaders after a successful link.
-    glDetachShader(program, vertexShader);
-    glDetachShader(program, fragmentShader);
-  }
-
-  OpenGLShader::~OpenGLShader()
-  {
-    glDeleteProgram(m_RendererId);
+    for(auto id : glShaderIDs)
+    {
+      glDetachShader(program, id);
+    }
   }
 
   void OpenGLShader::Bind() const
