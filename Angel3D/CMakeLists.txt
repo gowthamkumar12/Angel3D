@@ -39,6 +39,7 @@ TARGET_INCLUDE_DIRECTORIES(
     "${GLAD}/include"
     "${IMGUI}"
     "${GLM}"
+    "${STB}"
 )
 
 # Link GLFW and OpenGL as private dependencies

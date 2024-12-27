@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Core/Log.h"
 #include "Platform/OpenGL/OpenGLShader.h"
 #include "glad/glad.h"

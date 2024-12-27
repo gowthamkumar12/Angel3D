@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Renderer/RenderCommand.h"
 #include "Platform/OpenGL/OpenGLRendererAPI.h"
 

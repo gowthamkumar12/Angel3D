@@ -2,6 +2,7 @@ TARGET_SOURCES(
   ${ENGINE}
   PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/pch.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Vendor/stb/stb_image.cpp
 )
 
 ADD_SUBDIRECTORY(Core)
