@@ -28,9 +28,17 @@ namespace Angel3D::Platform::OpenGL
     std::string source = ReadFromFile(f_filePath);
     auto shaderSources = PreProcessing(source);
     Compile(shaderSources);
+
+    // Extract name from the file path
+    auto lastSlash = f_filePath.find_last_of("/\\");
+    lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+    auto lastDot = f_filePath.rfind('.');
+    auto count = lastDot == std::string::npos ? f_filePath.size() - lastSlash : lastDot - lastSlash;
+    m_Name = f_filePath.substr(lastSlash, count);
   }
 
-  OpenGLShader::OpenGLShader(const std::string &vertexSrc, const std::string &fragSrc)
+  OpenGLShader::OpenGLShader(const std::string& f_name, const std::string &vertexSrc, const std::string &fragSrc)
+  : m_Name(f_name)
   {
     std::unordered_map<GLenum, std::string> shaderSource;
     shaderSource[GL_VERTEX_SHADER] = vertexSrc;
@@ -46,7 +54,7 @@ namespace Angel3D::Platform::OpenGL
   std::string OpenGLShader::ReadFromFile(const std::string& f_filePath)
   {
     std::string result;
-    std::ifstream in(f_filePath, std::ios::in, std::ios::binary);
+    std::ifstream in(f_filePath, std::ios::in | std::ios::binary);
     if(in)
     {
       in.seekg(0, std::ios::end);
@@ -91,7 +99,9 @@ namespace Angel3D::Platform::OpenGL
   void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& f_shaderSources)
   {
     GLuint program = glCreateProgram();
-    std::vector<GLenum> glShaderIDs(f_shaderSources.size());
+    ANGEL3D_CORE_ASSERT(f_shaderSources.size() <= 2, "We only support 2 shaders for now.")
+    std::array<GLenum, 2> glShaderIDs;
+    int glShaderIndex = 0;
 
     for (auto& ele : f_shaderSources)
     {
@@ -129,6 +139,7 @@ namespace Angel3D::Platform::OpenGL
       }
 
       glAttachShader(program, shader);
+      glShaderIDs[glShaderIndex++] = shader;
     }
 
     // Vertex and fragment shaders are successfully compiled.

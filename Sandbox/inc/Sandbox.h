@@ -20,10 +20,9 @@ namespace Sandbox
       virtual void OnEvent(Angel3D::Events::Event& f_e) override;
 
     private:
+      Angel3D::Renderer::ShaderLibrary                    m_ShaderLibrary;
       Angel3D::Core::Ref<Angel3D::Renderer::VertexArray>  m_vertexArray;
       Angel3D::Core::Ref<Angel3D::Renderer::VertexArray>  m_squareVertexArray;
-      Angel3D::Core::Ref<Angel3D::Renderer::Shader>       m_Shader;
-      Angel3D::Core::Ref<Angel3D::Renderer::Shader>       m_TileShader, m_TextureShader;
       Angel3D::Core::Ref<Angel3D::Renderer::Texture2D>    m_Texture, m_Logo;
 
     private:

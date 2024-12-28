@@ -1,7 +1,7 @@
 #pragma once
 
-#include "pch.h"
 #include "Core/Core.h"
+#include <unordered_map>
 
 namespace Angel3D::Renderer
 {
@@ -13,7 +13,26 @@ namespace Angel3D::Renderer
       virtual void Bind() const = 0;
       virtual void Unbind() const = 0;
 
+      virtual const std::string& GetName() const = 0;
+
       static Angel3D::Core::Ref<Shader> Create(const std::string& f_filePath);
-      static Angel3D::Core::Ref<Shader> Create(const std::string& vertexSrc, const std::string& fragSrc);
+      static Angel3D::Core::Ref<Shader> Create(const std::string& f_name, const std::string& vertexSrc, const std::string& fragSrc);
+  };
+
+  class ShaderLibrary
+  {
+    public:
+      void Add(const std::string& f_name,const Angel3D::Core::Ref<Shader>& f_shader);
+      void Add(const Angel3D::Core::Ref<Shader>& f_shader);
+
+      Angel3D::Core::Ref<Shader> Load(const std::string& f_filePath);
+      Angel3D::Core::Ref<Shader> Load(const std::string& f_name, const std::string& f_filePath);
+      Angel3D::Core::Ref<Shader> Load(const std::string& f_name, const std::string& vertexSrc, const std::string& fragSrc);
+
+      Angel3D::Core::Ref<Shader> Get(const std::string& f_name);
+
+      bool Exists(const std::string& f_name) const;
+    private:
+      std::unordered_map<std::string, Angel3D::Core::Ref<Shader>> m_Shaders;
   };
 } // namespace Angel3D::Renderer

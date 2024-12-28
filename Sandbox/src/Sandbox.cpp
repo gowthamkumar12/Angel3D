@@ -94,47 +94,9 @@ namespace Sandbox
 			}
 		)";
 
-		m_Shader = Angel3D::Renderer::Shader::Create(vertexShader, fragmentShader);
-
-		// Shaders for the Tiles
-		std::string tile_vertexShader = R"(
-			#version 330 core
-
-			layout(location = 0) in vec3 a_Position;
-
-			uniform mat4 u_ViewProjectionMatrix;
-			uniform mat4 u_Transform;
-
-			out vec3 v_Position;
-
-			void main()
-			{
-				v_Position = a_Position;
-				gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Position, 1.0);
-			}
-		)";
-
-		std::string tile_fragmentShader = R"(
-			#version 330 core
-
-			layout(location = 0) out vec4 color;
-
-			uniform vec3 u_Color;
-
-			in vec3 v_Position;
-
-			void main()
-			{
-				color = vec4(u_Color, 1.0);
-			}
-		)";
-
-		m_TileShader = Angel3D::Renderer::Shader::Create(tile_vertexShader, tile_fragmentShader);
-
-		m_TextureShader = Angel3D::Renderer::Shader::Create("Sandbox/assets/shaders/Texture.glsl");
-
-		m_TextureShader->Bind();
-		std::dynamic_pointer_cast<Angel3D::Platform::OpenGL::OpenGLShader>(m_TileShader)->UploadUniformInt("u_Texture", 0);
+		auto triangleShader = m_ShaderLibrary.Load("Triangle", vertexShader, fragmentShader);         // Shader for the Triangle
+		auto tileShader     = m_ShaderLibrary.Load("Tiles", "Sandbox/assets/shaders/Tiles.glsl");     // Shader for the Tiles
+		auto textureShader  = m_ShaderLibrary.Load("Texture", "Sandbox/assets/shaders/Texture.glsl"); // Shader for the Textures
 
 		m_Texture = Angel3D::Renderer::Texture2D::Create("Sandbox/assets/textures/Checkerboard.png");
 		m_Logo    = Angel3D::Renderer::Texture2D::Create("Sandbox/assets/textures/ChernoLogo.png");
@@ -186,21 +148,24 @@ namespace Sandbox
 				{
 					glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
 					glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
-					m_TileShader->Bind();
-					std::dynamic_pointer_cast<Angel3D::Platform::OpenGL::OpenGLShader>(m_TileShader)->UploadUniformFloat3("u_Color", m_tileSquareColor);
-					Angel3D::Renderer::Renderer::Submit(m_TileShader, m_squareVertexArray, transform);
+					m_ShaderLibrary.Get("Tiles")->Bind();
+					std::dynamic_pointer_cast<Angel3D::Platform::OpenGL::OpenGLShader>(m_ShaderLibrary.Get("Tiles"))->UploadUniformFloat3("u_Color", m_tileSquareColor);
+					Angel3D::Renderer::Renderer::Submit(m_ShaderLibrary.Get("Tiles"), m_squareVertexArray, transform);
 				}
 			}
 
-			// Big Square
+			// Big Square with texture
+			m_ShaderLibrary.Get("Texture")->Bind();
+		  std::dynamic_pointer_cast<Angel3D::Platform::OpenGL::OpenGLShader>(m_ShaderLibrary.Get("Texture"))->UploadUniformInt("u_Texture", 0);
+
 			m_Texture->Bind();
-			Angel3D::Renderer::Renderer::Submit(m_TextureShader, m_squareVertexArray, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+			Angel3D::Renderer::Renderer::Submit(m_ShaderLibrary.Get("Texture"), m_squareVertexArray, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 			m_Logo->Bind();
-			Angel3D::Renderer::Renderer::Submit(m_TextureShader, m_squareVertexArray, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+			Angel3D::Renderer::Renderer::Submit(m_ShaderLibrary.Get("Texture"), m_squareVertexArray, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 			// Triangle
-			// Angel3D::Renderer::Renderer::Submit(m_Shader, m_vertexArray);
+			// Angel3D::Renderer::Renderer::Submit(m_ShaderLibrary.Get("Triangle"), m_vertexArray);
 		}
 
 		Angel3D::Renderer::Renderer::EndScene();
