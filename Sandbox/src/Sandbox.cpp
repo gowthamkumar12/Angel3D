@@ -4,8 +4,7 @@ namespace Sandbox
 {
 	MainApplicationLayer::MainApplicationLayer()
 	: Angel3D::Core::Layer("MainApplicationLayer"),
-		m_Camera(-1.6f, 1.6f, -0.9f, 0.9f),
-		m_CameraPosition(0.0f)
+	  m_CameraController(1920.0f / 1080.0f)
 	{
 		// Vertex array
 		m_vertexArray.reset(Angel3D::Renderer::VertexArray::Create());
@@ -104,40 +103,14 @@ namespace Sandbox
 
 	void MainApplicationLayer::OnUpdate(Angel3D::Core::Timestep f_ts)
 	{
-		if(Angel3D::Core::Input::IsKeyPressed(ANGEL3D_KEY_LEFT))
-		{
-			m_CameraPosition.x += m_CameraMoveSpeed * f_ts;
-		}
-		else if(Angel3D::Core::Input::IsKeyPressed(ANGEL3D_KEY_RIGHT))
-		{
-			m_CameraPosition.x -= m_CameraMoveSpeed * f_ts;
-		}
+		// Update
+		m_CameraController.OnUpdate(f_ts);
 
-		if(Angel3D::Core::Input::IsKeyPressed(ANGEL3D_KEY_UP))
-		{
-			m_CameraPosition.y -= m_CameraMoveSpeed * f_ts;
-		}
-		else if(Angel3D::Core::Input::IsKeyPressed(ANGEL3D_KEY_DOWN))
-		{
-			m_CameraPosition.y += m_CameraMoveSpeed * f_ts;
-		}
-
-		if(Angel3D::Core::Input::IsKeyPressed(ANGEL3D_KEY_A))
-		{
-			m_CameraRotation -= m_CameraRotationSpeed * f_ts;
-		}
-		else if(Angel3D::Core::Input::IsKeyPressed(ANGEL3D_KEY_D))
-		{
-			m_CameraRotation += m_CameraRotationSpeed * f_ts;
-		}
-
+		// Render
 		Angel3D::Renderer::RenderCommand::SetClearColor({0.1, 0.1, 0.1, 1});
 		Angel3D::Renderer::RenderCommand::Clear();
 
-		m_Camera.SetPosition(m_CameraPosition);
-		m_Camera.SetRotation(m_CameraRotation);
-
-		Angel3D::Renderer::Renderer::BeginScene(m_Camera);
+		Angel3D::Renderer::Renderer::BeginScene(m_CameraController.GetCamera());
 
 		{
 			// Tile
@@ -180,6 +153,7 @@ namespace Sandbox
 
 	void MainApplicationLayer::OnEvent(Angel3D::Events::Event& f_e)
 	{
+		m_CameraController.OnEvent(f_e);
 	}
 } // namespace Sandbox
 

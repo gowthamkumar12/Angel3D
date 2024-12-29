@@ -9,4 +9,5 @@ TARGET_SOURCES(
     ${CMAKE_CURRENT_SOURCE_DIR}/RenderCommand.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Camera.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Texture.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CameraController.cpp
 )

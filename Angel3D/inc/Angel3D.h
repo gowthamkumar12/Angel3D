@@ -25,6 +25,7 @@
 #include "Renderer/Texture.h"
 
 #include "Renderer/Camera.h"
+#include "Renderer/CameraController.h"
 // ---------------------------------
 
 // ------- Precompiled Header ----------

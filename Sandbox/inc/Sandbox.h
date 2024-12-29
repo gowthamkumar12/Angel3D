@@ -25,12 +25,7 @@ namespace Sandbox
       Angel3D::Core::Ref<Angel3D::Renderer::VertexArray>  m_squareVertexArray;
       Angel3D::Core::Ref<Angel3D::Renderer::Texture2D>    m_Texture, m_Logo;
 
-    private:
-      Angel3D::Renderer::OrthographicCamera m_Camera;
-      glm::vec3                             m_CameraPosition;
-      float                                 m_CameraMoveSpeed     = 5.0f;
-      float                                 m_CameraRotation      = 0.0f;
-      float                                 m_CameraRotationSpeed = 90.0f;
+      Angel3D::Renderer::OrthographicCameraController m_CameraController;
 
       glm::vec3 m_tileSquareColor{1.0f, 1.0f, 1.0f};
   };

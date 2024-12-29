@@ -9,6 +9,8 @@ namespace Angel3D::Renderer
     public:
       OrthographicCamera(float f_left, float f_right, float f_bottom, float f_top);
 
+      void SetProjectioMatrix(float f_left, float f_right, float f_bottom, float f_top);
+
       const glm::vec3& GetPosition() const { return m_Position; }
       void SetPosition(const glm::vec3& f_position)
       {
