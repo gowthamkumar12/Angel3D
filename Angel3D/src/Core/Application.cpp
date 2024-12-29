@@ -38,6 +38,7 @@ namespace Angel3D::Core
 	{
 		Events::EventDispatcher dispatcher(f_e);
 		dispatcher.Dispatch<Events::WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
+		dispatcher.Dispatch<Events::WindowResizeEvent>(BIND_EVENT_FN(Application::OnWindowResize));
 
 		for(auto it = m_LayerStack.begin(); it != m_LayerStack.end(); ++it)
 		{
@@ -57,9 +58,12 @@ namespace Angel3D::Core
 			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
-			for(Layer* layer : m_LayerStack)
+			if(!m_Minimized)
 			{
-				layer->OnUpdate(timestep);
+				for(Layer* layer : m_LayerStack)
+				{
+					layer->OnUpdate(timestep);
+				}
 			}
 
 			m_ImGuiLayer->Begin();
@@ -77,5 +81,19 @@ namespace Angel3D::Core
 	{
 		m_Running = false;
 		return true;
+	}
+
+	bool Application::OnWindowResize(Events::WindowResizeEvent& f_event)
+	{
+		if(f_event.GetWidth() == 0 || f_event.GetHeight() == 0)
+		{
+			m_Minimized = true;
+			return false;
+		}
+
+		m_Minimized = false;
+		Angel3D::Renderer::Renderer::OnWindowResize(f_event.GetWidth(), f_event.GetHeight());
+
+		return false;
 	}
 }

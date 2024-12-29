@@ -10,6 +10,8 @@ namespace Angel3D::Renderer
   {
     public:
       static void Init();
+      static void OnWindowResize(uint32_t f_width, uint32_t f_height);
+
       static void BeginScene(Angel3D::Renderer::OrthographicCamera& f_camera);
       static void EndScene();
 
@@ -24,6 +26,6 @@ namespace Angel3D::Renderer
         glm::mat4 m_ViewProjectionMatrix;
       };
 
-      static SceneData* m_SceneData;
+      static SceneData* s_SceneData;
   };
 } // namespace Angel3D::Renderer

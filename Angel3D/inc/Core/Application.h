@@ -27,11 +27,13 @@ namespace Angel3D::Core
 
 		private:
 			bool OnWindowClose(Events::WindowCloseEvent& f_event);
+			bool OnWindowResize(Events::WindowResizeEvent& f_event);
 
 		private:
 			Ref<Angel3D::Core::BaseWindow> m_Window;
 			Angel3D::ImGuiImpl::ImGuiLayer*            m_ImGuiLayer;
 			bool                                       m_Running = true;
+			bool                                       m_Minimized = false;
 			LayerStack                                 m_LayerStack;
 			float                                      m_LastFrameTime;
 			static Application* m_ApplicationInstance;

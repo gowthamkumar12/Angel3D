@@ -10,6 +10,11 @@ namespace Angel3D::Platform::OpenGL
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   }
 
+  void OpenGLRendererAPI::SetViewport(uint32_t x, uint32_t y, uint32_t f_width, uint32_t f_height)
+  {
+    glViewport(x, y, f_width, f_height);
+  }
+
   void OpenGLRendererAPI::SetClearColor(const glm::vec4 &f_color)
   {
     glClearColor(f_color.r, f_color.g, f_color.b, f_color.b);

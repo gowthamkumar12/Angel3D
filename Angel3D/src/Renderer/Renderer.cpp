@@ -4,16 +4,20 @@
 
 namespace Angel3D::Renderer
 {
-  Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
+  Renderer::SceneData* Renderer::s_SceneData = new Renderer::SceneData;
 
   void Renderer::Init()
   {
     RenderCommand::Init();
   }
+  void Renderer::OnWindowResize(uint32_t f_width, uint32_t f_height)
+  {
+    RenderCommand::SetViewport(0, 0, f_width, f_height);
+  }
 
   void Renderer::BeginScene(Angel3D::Renderer::OrthographicCamera& f_camera)
   {
-    m_SceneData->m_ViewProjectionMatrix = f_camera.GetViewProjectionMatrix();
+    s_SceneData->m_ViewProjectionMatrix = f_camera.GetViewProjectionMatrix();
   }
 
   void Renderer::EndScene()
@@ -22,11 +26,11 @@ namespace Angel3D::Renderer
 
   void Renderer::Submit(const Angel3D::Core::Ref<Shader>&      f_Shader,
                         const Angel3D::Core::Ref<VertexArray>& f_vertexArray,
-                        const glm::mat4&                    f_transform)
+                        const glm::mat4&                       f_transform)
   {
     f_Shader->Bind();
     std::dynamic_pointer_cast<Angel3D::Platform::OpenGL::OpenGLShader>(f_Shader)
-                                    ->UploadUniformMat4("u_ViewProjectionMatrix", m_SceneData->m_ViewProjectionMatrix);
+                                    ->UploadUniformMat4("u_ViewProjectionMatrix", s_SceneData->m_ViewProjectionMatrix);
     std::dynamic_pointer_cast<Angel3D::Platform::OpenGL::OpenGLShader>(f_Shader)
                                     ->UploadUniformMat4("u_Transform", f_transform);
 

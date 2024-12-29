@@ -12,6 +12,11 @@ namespace Angel3D::Renderer
         s_RendererAPI->Init();
       }
 
+      inline static void SetViewport(uint32_t x, uint32_t y, uint32_t f_width, uint32_t f_height)
+      {
+        s_RendererAPI->SetViewport(x, y, f_width, f_height);
+      }
+
       inline static void SetClearColor(const glm::vec4& f_color)
       {
         s_RendererAPI->SetClearColor(f_color);
