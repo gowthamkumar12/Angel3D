@@ -31,7 +31,3 @@
 // ------- Precompiled Header ----------
 #include "pch.h"
 // -------------------------------------
-
-// -------- Entry Point --------
-#include "Core/EntryPoint.h"
-// -----------------------------

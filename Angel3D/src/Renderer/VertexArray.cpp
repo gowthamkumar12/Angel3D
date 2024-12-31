@@ -5,7 +5,7 @@
 
 namespace Angel3D::Renderer
 {
-  VertexArray* VertexArray::Create()
+  Angel3D::Core::Ref<VertexArray> VertexArray::Create()
   {
     switch (Renderer::GetAPI())
     {
@@ -14,7 +14,7 @@ namespace Angel3D::Renderer
         return nullptr;
 
       case RendererAPI::API::OPENGL:
-        return new Angel3D::Platform::OpenGL::OpenGLVertexArray();
+        return Angel3D::Core::CreateRef<Angel3D::Platform::OpenGL::OpenGLVertexArray>();
 
       default:
         break;

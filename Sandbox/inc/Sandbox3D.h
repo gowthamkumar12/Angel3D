@@ -1,19 +1,13 @@
 #pragma once
 
 #include "Angel3D.h"
-#include "Platform/OpenGL/OpenGLShader.h"
-
-#include "imgui.h"
-
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 namespace Sandbox
 {
-  class MainApplicationLayer : public Angel3D::Core::Layer
+  class Sandbox3D : public Angel3D::Core::Layer
   {
     public:
-      MainApplicationLayer();
+      Sandbox3D();
 
       virtual void OnUpdate(Angel3D::Core::Timestep f_ts) override;
       virtual void OnImGuiRender() override;
@@ -27,6 +21,6 @@ namespace Sandbox
 
       Angel3D::Renderer::OrthographicCameraController m_CameraController;
 
-      glm::vec3 m_tileSquareColor{1.0f, 1.0f, 1.0f};
+      glm::vec4 m_tileSquareColor{1.0f, 1.0f, 1.0f, 1.0f};
   };
 } // namespace Sandbox

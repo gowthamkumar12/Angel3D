@@ -18,6 +18,6 @@ namespace Angel3D::Renderer
       virtual const std::vector<Angel3D::Core::Ref<VertexBuffer>>& GetVertexBuffers() const = 0;
       virtual const Angel3D::Core::Ref<IndexBuffer> GetIndexBuffer() const = 0;
 
-      static VertexArray* Create();
+      static Angel3D::Core::Ref<VertexArray> Create();
   };
 } // namespace Angel3D::Renderer
