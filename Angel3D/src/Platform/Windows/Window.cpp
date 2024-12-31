@@ -48,7 +48,7 @@ namespace Angel3D::Platform::Windows
 
     m_window = glfwCreateWindow((int)m_data.m_Width, (int)m_data.m_Height,
                                 m_data.m_Title.c_str(), nullptr, nullptr);
-    m_Context = new Angel3D::Platform::OpenGL::OpenGLContext(m_window);
+    m_Context = Angel3D::Core::CreateScope<Angel3D::Platform::OpenGL::OpenGLContext>(m_window);
     m_Context->Init();
 
     glfwSetWindowUserPointer(m_window, &m_data);

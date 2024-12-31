@@ -33,6 +33,6 @@ namespace Angel3D::Renderer
       }
 
     private:
-      static RendererAPI* s_RendererAPI;
+      static Angel3D::Core::Scope<RendererAPI> s_RendererAPI;
   };
 } // namespace Angel3D::Renderer

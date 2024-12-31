@@ -38,11 +38,6 @@ TARGET_LINK_LIBRARIES(
     Angel3D
 )
 
-# Platform-specific definitions
-IF(WIN32)
-  TARGET_COMPILE_DEFINITIONS(${SANDBOX} PRIVATE ANGEL3D_PLATFORM_WINDOWS)
-endif()
-
 # Configuration-specific definitions
 TARGET_COMPILE_DEFINITIONS(
   ${SANDBOX}

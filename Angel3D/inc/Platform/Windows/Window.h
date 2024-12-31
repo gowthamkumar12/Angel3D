@@ -30,7 +30,7 @@ namespace Angel3D::Platform::Windows
 
       GLFWwindow* m_window;
 
-      Angel3D::Renderer::GraphicsContext* m_Context;
+      Angel3D::Core::Scope<Angel3D::Renderer::GraphicsContext> m_Context;
 
       struct WindowData
       {

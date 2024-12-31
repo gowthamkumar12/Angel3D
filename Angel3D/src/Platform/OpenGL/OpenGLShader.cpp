@@ -77,20 +77,20 @@ namespace Angel3D::Platform::OpenGL
 
     const char* typeToken  = "#type";
     size_t typeTokenLength = strlen(typeToken);
-    size_t pos             = f_shaderSource.find(typeToken, 0);
+    size_t pos             = f_shaderSource.find(typeToken, 0); // Start of shader type declaration line
     while (pos != std::string::npos)
     {
-      size_t eol = f_shaderSource.find_first_of("\r\n", pos);
+      size_t eol = f_shaderSource.find_first_of("\r\n", pos); // End of shader type declaration line
       ANGEL3D_CORE_ASSERT(eol != std::string::npos, "Syntax error!");
 
-      size_t begin = pos + typeTokenLength + 1;
+      size_t begin = pos + typeTokenLength + 1; // Start of shader type name (after "#type " keyword)
       std::string type = f_shaderSource.substr(begin, eol - begin);
       ANGEL3D_CORE_ASSERT(ShaderTypeFromString(type), "Invalid shader type specification");
 
-      size_t nextLinePos = f_shaderSource.find_first_not_of("\r\n", eol);
-      pos = f_shaderSource.find(typeToken, nextLinePos);
-      shaderSources[ShaderTypeFromString(type)] = f_shaderSource.substr(nextLinePos,
-                                                                        pos - (nextLinePos == std::string::npos ? f_shaderSource.size() - 1 : nextLinePos));
+      size_t nextLinePos = f_shaderSource.find_first_not_of("\r\n", eol); // Start of shader code after shader type declaration line
+			ANGEL3D_CORE_ASSERT(nextLinePos != std::string::npos, "Syntax error");
+			pos = f_shaderSource.find(typeToken, nextLinePos); // Start of next shader type declaration line
+			shaderSources[ShaderTypeFromString(type)] = (pos == std::string::npos) ? f_shaderSource.substr(nextLinePos) : f_shaderSource.substr(nextLinePos, pos - nextLinePos);
     }
 
     return shaderSources;
@@ -180,6 +180,7 @@ namespace Angel3D::Platform::OpenGL
     for(auto id : glShaderIDs)
     {
       glDetachShader(program, id);
+      glDeleteShader(id);
     }
   }
 

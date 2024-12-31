@@ -13,43 +13,56 @@ namespace Angel3D::Renderer
   }
 
   void OrthographicCameraController::OnUpdate(Angel3D::Core::Timestep f_timestep)
-  {
-    if(Angel3D::Core::Input::IsKeyPressed(ANGEL3D_KEY_A))
+	{
+		if(Angel3D::Core::Input::IsKeyPressed(ANGEL3D_KEY_A))
 		{
-			m_CameraPosition.x += m_CameraTranslationSpeed * f_timestep;
+			m_CameraPosition.x -= cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * f_timestep;
+			m_CameraPosition.y -= sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * f_timestep;
 		}
 		else if(Angel3D::Core::Input::IsKeyPressed(ANGEL3D_KEY_D))
 		{
-			m_CameraPosition.x -= m_CameraTranslationSpeed * f_timestep;
+			m_CameraPosition.x += cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * f_timestep;
+			m_CameraPosition.y += sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * f_timestep;
 		}
 
 		if(Angel3D::Core::Input::IsKeyPressed(ANGEL3D_KEY_W))
 		{
-			m_CameraPosition.y -= m_CameraTranslationSpeed * f_timestep;
+			m_CameraPosition.x += -sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * f_timestep;
+			m_CameraPosition.y += cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * f_timestep;
 		}
 		else if(Angel3D::Core::Input::IsKeyPressed(ANGEL3D_KEY_S))
 		{
-			m_CameraPosition.y += m_CameraTranslationSpeed * f_timestep;
+			m_CameraPosition.x -= -sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * f_timestep;
+			m_CameraPosition.y -= cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * f_timestep;
 		}
 
-    if(m_Rotation)
-    {
-      if(Angel3D::Core::Input::IsKeyPressed(ANGEL3D_KEY_Q))
+		if (m_Rotation)
+		{
+			if(Angel3D::Core::Input::IsKeyPressed(ANGEL3D_KEY_Q))
       {
-        m_CameraRotation -= m_CameraRotationSpeed * f_timestep;
+				m_CameraRotation += m_CameraRotationSpeed * f_timestep;
       }
       else if(Angel3D::Core::Input::IsKeyPressed(ANGEL3D_KEY_E))
-      {
-        m_CameraRotation += m_CameraRotationSpeed * f_timestep;
+			{
+        m_CameraRotation -= m_CameraRotationSpeed * f_timestep;
       }
 
-      m_Camera.SetRotation(m_Rotation);
-    }
+			if (m_CameraRotation > 180.0f)
+      {
+				m_CameraRotation -= 360.0f;
+      }
+      else if (m_CameraRotation <= -180.0f)
+			{
+        m_CameraRotation += 360.0f;
+      }
 
-    m_Camera.SetPosition(m_CameraPosition);
+			m_Camera.SetRotation(m_CameraRotation);
+		}
 
-    m_CameraTranslationSpeed = m_ZoomLevel;
-  }
+		m_Camera.SetPosition(m_CameraPosition);
+
+		m_CameraTranslationSpeed = m_ZoomLevel;
+	}
 
   void OrthographicCameraController::OnEvent(Angel3D::Events::Event &f_e)
   {

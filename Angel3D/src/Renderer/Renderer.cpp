@@ -4,7 +4,7 @@
 
 namespace Angel3D::Renderer
 {
-  Renderer::SceneData* Renderer::s_SceneData = new Renderer::SceneData;
+  Angel3D::Core::Scope<Renderer::SceneData> Renderer::s_SceneData = Angel3D::Core::CreateScope<Renderer::SceneData>();
 
   void Renderer::Init()
   {

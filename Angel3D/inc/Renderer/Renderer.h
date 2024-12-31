@@ -26,6 +26,6 @@ namespace Angel3D::Renderer
         glm::mat4 m_ViewProjectionMatrix;
       };
 
-      static SceneData* s_SceneData;
+      static Angel3D::Core::Scope<SceneData> s_SceneData;
   };
 } // namespace Angel3D::Renderer

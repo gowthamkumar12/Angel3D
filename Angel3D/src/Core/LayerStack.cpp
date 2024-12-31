@@ -10,6 +10,7 @@ namespace Angel3D::Core
   {
     for(Layer* layer : m_Layers)
     {
+			layer->OnDetach();
       delete layer;
     }
   }
