@@ -10,7 +10,7 @@ namespace Angel3D::Renderer
   /**
    * VertexBuffer Class
    */
-  VertexBuffer* VertexBuffer::Create(float* f_Vertices, uint32_t f_size)
+  Angel3D::Core::Ref<VertexBuffer> VertexBuffer::Create(float* f_Vertices, uint32_t f_size)
   {
     switch (Renderer::GetAPI())
     {
@@ -19,7 +19,7 @@ namespace Angel3D::Renderer
         return nullptr;
 
       case RendererAPI::API::OPENGL:
-        return new Angel3D::Platform::OpenGL::OpenGLVertexBuffer(f_Vertices, f_size);
+        return Angel3D::Core::CreateRef<Angel3D::Platform::OpenGL::OpenGLVertexBuffer>(f_Vertices, f_size);
 
       default:
         break;
@@ -32,7 +32,7 @@ namespace Angel3D::Renderer
   /**
    * IndexBuffer Class
    */
-  IndexBuffer* IndexBuffer::Create(uint32_t* f_Indices, uint32_t f_size)
+  Angel3D::Core::Ref<IndexBuffer> IndexBuffer::Create(uint32_t* f_Indices, uint32_t f_size)
   {
     switch (Renderer::GetAPI())
     {
@@ -41,7 +41,7 @@ namespace Angel3D::Renderer
         return nullptr;
 
       case RendererAPI::API::OPENGL:
-        return new Angel3D::Platform::OpenGL::OpenGLIndexBuffer(f_Indices, f_size);
+        return Angel3D::Core::CreateRef<Angel3D::Platform::OpenGL::OpenGLIndexBuffer>(f_Indices, f_size);
 
       default:
         break;

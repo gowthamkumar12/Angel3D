@@ -22,7 +22,7 @@ namespace Sandbox
 															0.5f, -0.5f, 0.0f, 0.2f, 0.2f, 0.8f, 1.0f };
 
 		Angel3D::Core::Ref<Angel3D::Renderer::VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(Angel3D::Renderer::VertexBuffer::Create(vertices, sizeof(vertices)));
+		vertexBuffer = Angel3D::Renderer::VertexBuffer::Create(vertices, sizeof(vertices));
 		{
 			Angel3D::Renderer::BufferLayout layout = {{Angel3D::Renderer::ShaderDataType::Float3, "a_Position"},
 																								{Angel3D::Renderer::ShaderDataType::Float4, "a_Color"}};
@@ -35,7 +35,7 @@ namespace Sandbox
 		unsigned int indices[3] = {0, 1, 2};
 
 		Angel3D::Core::Ref<Angel3D::Renderer::IndexBuffer> indexBuffer;
-		indexBuffer.reset(Angel3D::Renderer::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		indexBuffer = Angel3D::Renderer::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 		m_vertexArray->SetIndexBuffer(indexBuffer);
 
 		// Squared Vertex Array
@@ -48,7 +48,7 @@ namespace Sandbox
 																		-0.5f,  0.5f, 0.0f, 0.0f, 1.0f};
 
 		Angel3D::Core::Ref<Angel3D::Renderer::VertexBuffer> squareVertexBuffer;
-		squareVertexBuffer.reset(Angel3D::Renderer::VertexBuffer::Create(SquareVertices, sizeof(SquareVertices)));
+		squareVertexBuffer = Angel3D::Renderer::VertexBuffer::Create(SquareVertices, sizeof(SquareVertices));
 		{
 			Angel3D::Renderer::BufferLayout SquareLayout = {{Angel3D::Renderer::ShaderDataType::Float3, "a_Position"},
 																											{Angel3D::Renderer::ShaderDataType::Float2, "a_TexCoord"}};
@@ -61,7 +61,7 @@ namespace Sandbox
 
 		Angel3D::Core::Ref<Angel3D::Renderer::IndexBuffer> squareIndexBuffer;
 
-		squareIndexBuffer.reset(Angel3D::Renderer::IndexBuffer::Create(squaredIndices, sizeof(squaredIndices)  / sizeof(uint32_t)));
+		squareIndexBuffer = Angel3D::Renderer::IndexBuffer::Create(squaredIndices, sizeof(squaredIndices)  / sizeof(uint32_t));
 		m_squareVertexArray->SetIndexBuffer(squareIndexBuffer);
 
 		// Shaders for the triangle

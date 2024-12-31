@@ -40,6 +40,6 @@ namespace Angel3D::Core
 
       virtual void* GetNativeWindow() const = 0;
 
-      static BaseWindow* Create(const WindowProps& f_props = WindowProps());
+      static Ref<BaseWindow> Create(const WindowProps& f_props = WindowProps());
   };
 } // namespace Angel3D::Core

@@ -20,16 +20,16 @@ namespace Angel3D::Core
 		Angel3D::Renderer::Renderer::Init();
 
 		// Creating a new ImGui Layer and pushing it to the layer stack as a overlay.
-		m_ImGuiLayer = new Angel3D::ImGuiImpl::ImGuiLayer();
+		m_ImGuiLayer = CreateRef<Angel3D::ImGuiImpl::ImGuiLayer>();
 		PushOverlay(m_ImGuiLayer);
 	}
 
-	void Application::PushLayer(Layer* f_layer)
+	void Application::PushLayer(Ref<Layer> f_layer)
 	{
 		m_LayerStack.PushLayer(f_layer);
 	}
 
-	void Application::PushOverlay(Layer* f_overlay)
+	void Application::PushOverlay(Ref<Layer> f_overlay)
 	{
 		m_LayerStack.PushOverlay(f_overlay);
 	}
@@ -60,14 +60,14 @@ namespace Angel3D::Core
 
 			if(!m_Minimized)
 			{
-				for(Layer* layer : m_LayerStack)
+				for(Ref<Layer> layer : m_LayerStack)
 				{
 					layer->OnUpdate(timestep);
 				}
 			}
 
 			m_ImGuiLayer->Begin();
-			for(Layer* layer : m_LayerStack)
+			for(Ref<Layer> layer : m_LayerStack)
 			{
 				layer->OnImGuiRender();
 			}

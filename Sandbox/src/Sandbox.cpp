@@ -11,7 +11,7 @@ namespace Sandbox
     public:
       SandboxApp()
       {
-        PushLayer(new Sandbox2D());
+        PushLayer(Angel3D::Core::CreateRef<Sandbox2D>());
       }
 
       ~SandboxApp()

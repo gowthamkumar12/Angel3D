@@ -122,7 +122,7 @@ namespace Angel3D::Renderer
       virtual const BufferLayout& GetLayout() const = 0;
       virtual void SetLayout(const BufferLayout& f_layout) = 0;
 
-      static VertexBuffer* Create(float* f_Vertices, uint32_t f_size);
+      static Angel3D::Core::Ref<VertexBuffer> Create(float* f_Vertices, uint32_t f_size);
   };
 
   /**
@@ -138,6 +138,6 @@ namespace Angel3D::Renderer
 
       virtual uint32_t GetCount() const = 0;
 
-      static IndexBuffer* Create(uint32_t* f_Indices, uint32_t f_size);
+      static Angel3D::Core::Ref<IndexBuffer> Create(uint32_t* f_Indices, uint32_t f_size);
   };
 } // namespace Angel3D::Renderer

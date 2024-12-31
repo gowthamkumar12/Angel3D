@@ -26,7 +26,7 @@ namespace Sandbox
 															-0.5f,  0.5f, 0.0f};
 
 		Angel3D::Core::Ref<Angel3D::Renderer::VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(Angel3D::Renderer::VertexBuffer::Create(vertices, sizeof(vertices)));
+		vertexBuffer = Angel3D::Renderer::VertexBuffer::Create(vertices, sizeof(vertices));
 		{
 			Angel3D::Renderer::BufferLayout layout = {{Angel3D::Renderer::ShaderDataType::Float3, "a_Position"}};
 
@@ -38,7 +38,7 @@ namespace Sandbox
 		unsigned int indices[6] = {0, 1, 2, 2, 3, 0};
 
 		Angel3D::Core::Ref<Angel3D::Renderer::IndexBuffer> indexBuffer;
-		indexBuffer.reset(Angel3D::Renderer::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		indexBuffer = Angel3D::Renderer::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 		m_vertexArray->SetIndexBuffer(indexBuffer);
 
     m_Shader = Angel3D::Renderer::Shader::Create("Sandbox/assets/shaders/Tiles.glsl");
