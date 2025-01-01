@@ -13,7 +13,7 @@ Angel3D::Core::Ref<Angel3D::Core::BaseWindow> Angel3D::Core::BaseWindow::Create(
 
 namespace Angel3D::Platform::Windows
 {
-  static bool g_GLFWWindowInitialized = false;
+  static uint8_t s_GLFWWindowInitialized = 0U;
 
   static void GLFWErrorCallbackFn(int error_code, const char* description)
   {
@@ -38,16 +38,19 @@ namespace Angel3D::Platform::Windows
 
     ANGEL3D_CORE_INFO("Creating Window {0} with ({1}, {2}) resolution.", f_props.m_Title, f_props.m_Width, f_props.m_Height);
 
-    if(!g_GLFWWindowInitialized)
+    if(s_GLFWWindowInitialized == 0)
     {
+      ANGEL3D_CORE_INFO("Initializing GLFW");
       int success = glfwInit();
       ANGEL3D_CORE_ASSERT(success, "Could not initialize GLFW.")
       glfwSetErrorCallback(GLFWErrorCallbackFn);
-      g_GLFWWindowInitialized = true;
+      s_GLFWWindowInitialized = true;
     }
 
     m_window = glfwCreateWindow((int)m_data.m_Width, (int)m_data.m_Height,
                                 m_data.m_Title.c_str(), nullptr, nullptr);
+    ++s_GLFWWindowInitialized;
+
     m_Context = Angel3D::Core::CreateScope<Angel3D::Platform::OpenGL::OpenGLContext>(m_window);
     m_Context->Init();
 
@@ -151,6 +154,11 @@ namespace Angel3D::Platform::Windows
   void Window::Shutdown()
   {
     glfwDestroyWindow(m_window);
+    if(--s_GLFWWindowInitialized == 0)
+    {
+      ANGEL3D_CORE_INFO("Terminating GLFW window");
+      glfwTerminate();
+    }
   }
 
   void Window::OnUpdate()

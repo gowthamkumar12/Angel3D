@@ -39,10 +39,10 @@ namespace Angel3D::Renderer
     std::string    Name;
     ShaderDataType Type;
     uint32_t       Size;
-    uint32_t       Offset;
+    size_t         Offset;
     bool           Normalized;
 
-    BufferElement() {}
+    BufferElement() = default;
 
     BufferElement(ShaderDataType type, const std::string& name, bool normalized = false)
     : Name(name), Type(type), Size(ShaderDataTypeSize(type)), Offset(0U), Normalized(normalized)
@@ -94,7 +94,7 @@ namespace Angel3D::Renderer
     private:
       void CalculateOffsetAndStride()
       {
-        uint32_t offset = 0U;
+        size_t offset = 0U;
         m_Stride = 0U;
         for(auto& element : m_Elements)
         {
