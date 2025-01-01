@@ -16,32 +16,6 @@ namespace Sandbox
 
   void Sandbox2D::OnAttach()
   {
-    // Vertex array
-		m_vertexArray = Angel3D::Renderer::VertexArray::Create();
-
-		// Vertex buffer
-		float vertices[4 * 3] = { -0.5f, -0.5f, 0.0f,
-															 0.5f, -0.5f, 0.0f,
-															 0.5f,  0.5f, 0.0f,
-															-0.5f,  0.5f, 0.0f};
-
-		Angel3D::Core::Ref<Angel3D::Renderer::VertexBuffer> vertexBuffer;
-		vertexBuffer = Angel3D::Renderer::VertexBuffer::Create(vertices, sizeof(vertices));
-		{
-			Angel3D::Renderer::BufferLayout layout = {{Angel3D::Renderer::ShaderDataType::Float3, "a_Position"}};
-
-			vertexBuffer->SetLayout(layout);
-		}
-		m_vertexArray->AddVertexBuffer(vertexBuffer);
-
-		// Index buffer
-		unsigned int indices[6] = {0, 1, 2, 2, 3, 0};
-
-		Angel3D::Core::Ref<Angel3D::Renderer::IndexBuffer> indexBuffer;
-		indexBuffer = Angel3D::Renderer::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
-		m_vertexArray->SetIndexBuffer(indexBuffer);
-
-    m_Shader = Angel3D::Renderer::Shader::Create("Sandbox/assets/shaders/Tiles.glsl");
   }
 
   void Sandbox2D::OnDetach()
@@ -57,13 +31,14 @@ namespace Sandbox
 		Angel3D::Renderer::RenderCommand::SetClearColor({0.1, 0.1, 0.1, 1});
 		Angel3D::Renderer::RenderCommand::Clear();
 
-		Angel3D::Renderer::Renderer::BeginScene(m_CameraController.GetCamera());
+		Angel3D::Renderer::Renderer2D::BeginScene(m_CameraController.GetCamera());
+		Angel3D::Renderer::Renderer2D::DrawQuad({0.0f, 0.0f}, {1.0f, 1.0f}, {0.8f, 0.2f, 0.1f, 1.0f});
+		Angel3D::Renderer::Renderer2D::EndScene();
 
-    m_Shader->Bind();
-    std::dynamic_pointer_cast<Angel3D::Platform::OpenGL::OpenGLShader>(m_Shader)->UploadUniformFloat4("u_Color", m_tileSquareColor);
-    Angel3D::Renderer::Renderer::Submit(m_Shader, m_vertexArray, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
-
-		Angel3D::Renderer::Renderer::EndScene();
+    // m_Shader->Bind();
+		// // TODO Shader::SetMat4, Shader::SetFloat4
+    // std::dynamic_pointer_cast<Angel3D::Platform::OpenGL::OpenGLShader>(m_Shader)->UploadUniformFloat4("u_Color", m_tileSquareColor);
+    // Angel3D::Renderer::Renderer::Submit(m_Shader, m_vertexArray, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
   }
 
   void Sandbox2D::OnImGuiRender()

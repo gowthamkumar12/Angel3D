@@ -1,4 +1,5 @@
 #include "Renderer/Renderer.h"
+#include "Renderer/Renderer2D.h"
 #include "Renderer/RenderCommand.h"
 #include "Platform/OpenGL/OpenGLShader.h"
 
@@ -9,6 +10,7 @@ namespace Angel3D::Renderer
   void Renderer::Init()
   {
     RenderCommand::Init();
+    Renderer2D::Init();
   }
   void Renderer::OnWindowResize(uint32_t f_width, uint32_t f_height)
   {
