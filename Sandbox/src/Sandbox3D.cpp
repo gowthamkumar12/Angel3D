@@ -1,9 +1,6 @@
 #include "Sandbox3D.h"
 
-#include "Platform/OpenGL/OpenGLShader.h"
-
 #include "imgui.h"
-
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -129,14 +126,14 @@ namespace Sandbox
 					glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
 					glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
 					m_ShaderLibrary.Get("Tiles")->Bind();
-					std::dynamic_pointer_cast<Angel3D::Platform::OpenGL::OpenGLShader>(m_ShaderLibrary.Get("Tiles"))->UploadUniformFloat4("u_Color", m_tileSquareColor);
+					m_ShaderLibrary.Get("Tiles")->SetFloat4("u_Color", m_tileSquareColor);
 					Angel3D::Renderer::Renderer::Submit(m_ShaderLibrary.Get("Tiles"), m_squareVertexArray, transform);
 				}
 			}
 
 			// Big Square with texture
 			m_ShaderLibrary.Get("Texture")->Bind();
-		  std::dynamic_pointer_cast<Angel3D::Platform::OpenGL::OpenGLShader>(m_ShaderLibrary.Get("Texture"))->UploadUniformInt("u_Texture", 0);
+		  m_ShaderLibrary.Get("Texture")->SetInt("u_Texture", 0);
 
 			m_Texture->Bind();
 			Angel3D::Renderer::Renderer::Submit(m_ShaderLibrary.Get("Texture"), m_squareVertexArray, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));

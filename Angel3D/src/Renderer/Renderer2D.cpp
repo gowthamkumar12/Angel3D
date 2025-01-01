@@ -2,9 +2,9 @@
 #include "Renderer/RenderCommand.h"
 #include "Renderer/VertexArray.h"
 #include "Renderer/Shader.h"
-
 #include "Core/Core.h"
-#include "Platform/OpenGL/OpenGLShader.h"
+
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace Angel3D::Renderer
 {
@@ -55,9 +55,8 @@ namespace Angel3D::Renderer
 
   void Renderer2D::BeginScene(const OrthographicCamera &f_camera)
   {
-    std::dynamic_pointer_cast<Angel3D::Platform::OpenGL::OpenGLShader>(s_Data->_Shader)->Bind();
-    std::dynamic_pointer_cast<Angel3D::Platform::OpenGL::OpenGLShader>(s_Data->_Shader)->UploadUniformMat4("u_ViewProjectionMatrix", f_camera.GetViewProjectionMatrix());
-    std::dynamic_pointer_cast<Angel3D::Platform::OpenGL::OpenGLShader>(s_Data->_Shader)->UploadUniformMat4("u_Transform", glm::mat4(1.0f));
+    s_Data->_Shader->Bind();
+    s_Data->_Shader->SetMat4("u_ViewProjectionMatrix", f_camera.GetViewProjectionMatrix());
   }
 
   void Renderer2D::EndScene()
@@ -71,8 +70,11 @@ namespace Angel3D::Renderer
 
   void Renderer2D::DrawQuad(const glm::vec3 &f_position, const glm::vec2 &f_size, const glm::vec4 &f_color)
   {
-    std::dynamic_pointer_cast<Angel3D::Platform::OpenGL::OpenGLShader>(s_Data->_Shader)->Bind();
-    std::dynamic_pointer_cast<Angel3D::Platform::OpenGL::OpenGLShader>(s_Data->_Shader)->UploadUniformFloat4("u_Color", f_color);
+    s_Data->_Shader->Bind();
+    s_Data->_Shader->SetFloat4("u_Color", f_color);
+
+    glm::mat4 transform = glm::translate(glm::mat4(1.0f), f_position) * glm::scale(glm::mat4(1.0f), {f_size.x, f_size.y, 1.0f});
+    s_Data->_Shader->SetMat4("u_Transform", transform);
 
     s_Data->_vertexArray->Bind();
     RenderCommand::DrawIndexed(s_Data->_vertexArray);

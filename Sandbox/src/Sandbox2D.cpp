@@ -1,9 +1,6 @@
 #include "Sandbox2D.h"
 
-#include "Platform/OpenGL/OpenGLShader.h"
-
 #include "imgui.h"
-
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -32,12 +29,13 @@ namespace Sandbox
 		Angel3D::Renderer::RenderCommand::Clear();
 
 		Angel3D::Renderer::Renderer2D::BeginScene(m_CameraController.GetCamera());
-		Angel3D::Renderer::Renderer2D::DrawQuad({0.0f, 0.0f}, {1.0f, 1.0f}, {0.8f, 0.2f, 0.1f, 1.0f});
+		Angel3D::Renderer::Renderer2D::DrawQuad({-0.5f, -0.25f}, {1.0f, 1.0f}, {0.8f, 0.2f, 0.3f, 1.0f});
+		Angel3D::Renderer::Renderer2D::DrawQuad({0.5f, -0.25f}, {0.5f, 0.5f}, {0.2f, 0.3f, 0.8f, 1.0f});
 		Angel3D::Renderer::Renderer2D::EndScene();
 
     // m_Shader->Bind();
 		// // TODO Shader::SetMat4, Shader::SetFloat4
-    // std::dynamic_pointer_cast<Angel3D::Platform::OpenGL::OpenGLShader>(m_Shader)->UploadUniformFloat4("u_Color", m_tileSquareColor);
+    // m_Shader->SetFloat4("u_Color", m_tileSquareColor);
     // Angel3D::Renderer::Renderer::Submit(m_Shader, m_vertexArray, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
   }
 

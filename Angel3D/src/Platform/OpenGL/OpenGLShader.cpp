@@ -194,6 +194,26 @@ namespace Angel3D::Platform::OpenGL
     glUseProgram(0);
   }
 
+  void OpenGLShader::SetInt(const std::string& f_name, int f_value)
+  {
+    UploadUniformInt(f_name, f_value);
+  }
+
+  void OpenGLShader::SetFloat3(const std::string& f_name, const glm::vec3& f_value)
+  {
+    UploadUniformFloat3(f_name, f_value);
+  }
+
+  void OpenGLShader::SetFloat4(const std::string& f_name, const glm::vec4& f_value)
+  {
+    UploadUniformFloat4(f_name, f_value);
+  }
+
+  void OpenGLShader::SetMat4(const std::string& f_name, const glm::mat4 f_value)
+  {
+    UploadUniformMat4(f_name, f_value);
+  }
+
   void OpenGL::OpenGLShader::UploadUniformInt(const std::string &f_name, int f_value)
   {
     GLint location = glGetUniformLocation(m_RendererId, f_name.c_str());
