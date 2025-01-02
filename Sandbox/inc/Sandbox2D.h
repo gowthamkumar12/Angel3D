@@ -24,13 +24,5 @@ namespace Sandbox
       Angel3D::Core::Ref<Angel3D::Renderer::Shader>      m_Shader;
       Angel3D::Core::Ref<Angel3D::Renderer::Texture2D>   m_Texture;
       glm::vec4                                          m_tileSquareColor{1.0f, 1.0f, 1.0f, 1.0f};
-
-      struct ProfileResult
-      {
-        const char* f_Name;
-        float       f_Time;
-      };
-
-      std::vector<ProfileResult> m_ProfileResults;
   };
 } // namespace Sandbox

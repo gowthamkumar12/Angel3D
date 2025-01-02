@@ -10,9 +10,17 @@
 	{
 		Angel3D::Core::Log::Init();
 
+		ANGEL3D_PROFILE_BEGIN_SESSION("Startup", "Startup_profile.json");
 		auto app = Angel3D::Core::CreateApplication();
+		ANGEL3D_PROFILE_END_SESSION();
+
+		ANGEL3D_PROFILE_BEGIN_SESSION("Runtime", "Runtime_profile.json");
 		app->Run();
+		ANGEL3D_PROFILE_END_SESSION();
+
+		ANGEL3D_PROFILE_BEGIN_SESSION("Shutdown", "Shutdown_profile.json");
 		delete app;
+		ANGEL3D_PROFILE_END_SESSION();
 	}
 #else
 	#error Angel3D only supports Windows!
