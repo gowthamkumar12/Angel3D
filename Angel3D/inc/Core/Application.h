@@ -8,11 +8,11 @@
 
 namespace Angel3D::Core
 {
-	class ANGEL3D_API Application
+	class Application
 	{
 		public:
 			Application();
-			virtual ~Application() = default;
+			virtual ~Application();
 
 			void Run();
 

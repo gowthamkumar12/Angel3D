@@ -6,7 +6,7 @@
 
 namespace Angel3D::Core
 {
-  class ANGEL3D_API Layer
+  class Layer
   {
     public:
       Layer(const std::string& name = "Layer");

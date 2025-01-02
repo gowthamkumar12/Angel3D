@@ -2,10 +2,6 @@
 
 namespace Angel3D::Core
 {
-  LayerStack::LayerStack()
-  {
-  }
-
   LayerStack::~LayerStack()
   {
     for(Ref<Layer> layer : m_Layers)

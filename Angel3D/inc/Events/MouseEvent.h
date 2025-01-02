@@ -4,7 +4,7 @@
 
 namespace Angel3D::Events
 {
-  class ANGEL3D_API MouseMovedEvent : public Event
+  class MouseMovedEvent : public Event
   {
     public:
       MouseMovedEvent(float f_x, float f_y)
@@ -29,7 +29,7 @@ namespace Angel3D::Events
       float m_MouseY;
   };
 
-  class ANGEL3D_API MouseScrolledEvent : public Event
+  class MouseScrolledEvent : public Event
   {
     public:
       MouseScrolledEvent(float f_xOffset, float f_yOffset)
@@ -54,7 +54,7 @@ namespace Angel3D::Events
       float m_yOffset;
   };
 
-  class ANGEL3D_API MouseButtonEvent : public Event
+  class MouseButtonEvent : public Event
   {
     public:
       inline int GetMouseButton() const { return m_Button; }
@@ -68,7 +68,7 @@ namespace Angel3D::Events
       int m_Button;
   };
 
-  class ANGEL3D_API MouseButtonPressedEvent : public MouseButtonEvent
+  class MouseButtonPressedEvent : public MouseButtonEvent
   {
     public:
       MouseButtonPressedEvent(int f_button)
@@ -85,7 +85,7 @@ namespace Angel3D::Events
       EVENT_CLASS_TYPE(MouseButtonPressed)
   };
 
-  class ANGEL3D_API MouseButtonReleasedEvent : public MouseButtonEvent
+  class MouseButtonReleasedEvent : public MouseButtonEvent
   {
     public:
       MouseButtonReleasedEvent(int f_button)

@@ -5,10 +5,10 @@
 
 namespace Angel3D::Core
 {
-  class ANGEL3D_API LayerStack
+  class LayerStack
   {
     public:
-      LayerStack();
+      LayerStack() = default;
       ~LayerStack();
 
       void PushLayer(Ref<Layer> f_layer);

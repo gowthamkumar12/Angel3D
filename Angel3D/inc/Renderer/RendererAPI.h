@@ -27,6 +27,8 @@ namespace Angel3D::Renderer
 
       inline static API GetAPI() { return s_API; }
 
+      static Angel3D::Core::Scope<RendererAPI> Create();
+
     private:
       static API s_API;
   };

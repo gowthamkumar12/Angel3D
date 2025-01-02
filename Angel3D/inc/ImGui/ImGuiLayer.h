@@ -7,7 +7,7 @@
 
 namespace Angel3D::ImGuiImpl
 {
-  class ANGEL3D_API ImGuiLayer : public Angel3D::Core::Layer
+  class ImGuiLayer : public Angel3D::Core::Layer
   {
     public:
       ImGuiLayer();

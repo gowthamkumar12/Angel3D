@@ -4,7 +4,7 @@
 
 namespace Angel3D::Events
 {
-  class ANGEL3D_API KeyEvent : public Event
+  class KeyEvent : public Event
   {
     public:
       inline int GetKeyCode() const { return m_KeyCode; }
@@ -17,7 +17,7 @@ namespace Angel3D::Events
       int m_KeyCode;
   };
 
-  class ANGEL3D_API KeyPressedEvent : public KeyEvent
+  class KeyPressedEvent : public KeyEvent
   {
     public:
       KeyPressedEvent(int f_keyCode, int f_repeatCount)
@@ -39,7 +39,7 @@ namespace Angel3D::Events
       int m_RepeatCount;
   };
 
-  class ANGEL3D_API KeyReleasedEvent : public KeyEvent
+  class KeyReleasedEvent : public KeyEvent
   {
     public:
       KeyReleasedEvent(int f_keyCode)
@@ -56,7 +56,7 @@ namespace Angel3D::Events
       EVENT_CLASS_TYPE(KeyReleased)
   };
 
-  class ANGEL3D_API KeyTypedEvent : public KeyEvent
+  class KeyTypedEvent : public KeyEvent
   {
     public:
       KeyTypedEvent(int f_keyCode)

@@ -21,7 +21,7 @@ namespace Angel3D::Core
   };
 
   // Interface representing a desktop system based window
-  class ANGEL3D_API BaseWindow
+  class BaseWindow
   {
     public:
       using EventCallbackfn = std::function<void(Angel3D::Events::Event&)>;

@@ -1,10 +1,9 @@
 #include "Core/BaseWindow.h"
 #include "Core/Log.h"
-#include "Platform/Windows/Window.h"
-#include "Platform/OpenGL/OpenGLContext.h"
 #include "Events/ApplicationEvent.h"
 #include "Events/KeyEvent.h"
 #include "Events/MouseEvent.h"
+#include "Platform/Windows/Window.h"
 
 Angel3D::Core::Ref<Angel3D::Core::BaseWindow> Angel3D::Core::BaseWindow::Create(const Angel3D::Core::WindowProps& f_props)
 {
@@ -51,7 +50,7 @@ namespace Angel3D::Platform::Windows
                                 m_data.m_Title.c_str(), nullptr, nullptr);
     ++s_GLFWWindowInitialized;
 
-    m_Context = Angel3D::Core::CreateScope<Angel3D::Platform::OpenGL::OpenGLContext>(m_window);
+    m_Context = Angel3D::Renderer::GraphicsContext::Create(m_window);
     m_Context->Init();
 
     glfwSetWindowUserPointer(m_window, &m_data);
@@ -154,7 +153,9 @@ namespace Angel3D::Platform::Windows
   void Window::Shutdown()
   {
     glfwDestroyWindow(m_window);
-    if(--s_GLFWWindowInitialized == 0)
+    --s_GLFWWindowInitialized;
+
+    if(s_GLFWWindowInitialized == 0)
     {
       ANGEL3D_CORE_INFO("Terminating GLFW window");
       glfwTerminate();

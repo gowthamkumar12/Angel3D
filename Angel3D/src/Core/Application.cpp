@@ -14,7 +14,7 @@ namespace Angel3D::Core
 		ANGEL3D_CORE_ASSERT(!m_ApplicationInstance, "Core application already exists.");
 		m_ApplicationInstance = this;
 
-		m_Window = Ref<Angel3D::Core::BaseWindow>(Angel3D::Core::BaseWindow::Create());
+		m_Window = Angel3D::Core::BaseWindow::Create();
 		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 
 		Angel3D::Renderer::Renderer::Init();
@@ -22,6 +22,11 @@ namespace Angel3D::Core
 		// Creating a new ImGui Layer and pushing it to the layer stack as a overlay.
 		m_ImGuiLayer = CreateRef<Angel3D::ImGuiImpl::ImGuiLayer>();
 		PushOverlay(m_ImGuiLayer);
+	}
+
+	Application::~Application()
+	{
+		Angel3D::Renderer::Renderer::Shutdown();
 	}
 
 	void Application::PushLayer(Ref<Layer> f_layer)

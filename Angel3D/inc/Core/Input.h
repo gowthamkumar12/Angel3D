@@ -4,7 +4,7 @@
 
 namespace Angel3D::Core
 {
-  class ANGEL3D_API Input
+  class Input
   {
     public:
       // Polling the key pressed events

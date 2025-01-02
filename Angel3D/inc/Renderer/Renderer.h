@@ -10,6 +10,8 @@ namespace Angel3D::Renderer
   {
     public:
       static void Init();
+      static void Shutdown();
+
       static void OnWindowResize(uint32_t f_width, uint32_t f_height);
 
       static void BeginScene(Angel3D::Renderer::OrthographicCamera& f_camera);

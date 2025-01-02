@@ -1,7 +1,7 @@
 #include "Core/Log.h"
 #include "Platform/OpenGL/OpenGLTexture.h"
 
-#include "stb_image.h"
+#include <stb_image.h>
 #include <glad/glad.h>
 
 namespace Angel3D::Platform::OpenGL
