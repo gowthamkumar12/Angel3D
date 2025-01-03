@@ -4,6 +4,7 @@
 #include "Events/KeyEvent.h"
 #include "Events/MouseEvent.h"
 #include "Platform/Windows/Window.h"
+#include "Renderer/Renderer.h"
 
 Angel3D::Core::Ref<Angel3D::Core::BaseWindow> Angel3D::Core::BaseWindow::Create(const Angel3D::Core::WindowProps& f_props)
 {
@@ -56,6 +57,13 @@ namespace Angel3D::Platform::Windows
 
     {
       ANGEL3D_PROFILE_SCOPE("Window::GLFWCreateWindow");
+
+      #if defined(HZ_DEBUG)
+        if (Angel3D::Renderer::Renderer::GetAPI() == Angel3D::Renderer::RendererAPI::API::OpenGL)
+        {
+          glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+        }
+      #endif
 
       m_window = glfwCreateWindow((int)m_data.m_Width, (int)m_data.m_Height,
                                   m_data.m_Title.c_str(), nullptr, nullptr);
