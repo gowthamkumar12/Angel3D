@@ -21,7 +21,6 @@ SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/_out/bin/${OUTPUT_DIR}/$
 
 # Create a precompiled header
 SET(PCH_HEADER "inc/pch.h")
-SET(PCH_SOURCE "src/pch.cpp")
 
 # Creating this Angel3D library as a shared library (DLL)
 ADD_LIBRARY(${ENGINE} STATIC)
@@ -59,7 +58,7 @@ ENDIF()
 
 # Platform-specific definitions
 IF(WIN32)
-  TARGET_COMPILE_DEFINITIONS(${ENGINE} PRIVATE ANGEL3D_BUILD_DLL ANGEL3D_ENABLE_ASSERTS GLFW_INCLUDE_NONE)
+  TARGET_COMPILE_DEFINITIONS(${ENGINE} PRIVATE ANGEL3D_ENABLE_ASSERTS GLFW_INCLUDE_NONE)
 ENDIF()
 
 # Configuration-specific definitions
