@@ -5,4 +5,6 @@ TARGET_SOURCES(
     ${CMAKE_CURRENT_SOURCE_DIR}/Log.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Layer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/LayerStack.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Input.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/BaseWindow.cpp
 )

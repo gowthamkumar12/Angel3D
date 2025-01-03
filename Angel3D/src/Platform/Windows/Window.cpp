@@ -7,11 +7,6 @@
 #include "Platform/Windows/Window.h"
 #include "Renderer/Renderer.h"
 
-Angel3D::Core::Ref<Angel3D::Core::BaseWindow> Angel3D::Core::BaseWindow::Create(const Angel3D::Core::WindowProps& f_props)
-{
-  return Angel3D::Core::CreateRef<Angel3D::Platform::Windows::Window>(f_props);
-}
-
 namespace Angel3D::Platform::Windows
 {
   static uint8_t s_GLFWWindowInitialized = 0U;

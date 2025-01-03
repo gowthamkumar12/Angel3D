@@ -2,9 +2,6 @@
 #include "GLFW/glfw3.h"
 #include "Core/Application.h"
 
-Angel3D::Core::Scope<Angel3D::Core::Input> Angel3D::Core::Input::s_Instance
-                                            = Angel3D::Core::CreateScope<Angel3D::Platform::Windows::WindowsInput>();
-
 namespace Angel3D::Platform::Windows
 {
   bool WindowsInput::IsKeyPressedImpl(Angel3D::Core::KeyCode f_keycode)
