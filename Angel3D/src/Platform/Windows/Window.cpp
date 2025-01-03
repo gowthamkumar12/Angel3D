@@ -1,5 +1,6 @@
 #include "Core/BaseWindow.h"
 #include "Core/Log.h"
+#include "Core/Input.h"
 #include "Events/ApplicationEvent.h"
 #include "Events/KeyEvent.h"
 #include "Events/MouseEvent.h"
@@ -102,19 +103,19 @@ namespace Angel3D::Platform::Windows
       {
         case GLFW_PRESS:
         {
-          Events::KeyPressedEvent event(key, 0);
+          Events::KeyPressedEvent event(static_cast<Angel3D::Core::KeyCode>(key), 0);
           data.m_eventCallbackFn(event);
           break;
         }
         case GLFW_RELEASE:
         {
-          Events::KeyReleasedEvent event(key);
+          Events::KeyReleasedEvent event(static_cast<Angel3D::Core::KeyCode>(key));
           data.m_eventCallbackFn(event);
           break;
         }
         case GLFW_REPEAT:
         {
-          Events::KeyPressedEvent event(key, 1);
+          Events::KeyPressedEvent event(static_cast<Angel3D::Core::KeyCode>(key), 1);
           data.m_eventCallbackFn(event);
           break;
         }
@@ -126,7 +127,7 @@ namespace Angel3D::Platform::Windows
     glfwSetCharCallback(m_window, [](GLFWwindow* window, unsigned int codepoint)
     {
       WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-      Events::KeyTypedEvent event(codepoint);
+      Events::KeyTypedEvent event(static_cast<Angel3D::Core::KeyCode>(codepoint));
       data.m_eventCallbackFn(event);
     });
 
@@ -138,13 +139,13 @@ namespace Angel3D::Platform::Windows
       {
         case GLFW_PRESS:
         {
-          Events::MouseButtonPressedEvent event(button);
+          Events::MouseButtonPressedEvent event(static_cast<Angel3D::Core::MouseCode>(button));
           data.m_eventCallbackFn(event);
           break;
         }
         case GLFW_RELEASE:
         {
-          Events::MouseButtonReleasedEvent event(button);
+          Events::MouseButtonReleasedEvent event(static_cast<Angel3D::Core::MouseCode>(button));
           data.m_eventCallbackFn(event);
           break;
         }

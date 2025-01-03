@@ -7,18 +7,18 @@ Angel3D::Core::Scope<Angel3D::Core::Input> Angel3D::Core::Input::s_Instance
 
 namespace Angel3D::Platform::Windows
 {
-  bool WindowsInput::IsKeyPressedImpl(int f_keycode)
+  bool WindowsInput::IsKeyPressedImpl(Angel3D::Core::KeyCode f_keycode)
   {
     auto window = static_cast<GLFWwindow*>(Angel3D::Core::Application::Get().GetWindow().GetNativeWindow());
-    auto state  = glfwGetKey(window, f_keycode);
+    auto state  = glfwGetKey(window, static_cast<int32_t>(f_keycode));
 
     return state == GLFW_PRESS || state == GLFW_REPEAT;
   }
 
-  bool WindowsInput::IsMouseButtonPressedImpl(int f_button)
+  bool WindowsInput::IsMouseButtonPressedImpl(Angel3D::Core::MouseCode f_button)
   {
     auto window = static_cast<GLFWwindow*>(Angel3D::Core::Application::Get().GetWindow().GetNativeWindow());
-    auto state  = glfwGetMouseButton(window, f_button);
+    auto state  = glfwGetMouseButton(window, static_cast<int32_t>(f_button));
     return state = GLFW_PRESS;
   }
 

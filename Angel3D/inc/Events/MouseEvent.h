@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Events/Event.h"
+#include "Core/Input.h"
 
 namespace Angel3D::Events
 {
@@ -57,28 +58,28 @@ namespace Angel3D::Events
   class MouseButtonEvent : public Event
   {
     public:
-      inline int GetMouseButton() const { return m_Button; }
+      inline Angel3D::Core::MouseCode GetMouseButton() const { return m_Button; }
 
       EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
     protected:
-      MouseButtonEvent(int f_button)
+      MouseButtonEvent(Angel3D::Core::MouseCode f_button)
       : m_Button(f_button)
       {}
 
-      int m_Button;
+      Angel3D::Core::MouseCode m_Button;
   };
 
   class MouseButtonPressedEvent : public MouseButtonEvent
   {
     public:
-      MouseButtonPressedEvent(int f_button)
+      MouseButtonPressedEvent(Angel3D::Core::MouseCode f_button)
       : MouseButtonEvent(f_button)
       {}
 
       std::string ToString() const override
       {
         std::stringstream ss;
-        ss << "MouseButtonPressedEvent: " << m_Button;
+        ss << "MouseButtonPressedEvent: " << static_cast<int16_t>(m_Button);
         return ss.str();
       }
 
@@ -88,14 +89,14 @@ namespace Angel3D::Events
   class MouseButtonReleasedEvent : public MouseButtonEvent
   {
     public:
-      MouseButtonReleasedEvent(int f_button)
+      MouseButtonReleasedEvent(Angel3D::Core::MouseCode f_button)
       : MouseButtonEvent(f_button)
       {}
 
       std::string ToString() const override
       {
         std::stringstream ss;
-        ss << "MouseButtonReleasedEvent: " << m_Button;
+        ss << "MouseButtonReleasedEvent: " << static_cast<int16_t>(m_Button);
         return ss.str();
       }
 

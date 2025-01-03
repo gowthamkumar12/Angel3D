@@ -9,9 +9,9 @@ namespace Angel3D::Platform::Windows
   class WindowsInput : public Angel3D::Core::Input
   {
     protected:
-      virtual bool IsKeyPressedImpl(int f_keycode)           override;
+      virtual bool IsKeyPressedImpl(Angel3D::Core::KeyCode f_keycode)           override;
       virtual std::pair<float, float> GetMousePositionImpl() override;
-      virtual bool IsMouseButtonPressedImpl(int f_button)    override;
+      virtual bool IsMouseButtonPressedImpl(Angel3D::Core::MouseCode f_button)    override;
       virtual float GetMouseXImpl()                          override;
       virtual float GetMouseYImpl()                          override;
   };
