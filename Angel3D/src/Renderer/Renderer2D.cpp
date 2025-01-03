@@ -88,6 +88,7 @@ namespace Angel3D::Renderer
     ANGEL3D_PROFILE_FUNCTION();
 
     s_Data->_TextureShader->SetFloat4("u_Color", f_color);
+    s_Data->_TextureShader->SetFloat("u_TilingFactor", 1.0f);
 
     s_Data->_WhiteTexture->Bind();
 
@@ -98,16 +99,19 @@ namespace Angel3D::Renderer
     RenderCommand::DrawIndexed(s_Data->_vertexArray);
   }
 
-  void Renderer2D::DrawQuad(const glm::vec2 &f_position, const glm::vec2 &f_size, const Angel3D::Core::Ref<Texture2D>& f_texture)
+  void Renderer2D::DrawQuad(const glm::vec2& f_position, const glm::vec2& f_size,const Angel3D::Core::Ref<Texture2D>& f_texture,
+                           float f_tilingFactor, const glm::vec4& f_tintColor)
   {
-    DrawQuad({f_position.x, f_position.y, 0.0f}, f_size, f_texture);
+    DrawQuad({f_position.x, f_position.y, 0.0f}, f_size, f_texture, f_tilingFactor, f_tintColor);
   }
 
-  void Renderer2D::DrawQuad(const glm::vec3 &f_position, const glm::vec2 &f_size, const Angel3D::Core::Ref<Texture2D>& f_texture)
+  void Renderer2D::DrawQuad(const glm::vec3& f_position, const glm::vec2& f_size, const Angel3D::Core::Ref<Texture2D>& f_texture,
+                            float f_tilingFactor, const glm::vec4& f_tintColor)
   {
     ANGEL3D_PROFILE_FUNCTION();
 
     s_Data->_TextureShader->SetFloat4("u_Color", glm::vec4(1.0f));
+    s_Data->_TextureShader->SetFloat("u_TilingFactor", f_tilingFactor);
     f_texture->Bind();
 
     glm::mat4 transform = glm::translate(glm::mat4(1.0f), f_position) * glm::scale(glm::mat4(1.0f), {f_size.x, f_size.y, 1.0f});
@@ -115,6 +119,57 @@ namespace Angel3D::Renderer
 
     s_Data->_vertexArray->Bind();
     RenderCommand::DrawIndexed(s_Data->_vertexArray);
+  }
+
+  void Renderer2D::DrawRotatedQuad(const glm::vec2& f_position, const glm::vec2& f_size, float f_rotation, const glm::vec4& f_color)
+	{
+		DrawRotatedQuad({ f_position.x, f_position.y, 0.0f }, f_size, f_rotation, f_color);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& f_position, const glm::vec2& f_size, float f_rotation, const glm::vec4& f_color)
+	{
+		ANGEL3D_PROFILE_FUNCTION();
+
+		s_Data->_TextureShader->SetFloat4("u_Color", f_color);
+		s_Data->_TextureShader->SetFloat("u_TilingFactor", 1.0f);
+
+		s_Data->_WhiteTexture->Bind();
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), f_position)
+			* glm::rotate(glm::mat4(1.0f), f_rotation, { 0.0f, 0.0f, 1.0f })
+			* glm::scale(glm::mat4(1.0f), { f_size.x, f_size.y, 1.0f });
+
+		s_Data->_TextureShader->SetMat4("u_Transform", transform);
+		s_Data->_vertexArray->Bind();
+
+		RenderCommand::DrawIndexed(s_Data->_vertexArray);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& f_position, const glm::vec2& f_size, float f_rotation,
+                                  const Angel3D::Core::Ref<Texture2D>& f_texture, float f_tilingFactor,
+                                  const glm::vec4& f_tintColor)
+	{
+		DrawRotatedQuad({ f_position.x, f_position.y, 0.0f }, f_size, f_rotation, f_texture, f_tilingFactor, f_tintColor);
+	}
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& f_position, const glm::vec2& f_size, float f_rotation,
+                                  const Angel3D::Core::Ref<Texture2D>& f_texture, float f_tilingFactor,
+                                  const glm::vec4& f_tintColor)
+	{
+		ANGEL3D_PROFILE_FUNCTION();
+
+		s_Data->_TextureShader->SetFloat4("u_Color", f_tintColor);
+		s_Data->_TextureShader->SetFloat("u_TilingFactor", f_tilingFactor);
+
+		f_texture->Bind();
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), f_position)
+			* glm::rotate(glm::mat4(1.0f), f_rotation, { 0.0f, 0.0f, 1.0f })
+			* glm::scale(glm::mat4(1.0f), { f_size.x, f_size.y, 1.0f });
+
+		s_Data->_TextureShader->SetMat4("u_Transform", transform);
+		s_Data->_vertexArray->Bind();
+
+		RenderCommand::DrawIndexed(s_Data->_vertexArray);
   }
 
 } // namespace Angel3D::Renderer

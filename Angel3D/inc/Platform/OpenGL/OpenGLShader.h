@@ -23,6 +23,7 @@ namespace Angel3D::Platform::OpenGL
       virtual const std::string& GetName() const override { return m_Name; };
 
       virtual void SetInt(const std::string& f_name, int f_value) override;
+      virtual void SetFloat(const std::string& f_name, float f_value) override;
       virtual void SetFloat3(const std::string& f_name, const glm::vec3& f_value) override;
       virtual void SetFloat4(const std::string& f_name, const glm::vec4& f_value) override;
       virtual void SetMat4(const std::string& f_name, const glm::mat4 f_value) override;

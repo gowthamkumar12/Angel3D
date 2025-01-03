@@ -225,8 +225,14 @@ namespace Angel3D::Platform::OpenGL
     UploadUniformInt(f_name, f_value);
   }
 
-  void OpenGLShader::SetFloat3(const std::string& f_name, const glm::vec3& f_value)
+  void OpenGL::OpenGLShader::SetFloat(const std::string &f_name, float f_value)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
+    UploadUniformFloat(f_name, f_value);
+  }
+  void OpenGLShader::SetFloat3(const std::string &f_name,
+                               const glm::vec3 &f_value) {
     ANGEL3D_PROFILE_FUNCTION();
 
     UploadUniformFloat3(f_name, f_value);
