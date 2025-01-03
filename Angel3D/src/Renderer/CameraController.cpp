@@ -14,6 +14,8 @@ namespace Angel3D::Renderer
 
   void OrthographicCameraController::OnUpdate(Angel3D::Core::Timestep f_timestep)
 	{
+    ANGEL3D_PROFILE_FUNCTION();
+
 		if(Angel3D::Core::Input::IsKeyPressed(ANGEL3D_KEY_A))
 		{
 			m_CameraPosition.x -= cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * f_timestep;
@@ -66,6 +68,8 @@ namespace Angel3D::Renderer
 
   void OrthographicCameraController::OnEvent(Angel3D::Events::Event &f_e)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     Angel3D::Events::EventDispatcher dispatcher(f_e);
     dispatcher.Dispatch<Angel3D::Events::MouseScrolledEvent>(BIND_EVENT_FN(OrthographicCameraController::OnMouseScrolled));
     dispatcher.Dispatch<Angel3D::Events::WindowResizeEvent>(BIND_EVENT_FN(OrthographicCameraController::OnWindowResized));
@@ -73,6 +77,8 @@ namespace Angel3D::Renderer
 
   bool OrthographicCameraController::OnMouseScrolled(Angel3D::Events::MouseScrolledEvent &f_e)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     m_ZoomLevel -= f_e.GetYOffset() * 0.25f;
     m_ZoomLevel = std::max(m_ZoomLevel, 0.25f);
     m_Camera.SetProjectioMatrix(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
@@ -81,6 +87,8 @@ namespace Angel3D::Renderer
 
   bool OrthographicCameraController::OnWindowResized(Angel3D::Events::WindowResizeEvent &f_e)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     m_AspectRatio = (float)f_e.GetWidth() / (float)f_e.GetHeight();
     m_Camera.SetProjectioMatrix(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
     return false;

@@ -14,13 +14,11 @@ namespace Angel3D::Core
 	{
 		m_Layers.emplace(m_Layers.begin() + m_LayerInsertIndex, f_layer);
 		m_LayerInsertIndex++;
-		f_layer->OnAttach();
 	}
 
 	void LayerStack::PushOverlay(Ref<Layer> f_overlay)
 	{
 		m_Layers.emplace_back(f_overlay);
-		f_overlay->OnAttach();
 	}
 
   void LayerStack::PopLayer(Ref<Layer> f_layer)

@@ -28,26 +28,36 @@ namespace Angel3D::Platform::OpenGL
 
   OpenGLVertexArray::OpenGLVertexArray()
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     glCreateVertexArrays(1, &m_RendererID);
   }
 
   OpenGLVertexArray::~OpenGLVertexArray()
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     glDeleteVertexArrays(1, &m_RendererID);
   }
 
   void OpenGLVertexArray::Bind() const
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     glBindVertexArray(m_RendererID);
   }
 
   void OpenGLVertexArray::Unbind() const
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     glBindVertexArray(0);
   }
 
   void OpenGLVertexArray::AddVertexBuffer(const Angel3D::Core::Ref<Angel3D::Renderer::VertexBuffer> &f_vertexBuffer)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     glBindVertexArray(m_RendererID);
     f_vertexBuffer->Bind();
 
@@ -70,6 +80,8 @@ namespace Angel3D::Platform::OpenGL
 
   void OpenGLVertexArray::SetIndexBuffer(const Angel3D::Core::Ref<Angel3D::Renderer::IndexBuffer> &f_indexBuffer)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     glBindVertexArray(m_RendererID);
     f_indexBuffer->Bind();
 

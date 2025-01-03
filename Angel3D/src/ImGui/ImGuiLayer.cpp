@@ -19,6 +19,8 @@ namespace Angel3D::ImGuiImpl
 
   void ImGuiLayer::OnAttach()
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -51,6 +53,8 @@ namespace Angel3D::ImGuiImpl
 
   void ImGuiLayer::OnDetach()
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
@@ -58,6 +62,8 @@ namespace Angel3D::ImGuiImpl
 
   void ImGuiLayer::Begin()
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
@@ -65,6 +71,8 @@ namespace Angel3D::ImGuiImpl
 
   void ImGuiLayer::End()
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     ImGuiIO& io = ImGui::GetIO();
     Angel3D::Core::Application& app = Angel3D::Core::Application::Get();
     io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());

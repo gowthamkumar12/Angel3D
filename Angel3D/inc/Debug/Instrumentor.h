@@ -116,7 +116,8 @@ namespace Angel3D::Debug
       std::chrono::time_point<std::chrono::high_resolution_clock> m_StartTimepoint;
       bool m_Stopped;
 	};
-}
+} // namespace Angel3D::Debug
+
 #define ANGEL3D_PROFILE 1
 #if ANGEL3D_PROFILE
 	#define ANGEL3D_PROFILE_BEGIN_SESSION(name, filepath) ::Angel3D::Debug::Instrumentor::Get().BeginSession(name, filepath)

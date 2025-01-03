@@ -8,6 +8,8 @@ namespace Angel3D::Renderer
 
   void Renderer::Init()
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     RenderCommand::Init();
     Renderer2D::Init();
   }

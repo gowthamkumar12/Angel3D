@@ -25,6 +25,8 @@ namespace Angel3D::Platform::OpenGL
 
   OpenGLShader::OpenGLShader(const std::string& f_filePath)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     std::string source = ReadFromFile(f_filePath);
     auto shaderSources = PreProcessing(source);
     Compile(shaderSources);
@@ -40,6 +42,8 @@ namespace Angel3D::Platform::OpenGL
   OpenGLShader::OpenGLShader(const std::string& f_name, const std::string &vertexSrc, const std::string &fragSrc)
   : m_Name(f_name)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     std::unordered_map<GLenum, std::string> shaderSource;
     shaderSource[GL_VERTEX_SHADER] = vertexSrc;
     shaderSource[GL_FRAGMENT_SHADER] = fragSrc;
@@ -48,11 +52,15 @@ namespace Angel3D::Platform::OpenGL
 
   OpenGLShader::~OpenGLShader()
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     glDeleteProgram(m_RendererId);
   }
 
   std::string OpenGLShader::ReadFromFile(const std::string& f_filePath)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     std::string result;
     std::ifstream in(f_filePath, std::ios::in | std::ios::binary);
     if(in)
@@ -81,6 +89,8 @@ namespace Angel3D::Platform::OpenGL
 
   std::unordered_map<GLenum, std::string> OpenGLShader::PreProcessing(const std::string& f_shaderSource)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     std::unordered_map<GLenum, std::string> shaderSources;
 
     const char* typeToken  = "#type";
@@ -106,6 +116,8 @@ namespace Angel3D::Platform::OpenGL
 
   void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& f_shaderSources)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     GLuint program = glCreateProgram();
     ANGEL3D_CORE_ASSERT(f_shaderSources.size() <= 2, "We only support 2 shaders for now.")
     std::array<GLenum, 2> glShaderIDs;
@@ -194,31 +206,43 @@ namespace Angel3D::Platform::OpenGL
 
   void OpenGLShader::Bind() const
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     glUseProgram(m_RendererId);
   }
 
   void OpenGLShader::Unbind() const
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     glUseProgram(0);
   }
 
   void OpenGLShader::SetInt(const std::string& f_name, int f_value)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     UploadUniformInt(f_name, f_value);
   }
 
   void OpenGLShader::SetFloat3(const std::string& f_name, const glm::vec3& f_value)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     UploadUniformFloat3(f_name, f_value);
   }
 
   void OpenGLShader::SetFloat4(const std::string& f_name, const glm::vec4& f_value)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     UploadUniformFloat4(f_name, f_value);
   }
 
   void OpenGLShader::SetMat4(const std::string& f_name, const glm::mat4 f_value)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     UploadUniformMat4(f_name, f_value);
   }
 

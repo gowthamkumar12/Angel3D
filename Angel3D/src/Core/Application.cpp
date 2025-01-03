@@ -11,6 +11,8 @@ namespace Angel3D::Core
 
 	Application::Application()
 	{
+		ANGEL3D_PROFILE_FUNCTION();
+
 		ANGEL3D_CORE_ASSERT(!m_ApplicationInstance, "Core application already exists.");
 		m_ApplicationInstance = this;
 
@@ -26,21 +28,31 @@ namespace Angel3D::Core
 
 	Application::~Application()
 	{
+		ANGEL3D_PROFILE_FUNCTION();
+
 		Angel3D::Renderer::Renderer::Shutdown();
 	}
 
 	void Application::PushLayer(Ref<Layer> f_layer)
 	{
+		ANGEL3D_PROFILE_FUNCTION();
+
 		m_LayerStack.PushLayer(f_layer);
+		f_layer->OnAttach();
 	}
 
 	void Application::PushOverlay(Ref<Layer> f_overlay)
 	{
+		ANGEL3D_PROFILE_FUNCTION();
+
 		m_LayerStack.PushOverlay(f_overlay);
+		f_overlay->OnAttach();
 	}
 
 	void Application::OnEvent(Angel3D::Events::Event& f_e)
 	{
+		ANGEL3D_PROFILE_FUNCTION();
+
 		Events::EventDispatcher dispatcher(f_e);
 		dispatcher.Dispatch<Events::WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
 		dispatcher.Dispatch<Events::WindowResizeEvent>(BIND_EVENT_FN(Application::OnWindowResize));
@@ -57,26 +69,38 @@ namespace Angel3D::Core
 
 	void Application::Run()
 	{
+		ANGEL3D_PROFILE_FUNCTION();
+
 		while (m_Running)
 		{
+			ANGEL3D_PROFILE_SCOPE("Application::RunLoop");
+
 			float time = (float)glfwGetTime();
 			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
 			if(!m_Minimized)
 			{
-				for(Ref<Layer> layer : m_LayerStack)
 				{
-					layer->OnUpdate(timestep);
-				}
-			}
+					ANGEL3D_PROFILE_SCOPE("Application::LayerStack::OnUpdate");
 
-			m_ImGuiLayer->Begin();
-			for(Ref<Layer> layer : m_LayerStack)
-			{
-				layer->OnImGuiRender();
+					for(Ref<Layer> layer : m_LayerStack)
+					{
+						layer->OnUpdate(timestep);
+					}
+				}
+
+				m_ImGuiLayer->Begin();
+				{
+					ANGEL3D_PROFILE_SCOPE("Application::LayerStack::OnImGuiRender");
+
+					for(Ref<Layer> layer : m_LayerStack)
+					{
+						layer->OnImGuiRender();
+					}
+				}
+				m_ImGuiLayer->End();
 			}
-			m_ImGuiLayer->End();
 
 			m_Window->OnUpdate();
 		}
@@ -90,6 +114,8 @@ namespace Angel3D::Core
 
 	bool Application::OnWindowResize(Events::WindowResizeEvent& f_event)
 	{
+		ANGEL3D_PROFILE_FUNCTION();
+
 		if(f_event.GetWidth() == 0 || f_event.GetHeight() == 0)
 		{
 			m_Minimized = true;

@@ -10,6 +10,8 @@ namespace Angel3D::Platform::OpenGL
   : m_Width(f_width),
     m_Height(f_height)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     m_InternalFormat = GL_RGB8;
     m_DataFormat     = GL_RGBA;
 
@@ -26,9 +28,15 @@ namespace Angel3D::Platform::OpenGL
   OpenGLTexture2D::OpenGLTexture2D(const std::string& f_filePath)
   : m_FilePath(f_filePath)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     int width, height, channels;
     stbi_set_flip_vertically_on_load(1);
-    stbi_uc* data = stbi_load(f_filePath.c_str(), &width, &height, &channels, 0);
+    stbi_uc* data = nullptr;
+    {
+      ANGEL3D_PROFILE_FUNCTION();
+      data = stbi_load(f_filePath.c_str(), &width, &height, &channels, 0);
+    }
     ANGEL3D_CORE_ASSERT(data, "Failed to load image!");
 
     m_Width  = width;
@@ -64,11 +72,15 @@ namespace Angel3D::Platform::OpenGL
 
   OpenGLTexture2D::~OpenGLTexture2D()
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     glDeleteTextures(1, &m_RendererID);
   }
 
   void OpenGLTexture2D::SetData(void *data, uint32_t size)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     uint8_t bpp = m_DataFormat == GL_RGBA ? 4 : 3;
     ANGEL3D_CORE_ASSERT(size == m_Width * m_Height * bpp, "Data must be entire texture!");
     glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
@@ -76,6 +88,8 @@ namespace Angel3D::Platform::OpenGL
 
   void OpenGLTexture2D::Bind(uint32_t f_slots) const
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     glBindTextureUnit(f_slots, m_RendererID);
   }
 

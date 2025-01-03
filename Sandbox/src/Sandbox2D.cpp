@@ -13,22 +13,22 @@ namespace Sandbox
 
   void Sandbox2D::OnAttach()
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     m_Texture = Angel3D::Renderer::Texture2D::Create("Sandbox/assets/textures/Checkerboard.png");
   }
 
   void Sandbox2D::OnDetach()
   {
+    ANGEL3D_PROFILE_FUNCTION();
   }
 
   void Sandbox2D::OnUpdate(Angel3D::Core::Timestep f_ts)
   {
     ANGEL3D_PROFILE_FUNCTION();
 
-    {
-      // Update
-      ANGEL3D_PROFILE_SCOPE("CameraController::OnUpdate");
-      m_CameraController.OnUpdate(f_ts);
-    }
+    // Update
+    m_CameraController.OnUpdate(f_ts);
 
     {
       // Render

@@ -15,6 +15,8 @@ namespace Angel3D::Platform::OpenGL
 
   void OpenGLContext::Init()
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     glfwMakeContextCurrent(m_WindowHandle);
     int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
     ANGEL3D_CORE_ASSERT(status, "Failed to initialize GLAD");
@@ -35,6 +37,8 @@ namespace Angel3D::Platform::OpenGL
 
   void OpenGLContext::SwapBuffers()
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     glfwSwapBuffers(m_WindowHandle);
   }
 } // namespace Angel3D::Platform::OpenGL

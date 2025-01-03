@@ -21,16 +21,22 @@ namespace Angel3D::Platform::Windows
 
   Window::Window(const Angel3D::Core::WindowProps& f_props)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     Init(f_props);
   }
 
   Window::~Window()
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     Shutdown();
   }
 
   void Window::Init(const Angel3D::Core::WindowProps& f_props)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     m_data.m_Title  = f_props.m_Title;
     m_data.m_Width  = f_props.m_Width;
     m_data.m_Height = f_props.m_Height;
@@ -39,6 +45,8 @@ namespace Angel3D::Platform::Windows
 
     if(s_GLFWWindowInitialized == 0)
     {
+      ANGEL3D_PROFILE_SCOPE("Window::GLFW");
+
       ANGEL3D_CORE_INFO("Initializing GLFW");
       int success = glfwInit();
       ANGEL3D_CORE_ASSERT(success, "Could not initialize GLFW.")
@@ -46,9 +54,13 @@ namespace Angel3D::Platform::Windows
       s_GLFWWindowInitialized = true;
     }
 
-    m_window = glfwCreateWindow((int)m_data.m_Width, (int)m_data.m_Height,
-                                m_data.m_Title.c_str(), nullptr, nullptr);
-    ++s_GLFWWindowInitialized;
+    {
+      ANGEL3D_PROFILE_SCOPE("Window::GLFWCreateWindow");
+
+      m_window = glfwCreateWindow((int)m_data.m_Width, (int)m_data.m_Height,
+                                  m_data.m_Title.c_str(), nullptr, nullptr);
+      ++s_GLFWWindowInitialized;
+    }
 
     m_Context = Angel3D::Renderer::GraphicsContext::Create(m_window);
     m_Context->Init();
@@ -152,6 +164,8 @@ namespace Angel3D::Platform::Windows
 
   void Window::Shutdown()
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     glfwDestroyWindow(m_window);
     --s_GLFWWindowInitialized;
 
@@ -164,12 +178,16 @@ namespace Angel3D::Platform::Windows
 
   void Window::OnUpdate()
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     glfwPollEvents();
     m_Context->SwapBuffers();
   }
 
   void Window::SetVSync(bool f_enabled)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     if(f_enabled)
     {
       glfwSwapInterval(1);

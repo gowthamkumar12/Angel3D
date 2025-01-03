@@ -19,6 +19,8 @@ namespace Angel3D::Renderer
 
   void Renderer2D::Init()
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     s_Data = new Render2DStorage();
 
     // Vertex array
@@ -58,17 +60,22 @@ namespace Angel3D::Renderer
 
   void Renderer2D::Shutdown()
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     delete s_Data;
   }
 
   void Renderer2D::BeginScene(const OrthographicCamera &f_camera)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     s_Data->_TextureShader->Bind();
     s_Data->_TextureShader->SetMat4("u_ViewProjectionMatrix", f_camera.GetViewProjectionMatrix());
   }
 
   void Renderer2D::EndScene()
   {
+    ANGEL3D_PROFILE_FUNCTION();
   }
 
   void Renderer2D::DrawQuad(const glm::vec2 &f_position, const glm::vec2 &f_size, const glm::vec4 &f_color)
@@ -78,6 +85,8 @@ namespace Angel3D::Renderer
 
   void Renderer2D::DrawQuad(const glm::vec3 &f_position, const glm::vec2 &f_size, const glm::vec4 &f_color)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     s_Data->_TextureShader->SetFloat4("u_Color", f_color);
 
     s_Data->_WhiteTexture->Bind();
@@ -96,6 +105,8 @@ namespace Angel3D::Renderer
 
   void Renderer2D::DrawQuad(const glm::vec3 &f_position, const glm::vec2 &f_size, const Angel3D::Core::Ref<Texture2D>& f_texture)
   {
+    ANGEL3D_PROFILE_FUNCTION();
+
     s_Data->_TextureShader->SetFloat4("u_Color", glm::vec4(1.0f));
     f_texture->Bind();
 
