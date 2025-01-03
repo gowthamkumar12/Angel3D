@@ -12,3 +12,7 @@ imgui_log.txt
 
 # Ignore __pycache__ folders
 __pycache__/
+
+#Ignore Angel3D generated files
+*.log
+*.json
