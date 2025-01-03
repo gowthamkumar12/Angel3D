@@ -6,6 +6,8 @@
 #include "Events/ApplicationEvent.h"
 #include "ImGui/ImGuiLayer.h"
 
+int main(int argc, char** argv);
+
 namespace Angel3D::Core
 {
 	class Application
@@ -13,8 +15,6 @@ namespace Angel3D::Core
 		public:
 			Application();
 			virtual ~Application();
-
-			void Run();
 
 			void OnEvent(Angel3D::Events::Event& f_e);
 
@@ -26,6 +26,7 @@ namespace Angel3D::Core
 			inline Angel3D::Core::BaseWindow& GetWindow() { return *m_Window; }
 
 		private:
+			void Run();
 			bool OnWindowClose(Events::WindowCloseEvent& f_event);
 			bool OnWindowResize(Events::WindowResizeEvent& f_event);
 
@@ -37,6 +38,8 @@ namespace Angel3D::Core
 			LayerStack                          m_LayerStack;
 			float                               m_LastFrameTime;
 			static Application*                 m_ApplicationInstance;
+
+			friend int ::main(int argc, char** argv);
 	};
 
 	// To be defined in the CLIENT
