@@ -19,6 +19,11 @@ namespace Angel3D::Platform::OpenGL
 
       virtual void Bind(uint32_t f_slot = 0) const override;
 
+      virtual bool operator==(const Angel3D::Renderer::Texture& f_other) const override
+      {
+        return m_RendererID == ((OpenGLTexture2D&)f_other).m_RendererID;
+      }
+
     private:
       std::string m_FilePath;
       uint32_t    m_Width, m_Height;

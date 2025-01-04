@@ -13,16 +13,16 @@ namespace Angel3D::Renderer
     glm::vec3 Position;
     glm::vec4 Color;
     glm::vec2 TexCoord;
-
-    // TODO
-    // uint8_t TextureId;
+    float     TexIndex;
+		float     TilingFactor;
   };
 
   struct Render2DData
   {
-    const uint32_t MaxQuads    = 10000;
-		const uint32_t MaxVertices = MaxQuads * 4;
-		const uint32_t MaxIndices  = MaxQuads * 6;
+    const uint32_t MaxQuads               = 10000;
+		const uint32_t MaxVertices            = MaxQuads * 4;
+		const uint32_t MaxIndices             = MaxQuads * 6;
+    static const uint32_t MaxTextureSlots = 32; // TODO: RenderCaps
 
     Angel3D::Core::Ref<VertexArray>  QuadVertexArray;
     Angel3D::Core::Ref<VertexBuffer> QuadVertexBuffer;
@@ -32,6 +32,10 @@ namespace Angel3D::Renderer
     uint32_t    QuadIndexCount       = 0;
     QuadVertex* QuadVertexBufferBase = nullptr;
     QuadVertex* QuadVertexBufferPtr  = nullptr;
+
+    std::array<Angel3D::Core::Ref<Texture2D>,
+                                  MaxTextureSlots> TextureSlots;
+		uint32_t                                       TextureSlotIndex = 1; // 0 = white texture
   };
 
   static Render2DData s_Data;
@@ -48,7 +52,9 @@ namespace Angel3D::Renderer
 		{
 			Angel3D::Renderer::BufferLayout layout = {{Angel3D::Renderer::ShaderDataType::Float3, "a_Position"},
                                                 {Angel3D::Renderer::ShaderDataType::Float4, "a_Color"},
-                                                {Angel3D::Renderer::ShaderDataType::Float2, "a_TexCoord"}};
+                                                {Angel3D::Renderer::ShaderDataType::Float2, "a_TexCoord"},
+                                                {Angel3D::Renderer::ShaderDataType::Float,  "a_TexIndex"},
+			                                          {Angel3D::Renderer::ShaderDataType::Float,  "a_TilingFactor"}};
 
 			s_Data.QuadVertexBuffer->SetLayout(layout);
 		}
@@ -81,9 +87,19 @@ namespace Angel3D::Renderer
     uint32_t whiteTextureData = 0xffffffff;
     s_Data.WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
 
+    int32_t samplers[s_Data.MaxTextureSlots];
+		for (uint32_t i = 0; i < s_Data.MaxTextureSlots; i++)
+    {
+			samplers[i] = i;
+    }
+
     s_Data.TextureShader = Angel3D::Renderer::Shader::Create("Sandbox/assets/shaders/Texture.glsl");
     s_Data.TextureShader->Bind();
-    s_Data.TextureShader->SetInt("u_Texture", 0);
+
+    s_Data.TextureShader->SetIntArray("u_Textures", samplers, s_Data.MaxTextureSlots);
+
+    // Set all texture slots to 0
+		s_Data.TextureSlots[0] = s_Data.WhiteTexture;
   }
 
   void Renderer2D::Shutdown()
@@ -100,6 +116,8 @@ namespace Angel3D::Renderer
 
     s_Data.QuadIndexCount = 0;
 		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
+    s_Data.TextureSlotIndex = 1;
   }
 
   void Renderer2D::EndScene()
@@ -114,6 +132,12 @@ namespace Angel3D::Renderer
 
   void Renderer2D::Flush()
   {
+    // Bind textures
+		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
+    {
+			s_Data.TextureSlots[i]->Bind(i);
+    }
+
     RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
   }
 
@@ -126,36 +150,38 @@ namespace Angel3D::Renderer
   {
     ANGEL3D_PROFILE_FUNCTION();
 
-    s_Data.QuadVertexBufferPtr->Position = f_position;
-    s_Data.QuadVertexBufferPtr->Color    = f_color;
-    s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 0.0f };
+    const float texIndex     = 0.0f; // White Texture
+		const float tilingFactor = 1.0f;
+
+    s_Data.QuadVertexBufferPtr->Position     = f_position;
+    s_Data.QuadVertexBufferPtr->Color        = f_color;
+    s_Data.QuadVertexBufferPtr->TexCoord     = { 0.0f, 0.0f };
+    s_Data.QuadVertexBufferPtr->TexIndex     = texIndex;
+    s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
     s_Data.QuadVertexBufferPtr++;
 
-    s_Data.QuadVertexBufferPtr->Position = { f_position.x + f_size.x, f_position.y, 0.0f};
-    s_Data.QuadVertexBufferPtr->Color    = f_color;
-    s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 0.0f };
+    s_Data.QuadVertexBufferPtr->Position     = { f_position.x + f_size.x, f_position.y, 0.0f};
+    s_Data.QuadVertexBufferPtr->Color        = f_color;
+    s_Data.QuadVertexBufferPtr->TexCoord     = { 1.0f, 0.0f };
+    s_Data.QuadVertexBufferPtr->TexIndex     = texIndex;
+    s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
     s_Data.QuadVertexBufferPtr++;
 
-    s_Data.QuadVertexBufferPtr->Position = { f_position.x + f_size.x, f_position.y + f_size.y, 0.0f};
-    s_Data.QuadVertexBufferPtr->Color    = f_color;
-    s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 1.0f };
+    s_Data.QuadVertexBufferPtr->Position     = { f_position.x + f_size.x, f_position.y + f_size.y, 0.0f};
+    s_Data.QuadVertexBufferPtr->Color        = f_color;
+    s_Data.QuadVertexBufferPtr->TexCoord     = { 1.0f, 1.0f };
+    s_Data.QuadVertexBufferPtr->TexIndex     = texIndex;
+    s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
     s_Data.QuadVertexBufferPtr++;
 
-    s_Data.QuadVertexBufferPtr->Position = { f_position.x, f_position.y + f_size.y, 0.0f};
-    s_Data.QuadVertexBufferPtr->Color    = f_color;
-    s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 1.0f };
+    s_Data.QuadVertexBufferPtr->Position     = { f_position.x, f_position.y + f_size.y, 0.0f};
+    s_Data.QuadVertexBufferPtr->Color        = f_color;
+    s_Data.QuadVertexBufferPtr->TexCoord     = { 0.0f, 1.0f };
+    s_Data.QuadVertexBufferPtr->TexIndex     = texIndex;
+    s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
     s_Data.QuadVertexBufferPtr++;
 
     s_Data.QuadIndexCount += 6;
-
-    // s_Data.TextureShader->SetFloat("u_TilingFactor", 1.0f);
-
-    // s_Data.WhiteTexture->Bind();
-
-    // glm::mat4 transform = glm::translate(glm::mat4(1.0f), f_position) * glm::scale(glm::mat4(1.0f), {f_size.x, f_size.y, 1.0f});
-    // s_Data.TextureShader->SetMat4("u_Transform", transform);
-
-    // s_Data.QuadVertexArray->Bind();
   }
 
   void Renderer2D::DrawQuad(const glm::vec2& f_position, const glm::vec2& f_size,const Angel3D::Core::Ref<Texture2D>& f_texture,
@@ -169,15 +195,54 @@ namespace Angel3D::Renderer
   {
     ANGEL3D_PROFILE_FUNCTION();
 
-    s_Data.TextureShader->SetFloat4("u_Color", glm::vec4(1.0f));
-    s_Data.TextureShader->SetFloat("u_TilingFactor", f_tilingFactor);
-    f_texture->Bind();
+    constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
+		float texIndex            = 0.0f;
 
-    glm::mat4 transform = glm::translate(glm::mat4(1.0f), f_position) * glm::scale(glm::mat4(1.0f), {f_size.x, f_size.y, 1.0f});
-    s_Data.TextureShader->SetMat4("u_Transform", transform);
+		for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++)
+		{
+			if (*s_Data.TextureSlots[i].get() == *f_texture.get())
+			{
+				texIndex = (float)i;
+				break;
+			}
+		}
 
-    s_Data.QuadVertexArray->Bind();
-    RenderCommand::DrawIndexed(s_Data.QuadVertexArray);
+		if (texIndex == 0.0f)
+		{
+			texIndex = (float)s_Data.TextureSlotIndex;
+			s_Data.TextureSlots[s_Data.TextureSlotIndex] = f_texture;
+			s_Data.TextureSlotIndex++;
+		}
+
+    s_Data.QuadVertexBufferPtr->Position     = f_position;
+    s_Data.QuadVertexBufferPtr->Color        = color;
+    s_Data.QuadVertexBufferPtr->TexCoord     = { 0.0f, 0.0f };
+    s_Data.QuadVertexBufferPtr->TexIndex     = texIndex;
+    s_Data.QuadVertexBufferPtr->TilingFactor = f_tilingFactor;
+    s_Data.QuadVertexBufferPtr++;
+
+    s_Data.QuadVertexBufferPtr->Position     = { f_position.x + f_size.x, f_position.y, 0.0f};
+    s_Data.QuadVertexBufferPtr->Color        = color;
+    s_Data.QuadVertexBufferPtr->TexCoord     = { 1.0f, 0.0f };
+    s_Data.QuadVertexBufferPtr->TexIndex     = texIndex;
+    s_Data.QuadVertexBufferPtr->TilingFactor = f_tilingFactor;
+    s_Data.QuadVertexBufferPtr++;
+
+    s_Data.QuadVertexBufferPtr->Position     = { f_position.x + f_size.x, f_position.y + f_size.y, 0.0f};
+    s_Data.QuadVertexBufferPtr->Color        = color;
+    s_Data.QuadVertexBufferPtr->TexCoord     = { 1.0f, 1.0f };
+    s_Data.QuadVertexBufferPtr->TexIndex     = texIndex;
+    s_Data.QuadVertexBufferPtr->TilingFactor = f_tilingFactor;
+    s_Data.QuadVertexBufferPtr++;
+
+    s_Data.QuadVertexBufferPtr->Position     = { f_position.x, f_position.y + f_size.y, 0.0f};
+    s_Data.QuadVertexBufferPtr->Color        = color;
+    s_Data.QuadVertexBufferPtr->TexCoord     = { 0.0f, 1.0f };
+    s_Data.QuadVertexBufferPtr->TexIndex     = texIndex;
+    s_Data.QuadVertexBufferPtr->TilingFactor = f_tilingFactor;
+    s_Data.QuadVertexBufferPtr++;
+
+    s_Data.QuadIndexCount += 6;
   }
 
   void Renderer2D::DrawRotatedQuad(const glm::vec2& f_position, const glm::vec2& f_size, float f_rotation, const glm::vec4& f_color)

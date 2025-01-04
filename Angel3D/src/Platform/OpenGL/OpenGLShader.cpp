@@ -225,6 +225,11 @@ namespace Angel3D::Platform::OpenGL
     UploadUniformInt(f_name, f_value);
   }
 
+  void OpenGLShader::SetIntArray(const std::string& f_name, int* f_values, uint32_t f_count)
+	{
+		UploadUniformIntArray(f_name, f_values, f_count);
+	}
+
   void OpenGL::OpenGLShader::SetFloat(const std::string &f_name, float f_value)
   {
     ANGEL3D_PROFILE_FUNCTION();
@@ -257,6 +262,12 @@ namespace Angel3D::Platform::OpenGL
     GLint location = glGetUniformLocation(m_RendererId, f_name.c_str());
     glUniform1i(location, f_value);
   }
+
+  void OpenGLShader::UploadUniformIntArray(const std::string& f_name, int* f_values, uint32_t f_count)
+	{
+		GLint location = glGetUniformLocation(m_RendererId, f_name.c_str());
+		glUniform1iv(location, f_count, f_values);
+	}
 
   void OpenGL::OpenGLShader::UploadUniformFloat(const std::string &f_name, float f_value)
   {

@@ -16,6 +16,7 @@ namespace Angel3D::Renderer
       virtual void Unbind() const = 0;
 
       virtual void SetInt(const std::string& f_name, int f_value) = 0;
+      virtual void SetIntArray(const std::string& f_name, int* f_values, uint32_t f_count) = 0;
       virtual void SetFloat(const std::string& f_name, float f_value) = 0;
       virtual void SetFloat3(const std::string& f_name, const glm::vec3& f_value) = 0;
       virtual void SetFloat4(const std::string& f_name, const glm::vec4& f_value) = 0;

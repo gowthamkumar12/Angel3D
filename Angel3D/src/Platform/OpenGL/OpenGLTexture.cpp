@@ -92,6 +92,5 @@ namespace Angel3D::Platform::OpenGL
 
     glBindTextureUnit(f_slots, m_RendererID);
   }
-
 } // namespace Angel3D::Platform::OpenGL
 
