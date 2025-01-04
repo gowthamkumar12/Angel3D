@@ -11,6 +11,7 @@ namespace Angel3D::Renderer
 
       static void BeginScene(const OrthographicCamera& f_camera);
       static void EndScene();
+      static void Flush();
 
       // Draw Quad using color
       static void DrawQuad(const glm::vec2& f_position, const glm::vec2& f_size, const glm::vec4& f_color);

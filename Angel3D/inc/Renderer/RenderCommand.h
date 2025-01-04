@@ -27,9 +27,9 @@ namespace Angel3D::Renderer
         s_RendererAPI->Clear();
       };
 
-      inline static void DrawIndexed(const Angel3D::Core::Ref<VertexArray>& f_vertexArray)
+      inline static void DrawIndexed(const Angel3D::Core::Ref<VertexArray>& f_vertexArray, uint32_t f_count = 0)
       {
-        s_RendererAPI->DrawIndexed(f_vertexArray);
+        s_RendererAPI->DrawIndexed(f_vertexArray, f_count);
       }
 
     private:

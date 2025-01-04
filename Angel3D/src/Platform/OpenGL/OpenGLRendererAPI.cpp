@@ -51,9 +51,10 @@ namespace Angel3D::Platform::OpenGL
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   }
 
-  void OpenGLRendererAPI::DrawIndexed(const Angel3D::Core::Ref<Angel3D::Renderer::VertexArray> &f_vertexArray)
+  void OpenGLRendererAPI::DrawIndexed(const Angel3D::Core::Ref<Angel3D::Renderer::VertexArray> &f_vertexArray, uint32_t f_count)
   {
-    glDrawElements(GL_TRIANGLES, f_vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+    uint32_t count = f_count ? f_vertexArray->GetIndexBuffer()->GetCount() : f_count;
+    glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
     glBindTexture(GL_TEXTURE_2D, 0);
   }
 

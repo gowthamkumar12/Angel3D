@@ -8,74 +8,113 @@
 
 namespace Angel3D::Renderer
 {
-  struct Render2DStorage
+  struct QuadVertex
   {
-    Angel3D::Core::Ref<VertexArray> _vertexArray;
-    Angel3D::Core::Ref<Shader>      _TextureShader;
-    Angel3D::Core::Ref<Texture2D>   _WhiteTexture;
+    glm::vec3 Position;
+    glm::vec4 Color;
+    glm::vec2 TexCoord;
+
+    // TODO
+    // uint8_t TextureId;
   };
 
-  static Render2DStorage* s_Data;
+  struct Render2DData
+  {
+    const uint32_t MaxQuads    = 10000;
+		const uint32_t MaxVertices = MaxQuads * 4;
+		const uint32_t MaxIndices  = MaxQuads * 6;
+
+    Angel3D::Core::Ref<VertexArray>  QuadVertexArray;
+    Angel3D::Core::Ref<VertexBuffer> QuadVertexBuffer;
+    Angel3D::Core::Ref<Shader>       TextureShader;
+    Angel3D::Core::Ref<Texture2D>    WhiteTexture;
+
+    uint32_t    QuadIndexCount       = 0;
+    QuadVertex* QuadVertexBufferBase = nullptr;
+    QuadVertex* QuadVertexBufferPtr  = nullptr;
+  };
+
+  static Render2DData s_Data;
 
   void Renderer2D::Init()
   {
     ANGEL3D_PROFILE_FUNCTION();
 
-    s_Data = new Render2DStorage();
+    // Creating a vertex array(i.e., Array that contains all the vertices to draw a quad)
+		s_Data.QuadVertexArray = Angel3D::Renderer::VertexArray::Create();
 
-    // Vertex array
-		s_Data->_vertexArray = Angel3D::Renderer::VertexArray::Create();
-
-		// Vertex buffer
-		float vertices[4 * 5] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-															 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-															 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
-															-0.5f,  0.5f, 0.0f, 0.0f, 1.0f};
-
-		Angel3D::Core::Ref<Angel3D::Renderer::VertexBuffer> vertexBuffer;
-		vertexBuffer = Angel3D::Renderer::VertexBuffer::Create(vertices, sizeof(vertices));
+    // Creating a vertex buffer that holds the n number of vertex arrays(Max 10000 in this case)
+		s_Data.QuadVertexBuffer = Angel3D::Renderer::VertexBuffer::Create(s_Data.MaxVertices * sizeof(QuadVertex));
 		{
 			Angel3D::Renderer::BufferLayout layout = {{Angel3D::Renderer::ShaderDataType::Float3, "a_Position"},
+                                                {Angel3D::Renderer::ShaderDataType::Float4, "a_Color"},
                                                 {Angel3D::Renderer::ShaderDataType::Float2, "a_TexCoord"}};
 
-			vertexBuffer->SetLayout(layout);
+			s_Data.QuadVertexBuffer->SetLayout(layout);
 		}
-		s_Data->_vertexArray->AddVertexBuffer(vertexBuffer);
+		s_Data.QuadVertexArray->AddVertexBuffer(s_Data.QuadVertexBuffer);
 
-		// Index buffer
-		unsigned int indices[6] = {0, 1, 2, 2, 3, 0};
+    s_Data.QuadVertexBufferBase = new QuadVertex[s_Data.MaxVertices];
 
-		Angel3D::Core::Ref<Angel3D::Renderer::IndexBuffer> indexBuffer;
-		indexBuffer = Angel3D::Renderer::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
-		s_Data->_vertexArray->SetIndexBuffer(indexBuffer);
+    // Creating an index buffer for each vertex
+    uint32_t* quadIndices = new uint32_t[s_Data.MaxIndices];
 
-    s_Data->_WhiteTexture = Angel3D::Renderer::Texture2D::Create(1, 1);
+		uint32_t offset = 0;
+		for (uint32_t i = 0; i < s_Data.MaxIndices; i += 6)
+		{
+			quadIndices[i + 0] = offset + 0;
+			quadIndices[i + 1] = offset + 1;
+			quadIndices[i + 2] = offset + 2;
+			quadIndices[i + 3] = offset + 2;
+			quadIndices[i + 4] = offset + 3;
+			quadIndices[i + 5] = offset + 0;
+			offset += 4;
+		}
+
+    Angel3D::Core::Ref<Angel3D::Renderer::IndexBuffer> quadIndexBuffer;
+		quadIndexBuffer = Angel3D::Renderer::IndexBuffer::Create(quadIndices, s_Data.MaxIndices);
+		s_Data.QuadVertexArray->SetIndexBuffer(quadIndexBuffer);
+
+    delete[] quadIndices;
+
+    s_Data.WhiteTexture = Angel3D::Renderer::Texture2D::Create(1, 1);
     uint32_t whiteTextureData = 0xffffffff;
-    s_Data->_WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
+    s_Data.WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
 
-    s_Data->_TextureShader = Angel3D::Renderer::Shader::Create("Sandbox/assets/shaders/Texture.glsl");
-    s_Data->_TextureShader->Bind();
-    s_Data->_TextureShader->SetInt("u_Texture", 0);
+    s_Data.TextureShader = Angel3D::Renderer::Shader::Create("Sandbox/assets/shaders/Texture.glsl");
+    s_Data.TextureShader->Bind();
+    s_Data.TextureShader->SetInt("u_Texture", 0);
   }
 
   void Renderer2D::Shutdown()
   {
     ANGEL3D_PROFILE_FUNCTION();
-
-    delete s_Data;
   }
 
   void Renderer2D::BeginScene(const OrthographicCamera &f_camera)
   {
     ANGEL3D_PROFILE_FUNCTION();
 
-    s_Data->_TextureShader->Bind();
-    s_Data->_TextureShader->SetMat4("u_ViewProjectionMatrix", f_camera.GetViewProjectionMatrix());
+    s_Data.TextureShader->Bind();
+    s_Data.TextureShader->SetMat4("u_ViewProjectionMatrix", f_camera.GetViewProjectionMatrix());
+
+    s_Data.QuadIndexCount = 0;
+		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
   }
 
   void Renderer2D::EndScene()
   {
     ANGEL3D_PROFILE_FUNCTION();
+
+    uint32_t dataSize = (uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase;
+		s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
+
+    Flush();
+  }
+
+  void Renderer2D::Flush()
+  {
+    RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
   }
 
   void Renderer2D::DrawQuad(const glm::vec2 &f_position, const glm::vec2 &f_size, const glm::vec4 &f_color)
@@ -87,16 +126,36 @@ namespace Angel3D::Renderer
   {
     ANGEL3D_PROFILE_FUNCTION();
 
-    s_Data->_TextureShader->SetFloat4("u_Color", f_color);
-    s_Data->_TextureShader->SetFloat("u_TilingFactor", 1.0f);
+    s_Data.QuadVertexBufferPtr->Position = f_position;
+    s_Data.QuadVertexBufferPtr->Color    = f_color;
+    s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 0.0f };
+    s_Data.QuadVertexBufferPtr++;
 
-    s_Data->_WhiteTexture->Bind();
+    s_Data.QuadVertexBufferPtr->Position = { f_position.x + f_size.x, f_position.y, 0.0f};
+    s_Data.QuadVertexBufferPtr->Color    = f_color;
+    s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 0.0f };
+    s_Data.QuadVertexBufferPtr++;
 
-    glm::mat4 transform = glm::translate(glm::mat4(1.0f), f_position) * glm::scale(glm::mat4(1.0f), {f_size.x, f_size.y, 1.0f});
-    s_Data->_TextureShader->SetMat4("u_Transform", transform);
+    s_Data.QuadVertexBufferPtr->Position = { f_position.x + f_size.x, f_position.y + f_size.y, 0.0f};
+    s_Data.QuadVertexBufferPtr->Color    = f_color;
+    s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 1.0f };
+    s_Data.QuadVertexBufferPtr++;
 
-    s_Data->_vertexArray->Bind();
-    RenderCommand::DrawIndexed(s_Data->_vertexArray);
+    s_Data.QuadVertexBufferPtr->Position = { f_position.x, f_position.y + f_size.y, 0.0f};
+    s_Data.QuadVertexBufferPtr->Color    = f_color;
+    s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 1.0f };
+    s_Data.QuadVertexBufferPtr++;
+
+    s_Data.QuadIndexCount += 6;
+
+    // s_Data.TextureShader->SetFloat("u_TilingFactor", 1.0f);
+
+    // s_Data.WhiteTexture->Bind();
+
+    // glm::mat4 transform = glm::translate(glm::mat4(1.0f), f_position) * glm::scale(glm::mat4(1.0f), {f_size.x, f_size.y, 1.0f});
+    // s_Data.TextureShader->SetMat4("u_Transform", transform);
+
+    // s_Data.QuadVertexArray->Bind();
   }
 
   void Renderer2D::DrawQuad(const glm::vec2& f_position, const glm::vec2& f_size,const Angel3D::Core::Ref<Texture2D>& f_texture,
@@ -110,15 +169,15 @@ namespace Angel3D::Renderer
   {
     ANGEL3D_PROFILE_FUNCTION();
 
-    s_Data->_TextureShader->SetFloat4("u_Color", glm::vec4(1.0f));
-    s_Data->_TextureShader->SetFloat("u_TilingFactor", f_tilingFactor);
+    s_Data.TextureShader->SetFloat4("u_Color", glm::vec4(1.0f));
+    s_Data.TextureShader->SetFloat("u_TilingFactor", f_tilingFactor);
     f_texture->Bind();
 
     glm::mat4 transform = glm::translate(glm::mat4(1.0f), f_position) * glm::scale(glm::mat4(1.0f), {f_size.x, f_size.y, 1.0f});
-    s_Data->_TextureShader->SetMat4("u_Transform", transform);
+    s_Data.TextureShader->SetMat4("u_Transform", transform);
 
-    s_Data->_vertexArray->Bind();
-    RenderCommand::DrawIndexed(s_Data->_vertexArray);
+    s_Data.QuadVertexArray->Bind();
+    RenderCommand::DrawIndexed(s_Data.QuadVertexArray);
   }
 
   void Renderer2D::DrawRotatedQuad(const glm::vec2& f_position, const glm::vec2& f_size, float f_rotation, const glm::vec4& f_color)
@@ -130,19 +189,19 @@ namespace Angel3D::Renderer
 	{
 		ANGEL3D_PROFILE_FUNCTION();
 
-		s_Data->_TextureShader->SetFloat4("u_Color", f_color);
-		s_Data->_TextureShader->SetFloat("u_TilingFactor", 1.0f);
+		s_Data.TextureShader->SetFloat4("u_Color", f_color);
+		s_Data.TextureShader->SetFloat("u_TilingFactor", 1.0f);
 
-		s_Data->_WhiteTexture->Bind();
+		s_Data.WhiteTexture->Bind();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), f_position)
 			* glm::rotate(glm::mat4(1.0f), f_rotation, { 0.0f, 0.0f, 1.0f })
 			* glm::scale(glm::mat4(1.0f), { f_size.x, f_size.y, 1.0f });
 
-		s_Data->_TextureShader->SetMat4("u_Transform", transform);
-		s_Data->_vertexArray->Bind();
+		s_Data.TextureShader->SetMat4("u_Transform", transform);
+		s_Data.QuadVertexArray->Bind();
 
-		RenderCommand::DrawIndexed(s_Data->_vertexArray);
+		RenderCommand::DrawIndexed(s_Data.QuadVertexArray);
 	}
 
 	void Renderer2D::DrawRotatedQuad(const glm::vec2& f_position, const glm::vec2& f_size, float f_rotation,
@@ -157,8 +216,8 @@ namespace Angel3D::Renderer
 	{
 		ANGEL3D_PROFILE_FUNCTION();
 
-		s_Data->_TextureShader->SetFloat4("u_Color", f_tintColor);
-		s_Data->_TextureShader->SetFloat("u_TilingFactor", f_tilingFactor);
+		s_Data.TextureShader->SetFloat4("u_Color", f_tintColor);
+		s_Data.TextureShader->SetFloat("u_TilingFactor", f_tilingFactor);
 
 		f_texture->Bind();
 
@@ -166,10 +225,10 @@ namespace Angel3D::Renderer
 			* glm::rotate(glm::mat4(1.0f), f_rotation, { 0.0f, 0.0f, 1.0f })
 			* glm::scale(glm::mat4(1.0f), { f_size.x, f_size.y, 1.0f });
 
-		s_Data->_TextureShader->SetMat4("u_Transform", transform);
-		s_Data->_vertexArray->Bind();
+		s_Data.TextureShader->SetMat4("u_Transform", transform);
+		s_Data.QuadVertexArray->Bind();
 
-		RenderCommand::DrawIndexed(s_Data->_vertexArray);
+		RenderCommand::DrawIndexed(s_Data.QuadVertexArray);
   }
 
 } // namespace Angel3D::Renderer

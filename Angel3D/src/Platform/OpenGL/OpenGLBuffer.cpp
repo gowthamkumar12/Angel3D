@@ -7,6 +7,15 @@ namespace Angel3D::Platform::OpenGL
   /**
    * OpenGLVertexBuffer Class
    */
+  OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t f_size)
+  {
+    ANGEL3D_PROFILE_FUNCTION();
+
+    glCreateBuffers(1, &m_RendererID);
+    glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+    glBufferData(GL_ARRAY_BUFFER, f_size, nullptr, GL_DYNAMIC_DRAW);
+  }
+
   OpenGLVertexBuffer::OpenGLVertexBuffer(float* f_Vertices, uint32_t f_size)
   {
     ANGEL3D_PROFILE_FUNCTION();
@@ -35,6 +44,12 @@ namespace Angel3D::Platform::OpenGL
     ANGEL3D_PROFILE_FUNCTION();
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+  }
+
+  void OpenGLVertexBuffer::SetData(const void* f_data, uint32_t f_size)
+  {
+    glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, f_size, f_data);
   }
 
   /**
