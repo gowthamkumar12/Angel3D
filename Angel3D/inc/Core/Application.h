@@ -36,7 +36,7 @@ namespace Angel3D::Core
 			bool                                m_Running = true;
 			bool                                m_Minimized = false;
 			LayerStack                          m_LayerStack;
-			float                               m_LastFrameTime;
+			float                               m_LastFrameTime = 0.0f;
 			static Application*                 m_ApplicationInstance;
 
 			friend int ::main(int argc, char** argv);

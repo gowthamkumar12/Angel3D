@@ -38,13 +38,25 @@ namespace Sandbox
     }
 
     {
+      static float rotation = 0.0f;
+		  rotation += f_ts * 50.0f;
+
       ANGEL3D_PROFILE_SCOPE("Renderer Draw");
       Angel3D::Renderer::Renderer2D::BeginScene(m_CameraController.GetCamera());
-      // Angel3D::Renderer::Renderer2D::DrawRotatedQuad({-0.5f, -0.25f}, {1.0f, 1.0f}, -45.0f, {0.8f, 0.2f, 0.3f, 1.0f});
+
+      // Quads with colors
       Angel3D::Renderer::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
       Angel3D::Renderer::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f });
-      Angel3D::Renderer::Renderer2D::DrawQuad({-5.0f, -5.0f, -0.1f}, {10.0f, 10.0f}, m_Texture, 10.0f);
-      Angel3D::Renderer::Renderer2D::DrawQuad({0.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, m_Texture, 10.0f);
+
+      // Quads with colors and textures
+      Angel3D::Renderer::Renderer2D::DrawQuad({0.0f, 0.0f, -0.1f}, {10.0f, 10.0f}, m_Texture, 10.0f);
+
+      // Rotated Quads with colors
+      Angel3D::Renderer::Renderer2D::DrawRotatedQuad({-0.5f, -0.25f}, {1.0f, 1.0f}, rotation, {0.8f, 0.2f, 0.3f, 1.0f});
+
+      // Rotates Quads with colors and textures
+      Angel3D::Renderer::Renderer2D::DrawRotatedQuad({0.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, rotation, m_Texture, 10.0f);
+
       Angel3D::Renderer::Renderer2D::EndScene();
     }
   }
