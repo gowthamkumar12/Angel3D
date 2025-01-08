@@ -53,7 +53,7 @@ namespace Angel3D::Platform::OpenGL
 
   void OpenGLRendererAPI::DrawIndexed(const Angel3D::Core::Ref<Angel3D::Renderer::VertexArray> &f_vertexArray, uint32_t f_count)
   {
-    uint32_t count = f_count ? f_vertexArray->GetIndexBuffer()->GetCount() : f_count;
+    uint32_t count = f_count ? f_count : f_vertexArray->GetIndexBuffer()->GetCount();
     glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
     glBindTexture(GL_TEXTURE_2D, 0);
   }

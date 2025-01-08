@@ -43,9 +43,23 @@
 	#error "Unknown platform!"
 #endif // End of platform detection
 
+#ifdef ANGEL3D_DEBUG
+	#if defined(ANGEL3D_PLATFORM_WINDOWS)
+		#define ANGEL3D_DEBUGBREAK() __debugbreak()
+	#elif defined(ANGEL3D_PLATFORM_LINUX)
+		#include <signal.h>
+		#define ANGEL3D_DEBUGBREAK() raise(SIGTRAP)
+	#else
+		#error "Platform doesn't support debugbreak yet!"
+	#endif
+	#define ANGEL3D_ENABLE_ASSERTS
+#else
+	#define ANGEL3D_DEBUGBREAK()
+#endif
+
 #ifdef ANGEL3D_ENABLE_ASSERTS
-	#define ANGEL3D_ASSERT(x, ...) {if(!(x)) { ANGEL3D_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();}}
-	#define ANGEL3D_CORE_ASSERT(x, ...) {if(!(x)) { ANGEL3D_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();}}
+	#define ANGEL3D_ASSERT(x, ...) {if(!(x)) { ANGEL3D_ERROR("Assertion Failed: {0}", __VA_ARGS__); ANGEL3D_DEBUGBREAK();}}
+	#define ANGEL3D_CORE_ASSERT(x, ...) {if(!(x)) { ANGEL3D_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); ANGEL3D_DEBUGBREAK();}}
 #else
 	#define ANGEL3D_ASSERT(x, ...)
 	#define ANGEL3D_CORE_ASSERT(x, ...)

@@ -57,13 +57,13 @@ namespace Angel3D::Core
 		dispatcher.Dispatch<Events::WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
 		dispatcher.Dispatch<Events::WindowResizeEvent>(BIND_EVENT_FN(Application::OnWindowResize));
 
-		for(auto it = m_LayerStack.begin(); it != m_LayerStack.end(); ++it)
+		for(auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
 		{
-			(*it)->OnEvent(f_e);
-			if(f_e.m_Handled);
+			if(f_e.m_Handled)
 			{
 				break;
 			}
+			(*it)->OnEvent(f_e);
 		}
 	}
 

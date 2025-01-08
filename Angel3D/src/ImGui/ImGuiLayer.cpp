@@ -60,6 +60,13 @@ namespace Angel3D::ImGuiImpl
     ImGui::DestroyContext();
   }
 
+  void ImGuiLayer::OnEvent(Angel3D::Events::Event& f_e)
+  {
+    ImGuiIO& io = ImGui::GetIO();
+		f_e.m_Handled |= f_e.IsInCategory(Angel3D::Events::EventCategory::EventCategoryMouse) & io.WantCaptureMouse;
+		f_e.m_Handled |= f_e.IsInCategory(Angel3D::Events::EventCategory::EventCategoryKeyboard) & io.WantCaptureKeyboard;
+  }
+
   void ImGuiLayer::Begin()
   {
     ANGEL3D_PROFILE_FUNCTION();

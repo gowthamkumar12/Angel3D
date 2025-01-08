@@ -67,12 +67,46 @@ namespace Angel3D::Platform::OpenGL
 		const auto& layout = f_vertexBuffer->GetLayout();
 		for(const auto& element : layout)
 		{
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index, element.GetComponentCount(),
-                            ShaderDataTypeToOpenGLBaseType(element.Type),
-			                      element.Normalized ? GL_TRUE : GL_FALSE,
-			                      layout.GetStride(), (const void*)element.Offset);
-			index++;
+      switch (element.Type)
+			{
+				case Angel3D::Renderer::ShaderDataType::Float  :
+				case Angel3D::Renderer::ShaderDataType::Float2 :
+				case Angel3D::Renderer::ShaderDataType::Float3 :
+				case Angel3D::Renderer::ShaderDataType::Float4 :
+				case Angel3D::Renderer::ShaderDataType::Int    :
+				case Angel3D::Renderer::ShaderDataType::Int2   :
+				case Angel3D::Renderer::ShaderDataType::Int3   :
+				case Angel3D::Renderer::ShaderDataType::Int4   :
+				case Angel3D::Renderer::ShaderDataType::Bool   :
+				{
+					glEnableVertexAttribArray(m_VertexBufferIndex);
+					glVertexAttribPointer(m_VertexBufferIndex, element.GetComponentCount(),
+                                ShaderDataTypeToOpenGLBaseType(element.Type),
+                                element.Normalized ? GL_TRUE : GL_FALSE,
+                                layout.GetStride(), (const void*)element.Offset);
+					m_VertexBufferIndex++;
+					break;
+				}
+
+				case Angel3D::Renderer::ShaderDataType::Mat3:
+				case Angel3D::Renderer::ShaderDataType::Mat4:
+				{
+					uint8_t count = element.GetComponentCount();
+					for (uint8_t i = 0; i < count; i++)
+					{
+						glEnableVertexAttribArray(m_VertexBufferIndex);
+						glVertexAttribPointer(m_VertexBufferIndex, count,
+                                  ShaderDataTypeToOpenGLBaseType(element.Type),
+                                  element.Normalized ? GL_TRUE : GL_FALSE,
+                                  layout.GetStride(), (const void*)(sizeof(float) * count * i));
+						glVertexAttribDivisor(m_VertexBufferIndex, 1);
+						m_VertexBufferIndex++;
+					}
+					break;
+				}
+				default:
+					ANGEL3D_CORE_ASSERT(false, "Unknown ShaderDataType!");
+			}
 		}
 
     m_VertexBuffers.push_back(f_vertexBuffer);

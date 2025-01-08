@@ -7,12 +7,14 @@
                 "${vcpkgRoot}/x64-windows/include"
             ],
             "defines": [
+                "DEBUG",
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE",
                 "ANGEL3D_PLATFORM_WINDOWS",
                 "ANGEL3D_BUILD_DLL",
                 "ANGEL3D_ENABLE_ASSERTS",
+                "ANGEL3D_DEBUG",
                 "GLFW_INCLUDE_NONE"
             ],
             "windowsSdkVersion": "10.0.19041.0",

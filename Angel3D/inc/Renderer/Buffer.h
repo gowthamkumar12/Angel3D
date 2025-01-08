@@ -6,7 +6,7 @@ namespace Angel3D::Renderer
 {
   enum class ShaderDataType
   {
-    Node = 0,
+    None = 0,
     Int, Int2, Int3, Int4,
     Float, Float2, Float3, Float4,
     Mat3, Mat4,
@@ -61,8 +61,8 @@ namespace Angel3D::Renderer
         case ShaderDataType::Float2:  return 2;
         case ShaderDataType::Float3:  return 3;
         case ShaderDataType::Float4:  return 4;
-        case ShaderDataType::Mat3:    return 3 * 3;
-        case ShaderDataType::Mat4:    return 4 * 4;
+        case ShaderDataType::Mat3:    return 3; // 3 * float3;
+        case ShaderDataType::Mat4:    return 4; // 4 * float4;
         case ShaderDataType::Bool:    return 1;
       }
 

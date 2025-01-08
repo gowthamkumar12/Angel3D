@@ -15,6 +15,7 @@ namespace Angel3D::ImGuiImpl
 
       virtual void OnAttach() override;
       virtual void OnDetach() override;
+      virtual void OnEvent(Angel3D::Events::Event& f_e) override;
 
       void Begin();
       void End();

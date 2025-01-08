@@ -20,7 +20,8 @@ namespace Angel3D::Platform::OpenGL
       virtual const Angel3D::Core::Ref<Angel3D::Renderer::IndexBuffer> GetIndexBuffer() const override { return m_IndexBuffer; }
     private:
       uint32_t m_RendererID;
+      uint32_t m_VertexBufferIndex = 0;
       std::vector<Angel3D::Core::Ref<Angel3D::Renderer::VertexBuffer>> m_VertexBuffers;
-      Angel3D::Core::Ref<Angel3D::Renderer::IndexBuffer>  m_IndexBuffer;
+      Angel3D::Core::Ref<Angel3D::Renderer::IndexBuffer>               m_IndexBuffer;
   };
 } // namespace Angel3D::Platform::OpenGL
