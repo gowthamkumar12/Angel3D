@@ -17,11 +17,11 @@ namespace Angel3D::Renderer
 		float     TilingFactor;
   };
 
-  struct Render2DData
+  struct Renderer2DData
   {
-    const uint32_t MaxQuads               = 10000;
-		const uint32_t MaxVertices            = MaxQuads * 4;
-		const uint32_t MaxIndices             = MaxQuads * 6;
+    static const uint32_t MaxQuads        = 20000;
+		static const uint32_t MaxVertices     = MaxQuads * 4;
+		static const uint32_t MaxIndices      = MaxQuads * 6;
     static const uint32_t MaxTextureSlots = 32; // TODO: RenderCaps
 
     Angel3D::Core::Ref<VertexArray>  QuadVertexArray;
@@ -38,9 +38,11 @@ namespace Angel3D::Renderer
 		uint32_t                                       TextureSlotIndex = 1; // 0 = white texture
 
     glm::vec4 QuadVertexPositions[4];
+
+    Renderer2D::Statistics m_stats;
   };
 
-  static Render2DData s_Data;
+  static Renderer2DData s_Data;
 
   void Renderer2D::Init()
   {
@@ -146,6 +148,18 @@ namespace Angel3D::Renderer
     }
 
     RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
+
+    s_Data.m_stats.DrawCalls++;
+  }
+
+  void Renderer2D::FlushAndReset()
+  {
+    EndScene();
+
+		s_Data.QuadIndexCount = 0;
+		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
+		s_Data.TextureSlotIndex = 1;
   }
 
   void Renderer2D::DrawQuad(const glm::vec2 &f_position, const glm::vec2 &f_size, const glm::vec4 &f_color)
@@ -156,6 +170,11 @@ namespace Angel3D::Renderer
   void Renderer2D::DrawQuad(const glm::vec3 &f_position, const glm::vec2 &f_size, const glm::vec4 &f_color)
   {
     ANGEL3D_PROFILE_FUNCTION();
+
+    if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
+    {
+			FlushAndReset();
+    }
 
     const float textureIndex = 0.0f; // White Texture
 		const float tilingFactor = 1.0f;
@@ -192,6 +211,8 @@ namespace Angel3D::Renderer
     s_Data.QuadVertexBufferPtr++;
 
     s_Data.QuadIndexCount += 6;
+
+    s_Data.m_stats.QuadCount++;
   }
 
   void Renderer2D::DrawQuad(const glm::vec2& f_position, const glm::vec2& f_size,const Angel3D::Core::Ref<Texture2D>& f_texture,
@@ -204,6 +225,11 @@ namespace Angel3D::Renderer
                             float f_tilingFactor, const glm::vec4& f_tintColor)
   {
     ANGEL3D_PROFILE_FUNCTION();
+
+    if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
+    {
+			FlushAndReset();
+    }
 
     constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 		float textureIndex        = 0.0f;
@@ -256,6 +282,8 @@ namespace Angel3D::Renderer
     s_Data.QuadVertexBufferPtr++;
 
     s_Data.QuadIndexCount += 6;
+
+    s_Data.m_stats.QuadCount++;
   }
 
   void Renderer2D::DrawRotatedQuad(const glm::vec2& f_position, const glm::vec2& f_size, float f_rotation, const glm::vec4& f_color)
@@ -266,6 +294,11 @@ namespace Angel3D::Renderer
 	void Renderer2D::DrawRotatedQuad(const glm::vec3& f_position, const glm::vec2& f_size, float f_rotation, const glm::vec4& f_color)
 	{
     ANGEL3D_PROFILE_FUNCTION();
+
+    if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
+    {
+			FlushAndReset();
+    }
 
     const float textureIndex = 0.0f; // White Texture
 		const float tilingFactor = 1.0f;
@@ -303,6 +336,8 @@ namespace Angel3D::Renderer
     s_Data.QuadVertexBufferPtr++;
 
     s_Data.QuadIndexCount += 6;
+
+    s_Data.m_stats.QuadCount++;
 	}
 
 	void Renderer2D::DrawRotatedQuad(const glm::vec2& f_position, const glm::vec2& f_size, float f_rotation,
@@ -316,6 +351,11 @@ namespace Angel3D::Renderer
                                   const glm::vec4& f_tintColor)
 	{
     ANGEL3D_PROFILE_FUNCTION();
+
+    if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
+    {
+			FlushAndReset();
+    }
 
     constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 		float textureIndex        = 0.0f;
@@ -369,6 +409,18 @@ namespace Angel3D::Renderer
     s_Data.QuadVertexBufferPtr++;
 
     s_Data.QuadIndexCount += 6;
+
+    s_Data.m_stats.QuadCount++;
   }
+
+  void Renderer2D::ResetStats()
+	{
+		memset(&s_Data.m_stats, 0, sizeof(Statistics));
+	}
+
+	Renderer2D::Statistics Renderer2D::GetStats()
+	{
+		return s_Data.m_stats;
+	}
 
 } // namespace Angel3D::Renderer

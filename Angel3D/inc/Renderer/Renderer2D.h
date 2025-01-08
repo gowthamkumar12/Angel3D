@@ -34,5 +34,20 @@ namespace Angel3D::Renderer
       static void DrawRotatedQuad(const glm::vec3& f_position, const glm::vec2& f_size, float f_rotation,
                                   const Angel3D::Core::Ref<Texture2D>& f_texture, float f_tilingFactor = 1.0f,
                                   const glm::vec4& f_tintColor = glm::vec4(1.0f));
+
+      // Stats
+      struct Statistics
+      {
+        uint32_t DrawCalls = 0;
+        uint32_t QuadCount = 0;
+        uint32_t GetTotalVertexCount() { return QuadCount * 4; }
+        uint32_t GetTotalIndexCount() { return QuadCount * 6; }
+      };
+
+      static void ResetStats();
+      static Statistics GetStats();
+
+      private:
+        static void FlushAndReset();
   };
 } // namespace Angel3D::Renderer

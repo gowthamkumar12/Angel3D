@@ -30,6 +30,7 @@ namespace Sandbox
     // Update
     m_CameraController.OnUpdate(f_ts);
 
+    Angel3D::Renderer::Renderer2D::ResetStats();
     {
       // Render
       ANGEL3D_PROFILE_SCOPE("Renderer Preparation");
@@ -42,6 +43,8 @@ namespace Sandbox
 		  rotation += f_ts * 50.0f;
 
       ANGEL3D_PROFILE_SCOPE("Renderer Draw");
+
+      /* --- Scene-1 start --- */
       Angel3D::Renderer::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
       // Quads with colors
@@ -58,13 +61,36 @@ namespace Sandbox
       Angel3D::Renderer::Renderer2D::DrawRotatedQuad({0.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, rotation, m_Texture, 10.0f);
 
       Angel3D::Renderer::Renderer2D::EndScene();
+      /* --- Scene-1 end --- */
+
+      /* --- Scene-2 start --- */
+      Angel3D::Renderer::Renderer2D::BeginScene(m_CameraController.GetCamera());
+
+      for (float y = -5.0f; y < 5.0f; y += 0.5f)
+      {
+        for (float x = -5.0f; x < 5.0f; x += 0.5f)
+        {
+          glm::vec4 color = { (x + 5.0f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.7f };
+          Angel3D::Renderer::Renderer2D::DrawQuad({ x, y }, { 0.45f, 0.45f }, color);
+        }
+      }
+
+      Angel3D::Renderer::Renderer2D::EndScene();
+      /* --- Scene-2 end --- */
     }
   }
 
   void Sandbox2D::OnImGuiRender()
   {
-    ImGui::Begin("Settings");
-		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_tileSquareColor));
+    ImGui::Begin("Statistics");
+
+    auto stats = Angel3D::Renderer::Renderer2D::GetStats();
+    ImGui::Text("Renderer2D Statistics");
+    ImGui::Text("Draw Calls : %d", stats.DrawCalls);
+    ImGui::Text("Quads      : %d", stats.QuadCount);
+    ImGui::Text("Vertices   : %d", stats.GetTotalVertexCount());
+    ImGui::Text("Indices    : %d", stats.GetTotalIndexCount());
+
 		ImGui::End();
   }
 
