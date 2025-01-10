@@ -16,6 +16,11 @@ namespace Sandbox
     ANGEL3D_PROFILE_FUNCTION();
 
     m_Texture = Angel3D::Renderer::Texture2D::Create("Sandbox/assets/textures/Checkerboard.png");
+
+    Angel3D::Renderer::FramebufferSpecification frameBufferSpecs;
+    frameBufferSpecs.Width = 1280;
+    frameBufferSpecs.Height = 720;
+    m_Framebuffer = Angel3D::Renderer::Framebuffer::Create(frameBufferSpecs);
   }
 
   void Sandbox2D::OnDetach()
@@ -34,6 +39,7 @@ namespace Sandbox
     {
       // Render
       ANGEL3D_PROFILE_SCOPE("Renderer Preparation");
+      m_Framebuffer->Bind();
       Angel3D::Renderer::RenderCommand::SetClearColor({0.1, 0.1, 0.1, 1});
       Angel3D::Renderer::RenderCommand::Clear();
     }
@@ -61,6 +67,7 @@ namespace Sandbox
       Angel3D::Renderer::Renderer2D::DrawRotatedQuad({0.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, rotation, m_Texture, 10.0f);
 
       Angel3D::Renderer::Renderer2D::EndScene();
+      m_Framebuffer->Unbind();
       /* --- Scene-1 end --- */
 
       /* --- Scene-2 start --- */
@@ -82,7 +89,7 @@ namespace Sandbox
 
   void Sandbox2D::OnImGuiRender()
   {
-    static bool dockingEnabled = false;
+    static bool dockingEnabled = true;
 	  if (dockingEnabled)
     {
       bool                      dockingSpaceOpen = true;
@@ -146,8 +153,8 @@ namespace Sandbox
         ImGui::Text("Vertices   : %d", stats.GetTotalVertexCount());
         ImGui::Text("Indices    : %d", stats.GetTotalIndexCount());
 
-        uint32_t textureID = m_Texture->GetRendererID();
-		    ImGui::Image((unsigned long long)textureID, ImVec2{ 256.0f, 256.0f });
+        uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
+		    ImGui::Image((unsigned long long)textureID, ImVec2{ 1280, 720 });
 
       ImGui::End();
 
@@ -163,9 +170,6 @@ namespace Sandbox
         ImGui::Text("Quads      : %d", stats.QuadCount);
         ImGui::Text("Vertices   : %d", stats.GetTotalVertexCount());
         ImGui::Text("Indices    : %d", stats.GetTotalIndexCount());
-
-        uint32_t textureID = m_Texture->GetRendererID();
-		    ImGui::Image((unsigned long long)textureID, ImVec2{ 256.0f, 256.0f });
 
       ImGui::End();
     }

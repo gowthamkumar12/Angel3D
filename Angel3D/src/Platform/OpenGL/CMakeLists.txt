@@ -7,4 +7,5 @@ TARGET_SOURCES(
     ${CMAKE_CURRENT_SOURCE_DIR}/OpenGLRendererAPI.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/OpenGLShader.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/OpenGLTexture.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/OpenGLFrameBuffer.cpp
 )

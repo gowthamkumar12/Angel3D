@@ -12,4 +12,5 @@ TARGET_SOURCES(
     ${CMAKE_CURRENT_SOURCE_DIR}/CameraController.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Renderer2D.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/GraphicsContext.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/FrameBuffer.cpp
 )

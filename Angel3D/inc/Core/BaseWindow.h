@@ -12,8 +12,8 @@ namespace Angel3D::Core
     unsigned int m_Height;
 
     WindowProps(const std::string& f_title = "Angel3D Engine",
-                unsigned int       f_width = 1920U,
-                unsigned int       f_height= 1080U)
+                unsigned int       f_width = 1280U,
+                unsigned int       f_height= 720U)
     : m_Title(f_title),
       m_Width(f_width),
       m_Height(f_height)
