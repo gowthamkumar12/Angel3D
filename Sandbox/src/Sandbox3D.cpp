@@ -98,11 +98,11 @@ namespace Sandbox
 		)";
 
 		auto triangleShader = m_ShaderLibrary.Load("Triangle", vertexShader, fragmentShader);         // Shader for the Triangle
-		auto tileShader     = m_ShaderLibrary.Load("Tiles", "Sandbox/assets/shaders/Tiles.glsl");     // Shader for the Tiles
-		auto textureShader  = m_ShaderLibrary.Load("Texture", "Sandbox/assets/shaders/Texture.glsl"); // Shader for the Textures
+		auto tileShader     = m_ShaderLibrary.Load("Tiles", "Assets/shaders/Tiles.glsl");     // Shader for the Tiles
+		auto textureShader  = m_ShaderLibrary.Load("Texture", "Assets/shaders/Texture.glsl"); // Shader for the Textures
 
-		m_Texture = Angel3D::Renderer::Texture2D::Create("Sandbox/assets/textures/Checkerboard.png");
-		m_Logo    = Angel3D::Renderer::Texture2D::Create("Sandbox/assets/textures/ChernoLogo.png");
+		m_Texture = Angel3D::Renderer::Texture2D::Create("Assets/textures/Checkerboard.png");
+		m_Logo    = Angel3D::Renderer::Texture2D::Create("Assets/textures/ChernoLogo.png");
 	}
 
 	void Sandbox3D::OnUpdate(Angel3D::Core::Timestep f_ts)

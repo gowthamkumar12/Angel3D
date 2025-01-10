@@ -97,7 +97,7 @@ namespace Angel3D::Renderer
 			samplers[i] = i;
     }
 
-    s_Data.TextureShader = Angel3D::Renderer::Shader::Create("Sandbox/assets/shaders/Texture.glsl");
+    s_Data.TextureShader = Angel3D::Renderer::Shader::Create("Assets/shaders/Texture.glsl");
     s_Data.TextureShader->Bind();
 
     s_Data.TextureShader->SetIntArray("u_Textures", samplers, s_Data.MaxTextureSlots);

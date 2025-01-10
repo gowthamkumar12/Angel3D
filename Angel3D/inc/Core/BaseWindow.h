@@ -8,12 +8,12 @@ namespace Angel3D::Core
   struct WindowProps
   {
     std::string  m_Title;
-    unsigned int m_Width;
-    unsigned int m_Height;
+    uint32_t     m_Width;
+    uint32_t     m_Height;
 
     WindowProps(const std::string& f_title = "Angel3D Engine",
-                unsigned int       f_width = 1280U,
-                unsigned int       f_height= 720U)
+                uint32_t           f_width = 1280U,
+                uint32_t           f_height= 720U)
     : m_Title(f_title),
       m_Width(f_width),
       m_Height(f_height)
@@ -30,8 +30,8 @@ namespace Angel3D::Core
 
       virtual void OnUpdate() = 0;
 
-      virtual unsigned int GetWidth() const = 0;
-      virtual unsigned int GetHeight() const = 0;
+      virtual uint32_t GetWidth() const = 0;
+      virtual uint32_t GetHeight() const = 0;
 
       // Window attributes
       virtual void SetEventCallback(const EventCallbackfn& f_callback) = 0;

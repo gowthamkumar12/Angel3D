@@ -1,7 +1,8 @@
 {
   "configurations": [
+    // Sandbox
     {
-      "name": "Debug",
+      "name": "Debug(Sandbox)",
       "type": "cppvsdbg",
       "request": "launch",
       "program": "${workspaceFolder}/_out/bin/Debug-Windows-x86_64/Sandbox/Sandbox.exe",
@@ -12,10 +13,34 @@
       "console": "externalTerminal"
     },
     {
-      "name": "Release",
+      "name": "Release(Sandbox)",
       "type": "cppvsdbg",
       "request": "launch",
       "program": "${workspaceFolder}/_out/bin/Release-Windows-x86_64/Sandbox/Sandbox.exe",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "console": "externalTerminal"
+    },
+
+    // Editor
+    {
+      "name": "Debug(Editor)",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/_out/bin/Debug-Windows-x86_64/Editor/Editor.exe",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "console": "externalTerminal"
+    },
+    {
+      "name": "Release(Editor)",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/_out/bin/Release-Windows-x86_64/Editor/Editor.exe",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",

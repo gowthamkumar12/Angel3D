@@ -13,7 +13,7 @@ namespace Angel3D::Core
 	class Application
 	{
 		public:
-			Application();
+			Application(const std::string& f_name = "Angel3D");
 			virtual ~Application();
 
 			void OnEvent(Angel3D::Events::Event& f_e);

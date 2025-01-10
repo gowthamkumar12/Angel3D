@@ -40,3 +40,4 @@ SET(STB       ${CMAKE_CURRENT_SOURCE_DIR}/Vendor/stb)
 # Add the subdirectories
 ADD_SUBDIRECTORY(Angel3D)
 ADD_SUBDIRECTORY(Sandbox)
+ADD_SUBDIRECTORY(Editor)

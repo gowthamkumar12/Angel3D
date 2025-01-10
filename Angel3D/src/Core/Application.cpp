@@ -9,14 +9,14 @@ namespace Angel3D::Core
 {
 	Application* Application::m_ApplicationInstance = nullptr;
 
-	Application::Application()
+	Application::Application(const std::string& f_name)
 	{
 		ANGEL3D_PROFILE_FUNCTION();
 
 		ANGEL3D_CORE_ASSERT(!m_ApplicationInstance, "Core application already exists.");
 		m_ApplicationInstance = this;
 
-		m_Window = Angel3D::Core::BaseWindow::Create();
+		m_Window = Angel3D::Core::BaseWindow::Create(Angel3D::Core::WindowProps(f_name));
 		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 
 		Angel3D::Renderer::Renderer::Init();

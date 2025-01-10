@@ -1,0 +1,6 @@
+TARGET_SOURCES(
+  ${EDITOR}
+  PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/Editor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/EditorLayer.cpp
+)
