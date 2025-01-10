@@ -25,6 +25,8 @@ namespace Angel3D::Core
 
 			inline Angel3D::Core::BaseWindow& GetWindow() { return *m_Window; }
 
+			void Close();
+
 		private:
 			void Run();
 			bool OnWindowClose(Events::WindowCloseEvent& f_event);

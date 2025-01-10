@@ -49,6 +49,11 @@ namespace Angel3D::Core
 		f_overlay->OnAttach();
 	}
 
+	void Application::Close()
+	{
+		m_Running = false;
+	}
+
 	void Application::OnEvent(Angel3D::Events::Event& f_e)
 	{
 		ANGEL3D_PROFILE_FUNCTION();
