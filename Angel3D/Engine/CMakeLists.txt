@@ -1,0 +1,77 @@
+# Name of the project
+SET(ENGINE Engine)
+PROJECT(${ENGINE} CXX)
+
+message("Started to build for ${ENGINE} project.")
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Set GLFW to build as a static library
+set(GLFW_LIBRARY_TYPE "STATIC" CACHE STRING "Library type override for GLFW (SHARED, STATIC, OBJECT, or empty to follow BUILD_SHARED_LIBS)")
+
+# Add GLFW as a subdirectory
+ADD_SUBDIRECTORY(${GLFW}  ${GLFW}/build)
+ADD_SUBDIRECTORY(${GLAD}  ${GLAD}/build)
+ADD_SUBDIRECTORY(${IMGUI} ${IMGUI}/build)
+
+# Define output directories
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/_out/bin/${OUTPUT_DIR}/${ENGINE}")
+SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/_out/bin/${OUTPUT_DIR}/${ENGINE}")
+SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/_out/bin/${OUTPUT_DIR}/${ENGINE}")
+
+# Create a precompiled header
+SET(PCH_HEADER "inc/pch.h")
+
+# Creating this Engine library as a shared library (DLL)
+ADD_LIBRARY(${ENGINE} STATIC)
+
+# Add precompiled header
+TARGET_PRECOMPILE_HEADERS(${ENGINE} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/${PCH_HEADER}")
+
+# Include directories
+TARGET_INCLUDE_DIRECTORIES(
+  ${ENGINE}
+  PUBLIC
+    "${PROJECT_SOURCE_DIR}/inc"         # Local include directory
+    "${SPDLOGDIR}/include"
+    "${GLFW}/include"
+    "${GLAD}/include"
+    "${IMGUI}"
+    "${GLM}"
+    "${STB}"
+)
+
+# Link GLFW and OpenGL as private dependencies
+TARGET_LINK_LIBRARIES(
+  ${ENGINE}
+  PRIVATE
+    glfw
+    GLAD
+    ImGui
+    opengl32.lib
+)
+
+# Ensure linker flags for Dist configuration
+IF(NOT CMAKE_SHARED_LINKER_FLAGS_DIST)
+  SET(CMAKE_SHARED_LINKER_FLAGS_DIST "")
+ENDIF()
+
+# Platform-specific definitions
+# IF(WIN32)
+#   TARGET_COMPILE_DEFINITIONS(${ENGINE} PRIVATE GLFW_INCLUDE_NONE)
+# ENDIF()
+
+# Configuration-specific definitions
+TARGET_COMPILE_DEFINITIONS(
+  ${ENGINE}
+  PRIVATE
+    $<$<CONFIG:Debug>:DEBUG DEBUG>
+    $<$<CONFIG:Release>:RELEASE>
+    $<$<CONFIG:Dist>:DIST>
+
+    _CRT_SECURE_NO_WARNINGS
+    GLFW_INCLUDE_NONE
+)
+
+# Add source directory
+ADD_SUBDIRECTORY(src)

@@ -8,7 +8,7 @@
       "program": "${workspaceFolder}/_out/bin/Debug-Windows-x86_64/Sandbox/Sandbox.exe",
       "args": [],
       "stopAtEntry": false,
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/Angel3D",
       "environment": [],
       "console": "externalTerminal"
     },
@@ -19,7 +19,7 @@
       "program": "${workspaceFolder}/_out/bin/Release-Windows-x86_64/Sandbox/Sandbox.exe",
       "args": [],
       "stopAtEntry": false,
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/Angel3D",
       "environment": [],
       "console": "externalTerminal"
     },
@@ -32,7 +32,7 @@
       "program": "${workspaceFolder}/_out/bin/Debug-Windows-x86_64/Editor/Editor.exe",
       "args": [],
       "stopAtEntry": false,
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/Angel3D",
       "environment": [],
       "console": "externalTerminal"
     },
@@ -43,7 +43,7 @@
       "program": "${workspaceFolder}/_out/bin/Release-Windows-x86_64/Editor/Editor.exe",
       "args": [],
       "stopAtEntry": false,
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/Angel3D",
       "environment": [],
       "console": "externalTerminal"
     }
