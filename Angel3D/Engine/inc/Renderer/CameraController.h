@@ -14,6 +14,7 @@ namespace Engine::Renderer
 
       void OnUpdate(Engine::Core::Timestep f_timestep);
       void OnEvent(Engine::Events::Event& f_e);
+      void OnResize(float f_width, float f_height);
 
       OrthographicCamera& GetCamera() { return m_Camera; }
       const OrthographicCamera& GetCamera() const { return m_Camera; }

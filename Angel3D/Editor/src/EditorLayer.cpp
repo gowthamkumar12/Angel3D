@@ -67,7 +67,6 @@ namespace Engine
       Renderer::Renderer2D::DrawRotatedQuad({0.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, rotation, m_Texture, 10.0f);
 
       Renderer::Renderer2D::EndScene();
-      m_Framebuffer->Unbind();
       /* --- Scene-1 end --- */
 
       /* --- Scene-2 start --- */
@@ -84,95 +83,94 @@ namespace Engine
 
       Renderer::Renderer2D::EndScene();
       /* --- Scene-2 end --- */
+
+      m_Framebuffer->Unbind();
     }
   }
 
   void Editor::OnImGuiRender()
   {
-    static bool dockingEnabled = true;
-	  if (dockingEnabled)
+    bool                      dockingSpaceOpen = true;
+    static bool               opt_fullscreen   = true;
+    static bool               opt_padding      = false;
+    static ImGuiDockNodeFlags dockspace_flags  = ImGuiDockNodeFlags_None;
+    ImGuiWindowFlags          window_flags     = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+
+    if (opt_fullscreen)
     {
-      bool                      dockingSpaceOpen = true;
-      static bool               opt_fullscreen   = true;
-      static bool               opt_padding      = false;
-      static ImGuiDockNodeFlags dockspace_flags  = ImGuiDockNodeFlags_None;
-      ImGuiWindowFlags          window_flags     = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-
-      if (opt_fullscreen)
-      {
-        const ImGuiViewport* viewport = ImGui::GetMainViewport();
-        ImGui::SetNextWindowPos(viewport->WorkPos);
-        ImGui::SetNextWindowSize(viewport->WorkSize);
-        ImGui::SetNextWindowViewport(viewport->ID);
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-        window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-        window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-      }
-
-      if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-      {
-        window_flags |= ImGuiWindowFlags_NoBackground;
-      }
-
-      if (!opt_padding)
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-
-      ImGui::Begin("DockSpace Demo", &dockingSpaceOpen, window_flags);
-
-      if (!opt_padding)
-        ImGui::PopStyleVar();
-
-      if (opt_fullscreen)
-        ImGui::PopStyleVar(2);
-
-      // Submit the DockSpace
-      ImGuiIO& io = ImGui::GetIO();
-      if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-      {
-        ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-      }
-
-      if (ImGui::BeginMenuBar())
-      {
-        if (ImGui::BeginMenu("File"))
-        {
-          if (ImGui::MenuItem("Exit")) Core::Application::Get().Close();
-          ImGui::EndMenu();
-        }
-        ImGui::EndMenuBar();
-      }
-
-      ImGui::Begin("Statistics");
-
-        auto stats = Renderer::Renderer2D::GetStats();
-        ImGui::Text("Renderer2D Statistics");
-        ImGui::Text("Draw Calls : %d", stats.DrawCalls);
-        ImGui::Text("Quads      : %d", stats.QuadCount);
-        ImGui::Text("Vertices   : %d", stats.GetTotalVertexCount());
-        ImGui::Text("Indices    : %d", stats.GetTotalIndexCount());
-
-        uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
-		    ImGui::Image((unsigned long long)textureID, ImVec2{ 1280, 720 }, ImVec2{0, 1}, ImVec2{1, 0});
-
-      ImGui::End();
-
-      ImGui::End();
+      const ImGuiViewport* viewport = ImGui::GetMainViewport();
+      ImGui::SetNextWindowPos(viewport->WorkPos);
+      ImGui::SetNextWindowSize(viewport->WorkSize);
+      ImGui::SetNextWindowViewport(viewport->ID);
+      ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+      ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+      window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+      window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
     }
-    else
+
+    if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
     {
-      ImGui::Begin("Statistics");
-
-        auto stats = Renderer::Renderer2D::GetStats();
-        ImGui::Text("Renderer2D Statistics");
-        ImGui::Text("Draw Calls : %d", stats.DrawCalls);
-        ImGui::Text("Quads      : %d", stats.QuadCount);
-        ImGui::Text("Vertices   : %d", stats.GetTotalVertexCount());
-        ImGui::Text("Indices    : %d", stats.GetTotalIndexCount());
-
-      ImGui::End();
+      window_flags |= ImGuiWindowFlags_NoBackground;
     }
+
+    if (!opt_padding)
+      ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
+    ImGui::Begin("DockSpace Demo", &dockingSpaceOpen, window_flags);
+
+    if (!opt_padding)
+      ImGui::PopStyleVar();
+
+    if (opt_fullscreen)
+      ImGui::PopStyleVar(2);
+
+    // Submit the DockSpace
+    ImGuiIO& io = ImGui::GetIO();
+    if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+    {
+      ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+      ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+    }
+
+    if (ImGui::BeginMenuBar())
+    {
+      if (ImGui::BeginMenu("File"))
+      {
+        if (ImGui::MenuItem("Exit")) Core::Application::Get().Close();
+        ImGui::EndMenu();
+      }
+      ImGui::EndMenuBar();
+    }
+
+    // Statistics Window
+    ImGui::Begin("Statistics");
+
+      auto stats = Renderer::Renderer2D::GetStats();
+      ImGui::Text("Renderer2D Statistics");
+      ImGui::Text("Draw Calls : %d", stats.DrawCalls);
+      ImGui::Text("Quads      : %d", stats.QuadCount);
+      ImGui::Text("Vertices   : %d", stats.GetTotalVertexCount());
+      ImGui::Text("Indices    : %d", stats.GetTotalIndexCount());
+
+    ImGui::End();
+
+    // Viewport window
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+    ImGui::Begin("Viewport");
+      ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+      if (m_ViewportSize != *((glm::vec2*)&viewportPanelSize))
+      {
+        m_Framebuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
+        m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+        m_CameraController.OnResize(viewportPanelSize.x, viewportPanelSize.y);
+      }
+      uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
+      ImGui::Image((unsigned long long)textureID, ImVec2{ viewportPanelSize.x, viewportPanelSize.y }, ImVec2{0, 1}, ImVec2{1, 0});
+    ImGui::End();
+    ImGui::PopStyleVar();
+
+
+    ImGui::End();
   }
 
   void Editor::OnEvent(Events::Event &f_e)
