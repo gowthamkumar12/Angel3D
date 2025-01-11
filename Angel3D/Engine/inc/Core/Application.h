@@ -27,6 +27,8 @@ namespace Engine::Core
 
 			void Close();
 
+			Ref<Engine::ImGuiImpl::ImGuiLayer> GetImGuiLayer() { return m_ImGuiLayer; }
+
 		private:
 			void Run();
 			bool OnWindowClose(Events::WindowCloseEvent& f_event);
@@ -35,11 +37,11 @@ namespace Engine::Core
 		private:
 			Ref<Engine::Core::BaseWindow>      m_Window;
 			Ref<Engine::ImGuiImpl::ImGuiLayer> m_ImGuiLayer;
-			bool                                m_Running = true;
-			bool                                m_Minimized = false;
-			LayerStack                          m_LayerStack;
-			float                               m_LastFrameTime = 0.0f;
-			static Application*                 m_ApplicationInstance;
+			bool                               m_Running = true;
+			bool                               m_Minimized = false;
+			LayerStack                         m_LayerStack;
+			float                              m_LastFrameTime = 0.0f;
+			static Application*                m_ApplicationInstance;
 
 			friend int ::main(int argc, char** argv);
 	};
