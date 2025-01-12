@@ -13,3 +13,6 @@
 [submodule "Vendor/colorama"]
 	path = Vendor/colorama
 	url = https://github.com/gowthamkumar12/colorama.git
+[submodule "Vendor/GLAD"]
+	path = Vendor/GLAD
+	url = https://github.com/gowthamkumar12/GLAD.git
