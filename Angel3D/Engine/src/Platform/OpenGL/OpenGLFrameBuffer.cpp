@@ -5,6 +5,8 @@
 
 namespace Engine::Platform::OpenGL
 {
+	static const uint32_t s_MaxFramebufferSize = 8192;
+
   OpenGLFrameBuffer::OpenGLFrameBuffer(const Engine::Renderer::FramebufferSpecification& f_specifications)
 		: m_Specification(f_specifications)
 	{
@@ -62,6 +64,12 @@ namespace Engine::Platform::OpenGL
 
 	void OpenGLFrameBuffer::Resize(uint32_t f_width, uint32_t f_height)
 	{
+		if (f_width == 0 || f_height == 0 || f_width > s_MaxFramebufferSize || f_height > s_MaxFramebufferSize)
+		{
+			CORE_WARN("Attempted to rezize framebuffer to {0}, {1}", f_width, f_height);
+			return;
+		}
+
 		m_Specification.Width  = f_width;
 		m_Specification.Height = f_height;
 

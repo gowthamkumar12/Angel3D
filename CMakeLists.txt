@@ -37,6 +37,7 @@ SET(GLAD      ${CMAKE_CURRENT_SOURCE_DIR}/Vendor/GLAD)
 SET(IMGUI     ${CMAKE_CURRENT_SOURCE_DIR}/Vendor/ImGui)
 SET(GLM       ${CMAKE_CURRENT_SOURCE_DIR}/Vendor/glm)
 SET(STB       ${CMAKE_CURRENT_SOURCE_DIR}/Vendor/stb)
+SET(ENTT      ${CMAKE_CURRENT_SOURCE_DIR}/Vendor/entt)
 
 # Add the subdirectories
 ADD_SUBDIRECTORY(Angel3D)

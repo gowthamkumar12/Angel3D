@@ -21,6 +21,14 @@ namespace Engine
     frameBufferSpecs.Width = 1280;
     frameBufferSpecs.Height = 720;
     m_Framebuffer = Renderer::Framebuffer::Create(frameBufferSpecs);
+
+    m_ActiveScene = Core::CreateRef<Engine::Scene::Scene>();
+
+		auto square = m_ActiveScene->CreateEntity();
+		m_ActiveScene->Reg().emplace<Engine::Scene::TransformComponent>(square);
+		m_ActiveScene->Reg().emplace<Engine::Scene::SpriteRendererComponent>(square, glm::vec4{0.933f, 0.733, 0.792f, 1.0f});
+
+		m_SquareEntity = square;
   }
 
   void Editor::OnDetach()
@@ -49,56 +57,20 @@ namespace Engine
     }
 
     Renderer::Renderer2D::ResetStats();
-    {
-      // Render
-      PROFILE_SCOPE("Renderer Preparation");
-      m_Framebuffer->Bind();
-      Renderer::RenderCommand::SetClearColor({0.1, 0.1, 0.1, 1});
-      Renderer::RenderCommand::Clear();
-    }
+    m_Framebuffer->Bind();
+    Renderer::RenderCommand::SetClearColor({0.1, 0.1, 0.1, 1});
+    Renderer::RenderCommand::Clear();
 
-    {
-      static float rotation = 0.0f;
-		  rotation += f_ts * 50.0f;
+    // Scene-1 Start
+    Renderer::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-      PROFILE_SCOPE("Renderer Draw");
+    // Update scene
+		m_ActiveScene->OnUpdate(f_ts);
 
-      /* --- Scene-1 start --- */
-      Renderer::Renderer2D::BeginScene(m_CameraController.GetCamera());
+    Renderer::Renderer2D::EndScene();
+    // Scene-1 End
 
-      // Quads with colors
-      Renderer::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-      Renderer::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f });
-
-      // Quads with colors and textures
-      Renderer::Renderer2D::DrawQuad({0.0f, 0.0f, -0.1f}, {10.0f, 10.0f}, m_Texture, 10.0f);
-
-      // Rotated Quads with colors
-      Renderer::Renderer2D::DrawRotatedQuad({-0.5f, -0.25f}, {1.0f, 1.0f}, rotation, {0.8f, 0.2f, 0.3f, 1.0f});
-
-      // Rotates Quads with colors and textures
-      Renderer::Renderer2D::DrawRotatedQuad({0.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, rotation, m_Texture, 10.0f);
-
-      Renderer::Renderer2D::EndScene();
-      /* --- Scene-1 end --- */
-
-      /* --- Scene-2 start --- */
-      Renderer::Renderer2D::BeginScene(m_CameraController.GetCamera());
-
-      for (float y = -5.0f; y < 5.0f; y += 0.5f)
-      {
-        for (float x = -5.0f; x < 5.0f; x += 0.5f)
-        {
-          glm::vec4 color = { (x + 5.0f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.7f };
-          Renderer::Renderer2D::DrawQuad({ x, y }, { 0.45f, 0.45f }, color);
-        }
-      }
-
-      Renderer::Renderer2D::EndScene();
-      /* --- Scene-2 end --- */
-
-      m_Framebuffer->Unbind();
-    }
+    m_Framebuffer->Unbind();
   }
 
   void Editor::OnImGuiRender()
@@ -164,6 +136,9 @@ namespace Engine
       ImGui::Text("Quads      : %d", stats.QuadCount);
       ImGui::Text("Vertices   : %d", stats.GetTotalVertexCount());
       ImGui::Text("Indices    : %d", stats.GetTotalIndexCount());
+
+      auto& squareColor = m_ActiveScene->Reg().get<Engine::Scene::SpriteRendererComponent>(m_SquareEntity).Color;
+		  ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
 
     ImGui::End();
 

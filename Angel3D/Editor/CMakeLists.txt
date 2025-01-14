@@ -29,6 +29,7 @@ TARGET_INCLUDE_DIRECTORIES(
     "${PROJECT_SOURCE_DIR}/inc"                   # Local include directory
     "${CMAKE_CURRENT_SOURCE_DIR}/../Engine/inc"  # Engine headers
     "${GLM}"
+    "${ENTT}/include"
 )
 
 # Link dependencies

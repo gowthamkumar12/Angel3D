@@ -23,6 +23,10 @@ namespace Engine::Renderer
       static void DrawQuad(const glm::vec3& f_position, const glm::vec2& f_size, const Engine::Core::Ref<Texture2D>& f_texture,
                            float f_tilingFactor = 1.0f, const glm::vec4& f_tintColor = glm::vec4(1.0f));
 
+      static void DrawQuad(const glm::mat4& f_transform, const glm::vec4& f_color);
+	  	static void DrawQuad(const glm::mat4& f_transform, const Engine::Core::Ref<Texture2D>& f_texture,
+                           float f_tilingFactor = 1.0f, const glm::vec4& f_tintColor = glm::vec4(1.0f));
+
       // Draw Rotated Quad using Color
       static void DrawRotatedQuad(const glm::vec2& f_position, const glm::vec2& f_size, float f_rotation, const glm::vec4& f_color);
       static void DrawRotatedQuad(const glm::vec3& f_position, const glm::vec2& f_size, float f_rotation, const glm::vec4& f_color);

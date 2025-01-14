@@ -39,6 +39,7 @@ TARGET_INCLUDE_DIRECTORIES(
     "${IMGUI}"
     "${GLM}"
     "${STB}"
+    "${ENTT}/include"
 )
 
 # Link GLFW and OpenGL as private dependencies
