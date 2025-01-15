@@ -24,9 +24,9 @@ namespace Engine
 
     m_ActiveScene = Core::CreateRef<Engine::Scene::Scene>();
 
-		auto square = m_ActiveScene->CreateEntity();
-		m_ActiveScene->Reg().emplace<Engine::Scene::TransformComponent>(square);
-		m_ActiveScene->Reg().emplace<Engine::Scene::SpriteRendererComponent>(square, glm::vec4{0.933f, 0.733, 0.792f, 1.0f});
+    // Entity
+		auto square = m_ActiveScene->CreateEntity("Square");
+		square.AddComponent<Engine::Scene::SpriteRendererComponent>(glm::vec4{1.0f, 0.5647f, 0.6941f, 1.0f});
 
 		m_SquareEntity = square;
   }
@@ -137,8 +137,16 @@ namespace Engine
       ImGui::Text("Vertices   : %d", stats.GetTotalVertexCount());
       ImGui::Text("Indices    : %d", stats.GetTotalIndexCount());
 
-      auto& squareColor = m_ActiveScene->Reg().get<Engine::Scene::SpriteRendererComponent>(m_SquareEntity).Color;
-		  ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
+      if(m_SquareEntity)
+      {
+        ImGui::Separator();
+        ImGui::Text("%s", m_SquareEntity.GetComponent<Engine::Scene::TagComponent>().Tag.c_str());
+
+        auto& squareColor = m_SquareEntity.GetComponent<Engine::Scene::SpriteRendererComponent>().Color;
+		    ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
+
+        ImGui::Separator();
+      }
 
     ImGui::End();
 

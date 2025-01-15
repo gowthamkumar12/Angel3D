@@ -54,8 +54,8 @@ namespace Engine::Platform::Windows
     {
       PROFILE_SCOPE("Window::GLFWCreateWindow");
 
-      #if defined(HZ_DEBUG)
-        if (Engine::Renderer::Renderer::GetAPI() == Engine::Renderer::RendererAPI::API::OpenGL)
+      #if defined(DEBUG)
+        if (Engine::Renderer::Renderer::GetAPI() == Engine::Renderer::RendererAPI::API::OPENGL)
         {
           glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
         }

@@ -1,5 +1,6 @@
 #include "Scene/Scene.h"
 #include "Scene/Components.h"
+#include "Scene/Entity.h"
 
 #include "Renderer/Renderer2D.h"
 
@@ -23,9 +24,16 @@ namespace Engine::Scene
 	{
 	}
 
-	entt::entity Scene::CreateEntity()
+	Entity Scene::CreateEntity(const std::string& f_name)
 	{
-		return m_Registry.create();
+		Entity entity = { m_Registry.create(), this };
+
+		entity.AddComponent<TransformComponent>();
+
+		auto& tag = entity.AddComponent<TagComponent>();
+		tag.Tag = f_name.empty() ? "Entity" : f_name;
+
+		return entity;
 	}
 
 	void Scene::OnUpdate(Engine::Core::Timestep ts)

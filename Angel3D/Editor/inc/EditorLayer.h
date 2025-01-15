@@ -24,8 +24,8 @@ namespace Engine
       Core::Ref<Renderer::Shader>      m_Shader;
       Core::Ref<Renderer::Framebuffer> m_Framebuffer;
 
-      Core::Ref<Engine::Scene::Scene> m_ActiveScene;
-		  entt::entity                    m_SquareEntity;
+      Core::Ref<Engine::Scene::Scene>  m_ActiveScene;
+		  Engine::Scene::Entity            m_SquareEntity;
 
       Core::Ref<Renderer::Texture2D>   m_Texture;
       glm::vec2                        m_ViewportSize{ 0.0f, 0.0f };
