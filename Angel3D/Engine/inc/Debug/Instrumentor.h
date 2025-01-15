@@ -29,16 +29,9 @@ namespace Engine::Debug
 
 	class Instrumentor
 	{
-    private:
-      std::mutex m_Mutex;
-      InstrumentationSession* m_CurrentSession;
-      std::ofstream m_OutputStream;
-
     public:
-      Instrumentor()
-        : m_CurrentSession(nullptr)
-      {
-      }
+      Instrumentor(const Instrumentor&) = delete;
+		  Instrumentor(Instrumentor&&) = delete;
 
       void BeginSession(const std::string& name, const std::string& filepath = "results.json")
       {
@@ -106,6 +99,17 @@ namespace Engine::Debug
       }
 
     private:
+
+      Instrumentor()
+			: m_CurrentSession(nullptr)
+      {
+      }
+
+      ~Instrumentor()
+      {
+        EndSession();
+      }
+
       void WriteHeader()
       {
         m_OutputStream << "{\"otherData\": {},\"traceEvents\":[{}";
@@ -130,6 +134,11 @@ namespace Engine::Debug
           m_CurrentSession = nullptr;
         }
       }
+
+    private:
+      std::mutex m_Mutex;
+      InstrumentationSession* m_CurrentSession;
+      std::ofstream m_OutputStream;
 	};
 
 	class InstrumentationTimer
@@ -219,8 +228,10 @@ namespace Engine::Debug
 
 	#define PROFILE_BEGIN_SESSION(name, filepath) ::Engine::Debug::Instrumentor::Get().BeginSession(name, filepath)
 	#define PROFILE_END_SESSION() ::Engine::Debug::Instrumentor::Get().EndSession()
-  #define PROFILE_SCOPE(name) constexpr auto fixedName = ::Engine::Debug::InstrumentorUtils::CleanupOutputString(name, "__cdecl ");\
-									                                               ::Engine::Debug::InstrumentationTimer timer##__LINE__(fixedName.Data)
+  #define PROFILE_SCOPE_LINE2(name, line) constexpr auto fixedName##line = ::Engine::Debug::InstrumentorUtils::CleanupOutputString(name, "__cdecl ");\
+											                                                     ::Engine::Debug::InstrumentationTimer timer##line(fixedName##line.Data)
+	#define PROFILE_SCOPE_LINE(name, line) PROFILE_SCOPE_LINE2(name, line)
+	#define PROFILE_SCOPE(name) PROFILE_SCOPE_LINE(name, __LINE__)
 	#define PROFILE_FUNCTION() PROFILE_SCOPE(FUNC_SIG)
 #else
 	#define PROFILE_BEGIN_SESSION(name, filepath)
