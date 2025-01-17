@@ -29,6 +29,13 @@ namespace Engine
 		square.AddComponent<Engine::Scene::SpriteRendererComponent>(glm::vec4{1.0f, 0.5647f, 0.6941f, 1.0f});
 
 		m_SquareEntity = square;
+
+    m_CameraEntity = m_ActiveScene->CreateEntity("Primary Camera");
+    m_CameraEntity.AddComponent<Engine::Scene::CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -10.0f, 10.0f));
+
+    m_CameraEntity_2 = m_ActiveScene->CreateEntity("Secondary Camera");
+    auto &cc = m_CameraEntity_2.AddComponent<Engine::Scene::CameraComponent>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -10.0f, 10.0f));
+    cc.PrimaryCamera = false;
   }
 
   void Editor::OnDetach()
@@ -58,17 +65,11 @@ namespace Engine
 
     Renderer::Renderer2D::ResetStats();
     m_Framebuffer->Bind();
-    Renderer::RenderCommand::SetClearColor({0.1, 0.1, 0.1, 1});
+    Renderer::RenderCommand::SetClearColor({0.25, 0.25, 0.25, 1});
     Renderer::RenderCommand::Clear();
-
-    // Scene-1 Start
-    Renderer::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
     // Update scene
 		m_ActiveScene->OnUpdate(f_ts);
-
-    Renderer::Renderer2D::EndScene();
-    // Scene-1 End
 
     m_Framebuffer->Unbind();
   }
@@ -146,6 +147,15 @@ namespace Engine
 		    ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
 
         ImGui::Separator();
+      }
+
+      ImGui::DragFloat3("Primary Camera Transform",
+                        glm::value_ptr(m_CameraEntity.GetComponent<Engine::Scene::TransformComponent>().Transform[3]));
+
+      if(ImGui::Checkbox("PrimaryCamera", &m_PrimaryCamera))
+      {
+        m_CameraEntity.GetComponent<Engine::Scene::CameraComponent>().PrimaryCamera = m_PrimaryCamera;
+        m_CameraEntity_2.GetComponent<Engine::Scene::CameraComponent>().PrimaryCamera = !m_PrimaryCamera;
       }
 
     ImGui::End();

@@ -9,6 +9,7 @@ namespace Engine::Renderer
       static void Init();
       static void Shutdown();
 
+      static void BeginScene(const Camera& f_camera, const glm::mat4& f_transform);
       static void BeginScene(const OrthographicCamera& f_camera);
       static void EndScene();
       static void Flush();

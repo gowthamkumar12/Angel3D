@@ -4,6 +4,20 @@
 
 namespace Engine::Renderer
 {
+  class Camera
+  {
+    public:
+      Camera(const glm::mat4& f_projection)
+      : m_Projection(f_projection)
+      {}
+
+      glm::mat4& GetProjection() { return m_Projection; }
+      const glm::mat4& GetProjection() const { return m_Projection; }
+
+    private:
+      glm::mat4 m_Projection;
+  };
+
   class OrthographicCamera
   {
     public:

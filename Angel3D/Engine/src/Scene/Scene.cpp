@@ -38,11 +38,34 @@ namespace Engine::Scene
 
 	void Scene::OnUpdate(Engine::Core::Timestep ts)
 	{
-		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-		for (auto entity : group)
+		Engine::Renderer::Camera *mainCamera      = nullptr;
+		glm::mat4                *cameraTransform = nullptr;
+
+		auto group = m_Registry.view<TransformComponent, CameraComponent>();
+		for(auto entity : group)
 		{
-			auto& [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-			Engine::Renderer::Renderer2D::DrawQuad(transform, sprite.Color);
+			auto& [transform, camera] = m_Registry.get<TransformComponent, CameraComponent>(entity);
+
+			if(camera.PrimaryCamera)
+			{
+				mainCamera      = &camera.Camera;
+				cameraTransform = &transform.Transform;
+				break;
+			}
+		}
+
+		if(mainCamera)
+		{
+			Engine::Renderer::Renderer2D::BeginScene(mainCamera->GetProjection(), *cameraTransform);
+
+			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+			for (auto entity : group)
+			{
+				auto& [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+				Engine::Renderer::Renderer2D::DrawQuad(transform, sprite.Color);
+			}
+
+			Engine::Renderer::Renderer2D::EndScene();
 		}
 	}
 } // namespace Engine::Scene

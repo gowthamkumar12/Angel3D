@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Renderer/Camera.h"
+
 #include <glm/glm.hpp>
 
 namespace Engine::Scene
@@ -35,5 +37,16 @@ namespace Engine::Scene
 		SpriteRendererComponent(const SpriteRendererComponent&) = default;
 		SpriteRendererComponent(const glm::vec4& color)
 			: Color(color) {}
+	};
+
+	struct CameraComponent
+	{
+		Engine::Renderer::Camera Camera;
+		bool                     PrimaryCamera = true; // TODO:Think about moving into the scene.
+
+		CameraComponent()                       = default;
+		CameraComponent(const CameraComponent&) = default;
+		CameraComponent(const glm::mat4& f_projection)
+			: Camera(f_projection) {}
 	};
 }
